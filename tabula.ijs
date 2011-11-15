@@ -700,6 +700,8 @@ wd 'psel tab; set info *' , tabengine 'QUER'
 setshow 3
 )
 
+hlpca=: hlpc shift hlpa
+
 hlpt=: 3 : 0
 Handler 'hlpt'	NB. retrieve fixed-info on TABULA HELP
 if. heldshift'' do. lob'' return. end.
@@ -1143,7 +1145,8 @@ Handler 'quit'	NB. Orderly shutdown after housekeeping
 if. -. preload'' do. return. end.
 xywh''
 unmap_jmf_ xywhN
-exit''	NB. Only: quit calls: exit
+RUNTIME_z_=: 0 default 'RUNTIME_z_'
+if. RUNTIME do. exit'' else. window_close'' end.
 )
 
 redo=: tabenginex@('Redo'"_)
@@ -1369,6 +1372,7 @@ end.
 
 start=: 3 : 0
 	NB. start the app: create form and init: cal
+RUNTIME_z_=: 0 default 'RUNTIME_z_'
 if. coldstart=. 0=#y do.
   sess 'start_tab_: enters...'
 else.
@@ -1389,7 +1393,7 @@ if. coldstart do.
 	TABNDX=: 0	NB. tab_tabs_button sets it to current tab
 	wd TABU
 	tabgroups=: 'ttable';'consts';'functs';'inf'	NB. wd-ids of sub-forms
-	wd 'set tabs "Ttable" "consts" "functs" "info"'	NB. labels in their tabs
+	wd 'set tabs "Ttable" "Consts" "Functs" "Info"'	NB. labels in their tabs
 	wd 'creategroup tabs'
 	inf_run''
 	consts_run''
@@ -1551,7 +1555,11 @@ ttable_xunit_select=: pickunits
 
 ttcont=: 3 : 0
 Handler 'ttcont'
-open ttabula tbx ttname y
+if. -:/tabengine each ;:'TFIL TFLU' do.
+  confirm '>>> cannot open undefined ttable - save it first'
+else.
+  open tabengine 'TFIL'
+end.
 )
 
 tthld=: 'hold'&funline

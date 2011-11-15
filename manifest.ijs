@@ -2,7 +2,7 @@ NB. tabula manifest
 
 CAPTION=: 'TABULA - scientific calculator'
 
-VERSION=: '1.0.0'
+VERSION=: '1.0.1'
 
 FILES=: 0 : 0
 click1.wav
