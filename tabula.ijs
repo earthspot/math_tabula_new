@@ -1,14 +1,10 @@
 NB. TABULA scientific calculator topend based on JWD gui
+
 coclass 'tab'
+require 'strings'	NB. for: rplc
+require 'gl2'		NB. load gl2 definitions in jgl2 locale
+coinsert'jgl2'		NB. allows use of gl2 verbs unlocalised
 
-require'gl2'	NB. load gl2 definitions in jgl2 locale
-coinsert'jgl2'	NB. allows use of gl2 verbs unlocalised
-load 'math/cal'	NB. also defines needed _z_ names
-
-	NB. Permit manual reset of window posn by entering: repos 0
-repos_z_=: repos_tab_
-
-TABDIR=: jpath '~addons/math/tabula/'	NB. folder for this topend
 XYWH0=: 8 55 527 450		NB. Factory setting: form position
 TRACH=: 0
 TRACE=: 0
@@ -131,6 +127,8 @@ menu dupit "Duplicate Line" "Ctrl+D" "Duplicate this line" "dup";
 menusep;
 menu updex "Update Exchange Rates" "" "Update currency exchange rates for this ttable" "upd-exch";
 menu updin "Update Info" "" "Update info for this ttable" "upd-inf";
+menusep;
+menu stup "Startup with TABULA" "" "Fix startup" "stup";
 menupopz;
 menupop "Command";
 menu repet "Repeat" "Ctrl+Shift+R" "Repeat last action" "repeat";
@@ -376,7 +374,7 @@ if. 0=L0 do. tabenginex 'titl' ; calco  return. end.
 	NB. ALL ELSE needs an item selected...
 if. -.setL 0 do. return. end.
 	NB. Globals filled by: isunits, isvalunits...
-VALUE=: UNDEFINED [ UNITS=: '??'
+VALUE=: UNDEFINED [ UNITS=: '??' [ RIDER=: ''
 if. ']['-: 2{._1|.calco do.	sess 'calcmd: units (forced)'
 	if. isunits z=. }.}:calco do.
 	  tabenginex nb 'unit' ; L0 ; UNITS
@@ -391,7 +389,10 @@ elseif. isnumeric calco do.	sess 'calcmd: numeric'
 elseif. isunits calco do. sess 'calcmd: units'
 	tabenginex nb 'unit' ; L0 ; UNITS
 	setunits 0
-elseif. isvalunits calco do.	sess 'calcmd: value+units'
+elseif. isvalunits calco do.	sess 'calcmd: value+units[+rider]'
+	if. 0<#RIDER do.
+	  tabengine nb 'name' ; L0 ; RIDER
+	end.
 	setunits 0 [ tabengine nb 'unit' ; L0 ; UNITS
 	tabenginex nb 'valu' ; L0 ; VALUE
 elseif. isnumvec calco do. sess 'calcmd: plot instruction'
@@ -575,22 +576,18 @@ y pix pp
 dtblf=: #~ ([: +./\. [: -. (10 32{a.) e.~ ])
 dupit=: 'dupl'&funline
 
-eduu=: 3 : 0
-	NB. edit UUC / UUF
-Handler 'eduu'
-(eduuc shift eduuf)y
-)
+eduu=: eduuc shift eduuf
 
 eduuc=: 3 : 0
 	NB. edit UUC.ijs
 Handler 'eduuc'
-open 'math/uu/uuc'
+open 'dev/uu/uuc'
 )
 
 eduuf=: 3 : 0
 	NB. edit UUF.ijs
 Handler 'eduuf'
-open 'math/uu/uuf'
+open 'dev/uu/uuf'
 )
 
 equal=: 3 : 0
@@ -616,6 +613,15 @@ fillfuncts=: 3 : 0
 Handler 'fillfuncts'	NB. fill functs pane
 set_ucase casef-: ,'0'
 wd 'psel tab; set func *',x2f uurowsf searchf
+)
+
+flags=: 3 : 0
+	NB. literal flags in place of numeric x for tabenginex
+if. isNo y do. y return. end.
+	NB.	-c	clear calco
+	NB.	-l	last line selected
+	NB.	-s	clear all selections
+#. 'lcs' e. y
 )
 
 formu=: 3 : 0
@@ -709,9 +715,20 @@ wd 'psel tab; set info *',HELP
 setshow 3
 )
 
+hold1=: tthld shift thold
+
 hold=: 3 : 0
-Handler 'hold'	NB. tool: toggle hold / transient hold
-if. heldshift'' do. tthld'' else. thold'' end.
+Handler 'hold'	NB. toggle (transient) hold to ALL selected items
+if. 0=#panel_select do.
+  confirm '>>> No action: needs 1 or more selected lines'
+else.
+  for_L. ps=.,". panel_select do.
+    panel_select=: ,":L
+    hold1''
+  end.
+  sellines ps
+  panel_select=: ,":ps
+end.
 )
 
 holdcons=: '!' ,~ ]
@@ -828,7 +845,10 @@ if. 1<#z=. _". y do.	NB. converts to 2 nos or more
   if. (_=VALUE=:{.z) +. (_~:1{z) do. 0 return. end.
 else. 0 return.
 end.
--. '??' -: >{.convert UNITS=: deb SP dropto y
+'y r'=. 2{. QT cut y
+RIDER=: dlb r
+if. 0=#UNITS=: deb SP dropto y do. UNITS=: '/' end.
+-. '??' -: >{.convert UNITS
 )
 
 isverb=: 3 = [: 4!:0 <
@@ -844,12 +864,6 @@ Handler 'lob'
 load '~user/lobrow.ijs'
 )
 
-mappos=: 3 : 0
-	NB. Retrieve the window posn,size
-unmap_jmf_ xywhN=:'XYWH_tab_'	NB. xywhN used by: quit
-map_jmf_ xywhN ; (TABDIR,'posn.jmf')
-)
-
 maybeep=: 3 : 0
 	NB. decides if message: y needs beep
 if. -.isLit y do. return. end.
@@ -861,7 +875,9 @@ end.
 merge=: 3 : 0
 Handler 'merge'	NB. merge 2 lines
 if. -.setL 1 do. return. end.
+	NB. Shift held: setL swaps L0 L1
 tabenginex 'merg' ; L0 ; L1
+selline (L0,L1) {~ heldshift''
 )
 
 mousemove=: 3 : 0
@@ -910,10 +926,7 @@ if. i<1 do. i=. last end.
 selline i
 )
 
-movud=: 3 : 0
-Handler 'movud'	NB. Move selected line (L0) up / down 1 line
-(mvitu shift movit)y
-)
+movud=: mvitu shift movit
 
 mulitems=: 3 : 0
 Handler 'mulitems'
@@ -937,22 +950,24 @@ selline L0-1
 needsHnd=: 3 : 'smoutput sysevent,NEEDS'
 
 newc=: 3 : 0
-y newc~ holdcons cons	NB. cons is selection line buffer
-:
 Handler 'newc'	NB. make a new Const line
-if. 0<#x-.SP do.
-  4 tabenginex 'cons' ; x
-  setshow 0
+cons newc y	NB. cons is selection buffer
+:
+if. 0=#x-.SP do.
+  confirm '>>> No action: select a single line'
+else.
+  4 tabenginex 'cons' ; holdcons x
 end.
 )
 
 newf=: 3 : 0
-func newf y	NB. x is selection line buffer
+func newf y	NB. func is selection buffer
 :
 Handler 'newf'	NB. make a new Funct line
-if. 0<#x-.SP do.
+if. 0=#x-.SP do.
+  confirm '>>> No action: select a single line'
+else.
   4 tabenginex 'func' ; x
-  setshow 0
 end.
 )
 
@@ -975,7 +990,6 @@ if. -. preload'' do. return. end.
 0 ttinf''	NB. clear the info display
 1 tabenginex 'newt'
 clearunits''
-setshow 0
 immx 'inputfocus_tab_ 0'
 )
 
@@ -1007,7 +1021,7 @@ Handler 'opens'	NB. Handler generator
 if. -. preload'' do. return. end.
 1 tabenginex 'open' ; x
 clearunits''
-ttinf setshow 0
+ttinf''
 immx 'inputfocus_tab_ 0'
 )
 
@@ -1021,17 +1035,17 @@ if. heldshift'' do. opens'' return. end.
 if. -. preload'' do. return. end.
 cmd=. 4{. lowx=. tolower x
 mytitle=. nb 'Choose a ttable to' ; lowx ; '...'
-mydir=. ttabula''
+mydir=. TPATH_TTABLES
 nom=. wd nb 'mbopen' ; (dquote mytitle) ; (dquote mydir)
 	NB. At present we use filename-only: nom
-	NB. and assume all ttables reside in folder: ttabula''
+	NB. and assume all ttables reside in folder: mydir
 nom=. nom rplc BS ; SL
 if. 0=#nom do.
   confirm '>>>' ; x ; '...cancelled'
 else.
   1 tabenginex cmd ; fprefix nom
   clearunits''
-  ttinf setshow 0
+  ttinf''
   immx 'inputfocus_tab_ 0'
 end.
 )
@@ -1049,7 +1063,7 @@ pix=: 4 : 0
 glpixels X,Y, 32 32 ,, convicon y
 )
 
-play=: 3 : '2!:1 ''afplay '',TABDIR,wav y'
+play=: 3 : '2!:1 ''afplay '',TPATH_TABULA,wav y'
 playerror=: play@('error'"_)
 playwarning=: play@('warning'"_)
 
@@ -1095,7 +1109,8 @@ if. -.setL 1 do. return. end.
 
 preload=: 3 : 0
 	NB. called by verbs which invalidate old table
-if. tabengine 'DIRT' do.
+	NB. heldalt'' skips the DIRTY check...
+if. (tabengine 'DIRT') and -.heldalt'' do.
 	par=. 'Save current ttable?'
 	msg=. 'Ttable: ',tabengine 'TITL'
 	msg=. msg,LF,'has unsaved structural changes.'
@@ -1143,10 +1158,9 @@ smoutput llog 'L0 L1 panel_select'
 quit=: 3 : 0
 Handler 'quit'	NB. Orderly shutdown after housekeeping
 if. -. preload'' do. return. end.
-xywh''
-unmap_jmf_ xywhN
+winpos 1	NB. write out window posn,size
 RUNTIME_z_=: 0 default 'RUNTIME_z_'
-if. RUNTIME do. exit'' else. window_close'' end.
+if. RUNTIME or heldalt'' do. exit'' else. window_close'' end.
 )
 
 redo=: tabenginex@('Redo'"_)
@@ -1154,8 +1168,8 @@ redo=: tabenginex@('Redo'"_)
 refresh=: 3 : 0
 0 refresh y		NB. y is always ignored
 :
-	NB. x (bit-int) controls how gui ends up
-cmd_tab_=: cmd	NB. >>>>>>>>> TEST-ONLY USING LOBROW
+	NB. x (bit-int) sets finishing state of display
+x=. flags x	NB. flags: lit --> bit-coded int
 putpanel tabengine 'CTBU'
 if. x bit 0 do.	NB. clear panel selections
   sellinex''	NB. c/f selline
@@ -1202,13 +1216,13 @@ sellines PLOTY	NB. indicate which have been plotted
 repos=: 3 : 0
 Handler 'repos'	NB. reset form pos+size to value in XYWH
 if. (y-:0) or (heldshift'') do. XYWH=: XYWH0 end.
-wd nb 'psel tab; pmovex' ; ".xywhN
+wd nb 'psel tab; pmovex' ; XYWH
 )
 
 restart=: 3 : 0
 Handler 'restart' NB. warm-start TABULA, eg after editing UUC or tabtools
 start_uu_''
-start 1		NB. start detect: 0<#y
+start 1		NB. start detects 0<#y
 )
 
 
@@ -1217,7 +1231,7 @@ Handler 'savea'	NB. service the "save ttable as..." ctl
 	NB. NEEDS...
 	NB. trial save-name setup in field
 mytitle=. 'Save ttable as...'
-mydir=. ttabula''
+mydir=. TPATH_TTABLES
 nom=. wd nb 'mbsave' ; (dquote mytitle) ; (dquote mydir)
 if. 0=#nom do.
   confirm '>>> Save As... cancelled'
@@ -1246,10 +1260,7 @@ if. (ttname'')-:tabengine'TFLU' do. savea'' return. end.
 tabenginex 'save'	NB. uses: file_cal_ anyway
 )
 
-savts=: 3 : 0
-Handler 'savts'	NB. tool: Save ttable as Title / SAMPLE
-(savet shift saves)y
-)
+savts=: savet shift saves
 
 scino=: scino_uu_
 
@@ -1372,6 +1383,7 @@ end.
 
 start=: 3 : 0
 	NB. start the app: create form and init: cal
+load :: 0: TPATH_TABULA,'manifest.ijs'	NB. sets VERSION
 RUNTIME_z_=: 0 default 'RUNTIME_z_'
 if. coldstart=. 0=#y do.
   sess 'start_tab_: enters...'
@@ -1379,8 +1391,8 @@ else.
   sess 'start_tab_: called by: restart with y=',":y
 end.
 	NB. Load editable scripts for: tab
-load TABDIR,'tabfun.ijs'
-load TABDIR,'tabtools.ijs'
+load TPATH_TABULA,'tabfun.ijs'
+load TPATH_TABULA,'tabtools.ijs'
 tabengine 'Init'	NB. Start the CAL engine
 Handler=: Handler1	NB. or: Handler=: empty
 L0=: 1
@@ -1402,14 +1414,12 @@ if. coldstart do.
 	wd 'creategroup'
 	wd 'setshow ttable 1'
 end.
-NB. wd 'pshow'
-calco=: ''			NB. used by: calcmd...
+calco=: ''	NB. used by: calcmd...
 sess 'start_tab_: init the form'
 paneL0'' [panel_select=: ,'1'
-setpreci 3			NB. set precision in dropdown
+setpreci 3	NB. set precision in dropdown
 setunits 0
-mappos''	NB. map window coords
-repos''		NB. restore old window position,size
+winpos''	NB. restore saved window position,size
 wd 'pshow'
 wd 'pn "Tabula"'
 	NB. Define toolbar buttons ...
@@ -1434,6 +1444,20 @@ else.
   if. val<0 do. z=. val,0,100 else. z=. 0,val,100 end.
 end.
 calcmd 'steps ',":z
+)
+
+stup=: 3 : 0
+Handler 'stup'	NB. alter startup.ijs to run TABULA
+efx=. 'load ''math/tabula'''
+z=. freads fi=. jpath '~config/startup.ijs'
+if. z-:freads'' do.	NB, startup file is absent
+  rc=. efx fwrites fi
+  confirm 'startup file created' ; (brack rc)
+else.
+  z fwrites jpath '~config/startup.bak'
+  rc=. efx fwrites fi
+  confirm 'startup file replaced' ; (brack rc) ; '(old=startup.bak)'
+end.
 )
 
 subitems=: 3 : 0
@@ -1463,6 +1487,7 @@ tabenginex=: 3 : 0
 	NB. if. 1= x bit 2(eg x=4)	-select last line
 if. isBoxed y do. y=. nb y end.
 x refresh confirm tabengine INSTR=: ,y
+setshow 0
 )
 
 tbx=: ijs
@@ -1589,11 +1614,7 @@ end.
 ttname=: tabengine@('TNAM'"_)
 undo=: tabenginex@('Undo'"_)
 
-undoredo=: 3 : 0
-	NB. undo / redo
-Handler 'undoredo'
-(undo shift redo)y
-)
+undoredo=: undo shift redo
 
 unhid=: tabenginex@('unhid'"_)
 
@@ -1634,6 +1655,20 @@ try.
   11!:0 'psel tab; pclose;'
 catch.
   i.0 0
+end.
+)
+
+winpos=: 3 : 0
+	NB. write out (y=1) or read back window pos
+posfi=. TPATH_TABULA,'posn.ijs'
+if. y-:1 do.	NB. write out...
+ xywh''
+ z=. 'XYWH=: ',":XYWH
+ z fwrite posfi
+else.		NB. read back...
+ XYWH=: XYWH0
+ load :: 0: posfi
+ repos''
 end.
 )
 
@@ -1685,5 +1720,23 @@ uctrl=:		undo
 uctrlshift=:	redo
 	NB. --leave zctrlshift to pair with zctrl
 
-NB.=========================================================
-start''
+NB. ========== z-LOCALE ==========
+
+cocurrent 'z'
+
+TPATH_TABULA=: 3 : 0 ''
+	NB. returns directory containing this script
+	NB. also assigns global: WHEREAMI -the folder in question
+ws=. [: 'Not from script'"_`({ 4!:3@(0&$))@.(0&<:) [: 4!:4 [: < >
+WHEREAMI=: '<UNSET>'	NB. needed for ws to work with
+z=. >ws 'WHEREAMI'
+WHEREAMI=: (>: z i: PATHSEP_j_) {.z
+)
+
+	NB. Load: cal -by looking for sibling folder
+load (TPATH_TABULA,'tabula.ijs') rplc ;:'tabula cal'
+
+	NB. Permit manual reset of window posn by entering: repos 0
+repos=: repos_tab_
+
+start_tab_''

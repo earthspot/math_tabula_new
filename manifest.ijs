@@ -2,14 +2,13 @@ NB. tabula manifest
 
 CAPTION=: 'TABULA - scientific calculator'
 
-VERSION=: '1.0.1'
+VERSION=: '1.0.2'
 
 FILES=: 0 : 0
 click1.wav
 click2.wav
 error.wav
 manifest.ijs
-posn.jmf
 tabfun.ijs
 tabtools.ijs
 tabula.ijs
