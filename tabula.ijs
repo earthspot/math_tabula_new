@@ -1,4 +1,5 @@
-NB. TABULA scientific calculator topend based on JWD gui
+NB. Thu 01 Dec 2011 04:39:47 TABULA scientific calculator topend
+NB. based on JWD gui: j7 not supported
 
 coclass 'tab'
 require 'strings'	NB. for: rplc
@@ -1383,6 +1384,11 @@ end.
 
 start=: 3 : 0
 	NB. start the app: create form and init: cal
+if. +./ 'j7' E. JVERSION do.
+  smoutput '>>> TABULA is not yet supported in this JVERSION:'
+  smoutput JVERSION
+  return.
+end.
 load :: 0: TPATH_TABULA,'manifest.ijs'	NB. sets VERSION
 RUNTIME_z_=: 0 default 'RUNTIME_z_'
 if. coldstart=. 0=#y do.
