@@ -1,18 +1,16 @@
 NB. Thu 01 Dec 2011 04:39:47 TABULA scientific calculator topend
 NB. based on JWD gui: j7 not supported
 
-coclass 'tab'
 3 : 0''
 if. IFJ6 do.
   require 'strings'	NB. for: rplc
   require 'gl2'		NB. load gl2 definitions in jgl2 locale
 else.
   require 'gui/gtkwd'	NB. for: wd
-NB. TODO kludge for resize bug in gtkwd
-  resizechild_gtkwd_=: 0:
 end.
 ''
 )
+coclass 'tab'
 coinsert'jgl2'		NB. allows use of gl2 verbs unlocalised
 
 XYWH0=: 8 55 527 450		NB. Factory setting: form position
