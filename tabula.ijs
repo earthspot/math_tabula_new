@@ -2,8 +2,17 @@ NB. Thu 01 Dec 2011 04:39:47 TABULA scientific calculator topend
 NB. based on JWD gui: j7 not supported
 
 coclass 'tab'
-require 'strings'	NB. for: rplc
-require 'gl2'		NB. load gl2 definitions in jgl2 locale
+3 : 0''
+if. IFJ6 do.
+  require 'strings'	NB. for: rplc
+  require 'gl2'		NB. load gl2 definitions in jgl2 locale
+else.
+  require 'gui/gtkwd'	NB. for: wd
+NB. TODO kludge for resize bug in gtkwd
+  resizechild_gtkwd_=: 0:
+end.
+''
+)
 coinsert'jgl2'		NB. allows use of gl2 verbs unlocalised
 
 XYWH0=: 8 55 527 450		NB. Factory setting: form position
@@ -84,7 +93,7 @@ rem form end;
 NEEDS=: '=:',TAB,TAB,'empty'
 
 TABU=: 0 : 0
-pc tab;
+pc tab closeok;
 menupop "File";
 menu newtt "&New" "Ctrl+N" "Start a new ttable" "new";
 menu opens "Open Sample" "Ctrl+Shift+O" "Open a sample ttable" "sample";
@@ -1384,7 +1393,7 @@ end.
 
 start=: 3 : 0
 	NB. start the app: create form and init: cal
-if. +./ 'j7' E. JVERSION do.
+if. 0[ -.IFJ6 do.
   smoutput '>>> TABULA is not yet supported in this JVERSION:'
   smoutput JVERSION
   return.
@@ -1642,7 +1651,7 @@ wd=: wd_probed
 
 wd_probed=: 3 : 0
 try.
-  11!:0 y
+  wd_z_`(11!:0)@.IFJ6 y
 catch.
   sess 'wd: failed with: ',WD=: y
 end.
