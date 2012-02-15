@@ -486,11 +486,11 @@ DEAF=: DEAFEN		NB. suppress mousemove msg
 )
 
 conss=: setshow@(1"_)
-consts_cappend_button=: newc
-consts_casec_button=: empty
+tab_cappend_button=: consts_cappend_button=: newc
+tab_casec_button=: consts_casec_button=: empty
 consts_close=: subwindowclose
-consts_cons_button=: newc
-consts_cons_select=: empty
+tab_cons_button=: consts_cons_button=: newc
+tab_cons_select=: consts_cons_select=: empty
 consts_default=: needsHnd
 
 consts_run=: 3 : 0
@@ -505,7 +505,7 @@ wd 'set cons *',x2f ZZ
 wd 'pshow;'
 )
 
-consts_searchc_button=: fillconsts
+tab_searchc_button=: consts_searchc_button=: fillconsts
 
 contains=: 4 : 0
 	NB. =1 iff x contains any of wds in: y
@@ -643,12 +643,12 @@ end.
 )
 
 funcs=: setshow@(2"_)
-functs_casef_button=: empty
+tab_casef_button=: functs_casef_button=: empty
 functs_close=: subwindowclose
 functs_default=: needsHnd
-functs_fappend_button=: newf
-functs_func_button=: newf
-functs_func_select=: empty
+tab_fappend_button=: functs_fappend_button=: newf
+tab_func_button=: functs_func_button=: newf
+tab_func_select=: functs_func_select=: empty
 
 functs_run=: 3 : 0
 try.
@@ -662,7 +662,7 @@ wd 'set func *',x2f ZZ
 wd 'pshow;'
 )
 
-functs_searchf_button=: fillfuncts
+tab_searchf_button=: functs_searchf_button=: fillfuncts
 
 funline=: 3 : 0
 	NB. To gen handler: funline bind '<phrase>'
@@ -790,6 +790,7 @@ infor=: showttinf
 inputfocus=: 3 : 0
 Handler 'inputfocus'	NB. give calco the focus
 wd 'psel tab; pactive'
+if. -.IFJ6 do. i. 0 0 return. end.
 select. TABNDX
 case. 0 do. wd 'psel tab; setfocus calco'
 case. 1 do. wd 'psel tab; setfocus searchc'
@@ -1222,6 +1223,7 @@ sellines PLOTY	NB. indicate which have been plotted
 )
 
 repos=: 3 : 0
+return.
 Handler 'repos'	NB. reset form pos+size to value in XYWH
 if. (y-:0) or (heldshift'') do. XYWH=: XYWH0 end.
 wd nb 'psel tab; pmovex' ; XYWH
@@ -1420,12 +1422,13 @@ if. coldstart do.
 	tabgroups=: 'ttable';'consts';'functs';'inf'	NB. wd-ids of sub-forms
 	wd 'set tabs "Ttable" "Consts" "Functs" "Info"'	NB. labels in their tabs
 	wd 'creategroup tabs'
-	inf_run''
+	ttable_run''
 	consts_run''
 	functs_run''
-	ttable_run''
+	inf_run''
 	wd 'creategroup'
 	wd 'setshow ttable 1'
+wd 'pshow'
 end.
 calco=: ''	NB. used by: calcmd...
 sess 'start_tab_: init the form'
@@ -1482,11 +1485,18 @@ if. -.setL 1 do. return. end.
 subwindowclose=: wd@('pclose'"_)
 tab_close=: quit
 tab_default=: dofn
+tab_size=: empty
 tab_g_focus=: empty
 tab_g_focuslost=: empty
 tab_g_mbldown=: click@(1"_)
 tab_g_mblup=: click@(0"_)
 tab_g_mmove=: mousemove
+3 : 0''
+if. -.IFJ6 do.
+tab_g_paint=: 3 : 'for_i. i.32 do. 0 drawico i end.'
+end.
+''
+)
 tab_run=: start
 tab_tabs_button=: clicktab
 tabengine=: tabengine_cal_
@@ -1568,12 +1578,12 @@ setcalco''
 setshow 0
 )
 
-ttable_calco_button=: calcmd
+tab_calco_button=: ttable_calco_button=: calcmd
 ttable_close=: subwindowclose
 ttable_default=: needsHnd
-ttable_panel_button=: clickpanel
-ttable_panel_select=: clickpanel
-ttable_preci_select=: setpreci
+tab_panel_button=: ttable_panel_button=: clickpanel
+tab_panel_select=: ttable_panel_select=: clickpanel
+tab_preci_select=: ttable_preci_select=: setpreci
 
 ttable_run=: 3 : 0
 	NB. create the subwindow for tab: "Ttable"
@@ -1588,8 +1598,8 @@ wd 'set panel *',UNSET
 wd 'pshow;'
 )
 
-ttable_xunit_button=: empty
-ttable_xunit_select=: pickunits
+tab_xunit_button=: ttable_xunit_button=: empty
+tab_xunit_select=: ttable_xunit_select=: pickunits
 
 ttcont=: 3 : 0
 Handler 'ttcont'
@@ -1645,11 +1655,17 @@ uurowsc=: uurowsc_uu_
 uurowsf=: uurowsf_uu_
 vv=: ":@|:@,:
 wav=: ] , '.wav' #~ [: -. '.' e. ]
-wd=: wd_probed
+
+3 : 0''
+if. IFJ6 do.
+  wd=: wd_probed
+end.
+''
+)
 
 wd_probed=: 3 : 0
 try.
-  wd_z_`(11!:0)@.IFJ6 y
+  11!:0 y
 catch.
   sess 'wd: failed with: ',WD=: y
 end.
