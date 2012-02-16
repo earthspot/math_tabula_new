@@ -486,11 +486,11 @@ DEAF=: DEAFEN		NB. suppress mousemove msg
 )
 
 conss=: setshow@(1"_)
-tab_cappend_button=: consts_cappend_button=: newc
-tab_casec_button=: consts_casec_button=: empty
+consts_cappend_button=: newc
+consts_casec_button=: empty
 consts_close=: subwindowclose
-tab_cons_button=: consts_cons_button=: newc
-tab_cons_select=: consts_cons_select=: empty
+consts_cons_button=: newc
+consts_cons_select=: empty
 consts_default=: needsHnd
 
 consts_run=: 3 : 0
@@ -505,7 +505,7 @@ wd 'set cons *',x2f ZZ
 wd 'pshow;'
 )
 
-tab_searchc_button=: consts_searchc_button=: fillconsts
+consts_searchc_button=: fillconsts
 
 contains=: 4 : 0
 	NB. =1 iff x contains any of wds in: y
@@ -643,12 +643,12 @@ end.
 )
 
 funcs=: setshow@(2"_)
-tab_casef_button=: functs_casef_button=: empty
+functs_casef_button=: empty
 functs_close=: subwindowclose
 functs_default=: needsHnd
-tab_fappend_button=: functs_fappend_button=: newf
-tab_func_button=: functs_func_button=: newf
-tab_func_select=: functs_func_select=: empty
+functs_fappend_button=: newf
+functs_func_button=: newf
+functs_func_select=: empty
 
 functs_run=: 3 : 0
 try.
@@ -662,7 +662,7 @@ wd 'set func *',x2f ZZ
 wd 'pshow;'
 )
 
-tab_searchf_button=: functs_searchf_button=: fillfuncts
+functs_searchf_button=: fillfuncts
 
 funline=: 3 : 0
 	NB. To gen handler: funline bind '<phrase>'
@@ -1578,12 +1578,12 @@ setcalco''
 setshow 0
 )
 
-tab_calco_button=: ttable_calco_button=: calcmd
+ttable_calco_button=: calcmd
 ttable_close=: subwindowclose
 ttable_default=: needsHnd
-tab_panel_button=: ttable_panel_button=: clickpanel
-tab_panel_select=: ttable_panel_select=: clickpanel
-tab_preci_select=: ttable_preci_select=: setpreci
+ttable_panel_button=: clickpanel
+ttable_panel_select=: clickpanel
+ttable_preci_select=: setpreci
 
 ttable_run=: 3 : 0
 	NB. create the subwindow for tab: "Ttable"
@@ -1598,8 +1598,8 @@ wd 'set panel *',UNSET
 wd 'pshow;'
 )
 
-tab_xunit_button=: ttable_xunit_button=: empty
-tab_xunit_select=: ttable_xunit_select=: pickunits
+ttable_xunit_button=: empty
+ttable_xunit_select=: pickunits
 
 ttcont=: 3 : 0
 Handler 'ttcont'
