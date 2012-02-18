@@ -790,7 +790,6 @@ infor=: showttinf
 inputfocus=: 3 : 0
 Handler 'inputfocus'	NB. give calco the focus
 wd 'psel tab; pactive'
-if. -.IFJ6 do. i. 0 0 return. end.
 select. TABNDX
 case. 0 do. wd 'psel tab; setfocus calco'
 case. 1 do. wd 'psel tab; setfocus searchc'
@@ -1485,7 +1484,6 @@ if. -.setL 1 do. return. end.
 subwindowclose=: wd@('pclose'"_)
 tab_close=: quit
 tab_default=: dofn
-tab_size=: empty
 tab_g_focus=: empty
 tab_g_focuslost=: empty
 tab_g_mbldown=: click@(1"_)
@@ -1493,7 +1491,9 @@ tab_g_mblup=: click@(0"_)
 tab_g_mmove=: mousemove
 3 : 0''
 if. -.IFJ6 do.
+if. 3=GTKVER_j_ do.
 tab_g_paint=: 3 : 'for_i. i.32 do. 0 drawico i end.'
+end.
 end.
 ''
 )
@@ -1681,7 +1681,7 @@ window_close=: 3 : 0
 NB. Close the form: tab
 NB. SAFE TO CALL EVEN IF WINDOW IS ABSENT
 try.
-  11!:0 'psel tab; pclose;'
+  wd`(11!:0)@.IFJ6 'psel tab; pclose;'
 catch.
   i.0 0
 end.
