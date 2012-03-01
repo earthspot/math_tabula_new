@@ -1437,6 +1437,7 @@ toolbar_make''
 	NB. Finish off ...
 sess 'start_tab_: completed'
 empty inputfocus''
+wdloop^:(-.IFJ6)''
 )
 
 stept=: 3 : 0
