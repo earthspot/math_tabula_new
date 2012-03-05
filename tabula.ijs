@@ -513,8 +513,8 @@ convicon=: 3 : 0
 	NB. convert char-represented pixel to rgb num
 z=. 0 16bff0000 16bffff00 16b00ff00 16b0000ff 16b3c90fc 16b8e530f 16b9500fc 16ba9a9a9 16be6e6e6 16bffffff
 if. -.IFJ6 do.
-NB. flip if 255 is blue
-  z=. flip_rgb_jglcanvas_^:(-.RGBSEQ_jgtk_) z
+NB. flip if 255 is red
+  z=. flip_rgb_jgtk_^:(-.RGBSEQ_jgtk_) z
 end.
 z{~ '=rygbaMv.;' i. y -. LF
 )
