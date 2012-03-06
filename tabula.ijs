@@ -1431,7 +1431,7 @@ if. coldstart do.
 	inf_run''
 	wd 'creategroup'
 	wd 'setshow ttable 1'
-wd 'pshow'
+  wd^:(-.IFJ6) 'pshow;pshow sw_hide'
 end.
 calco=: ''	NB. used by: calcmd...
 sess 'start_tab_: init the form'
@@ -1439,13 +1439,14 @@ paneL0'' [panel_select=: ,'1'
 setpreci 3	NB. set precision in dropdown
 setunits 0
 winpos''	NB. restore saved window position,size
-wd 'pshow'
+wd^:(-.IFJ6) 'pshow;pshow sw_hide'
 wd 'pn "Tabula"'
 	NB. Define toolbar buttons ...
 toolbar_make''
 	NB. Finish off ...
 sess 'start_tab_: completed'
 empty inputfocus''
+wd 'pshow'
 wdloop^:(-.IFJ6)''
 )
 
