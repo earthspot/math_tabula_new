@@ -1140,7 +1140,7 @@ if. IFJ6 do.
   z=. z,tabengine 'CTBU'
   ijsstr z
 else.
-  require 'graphics/print'
+  require 'print'
   if.''-.@-: wd 'mbprinter' do. print_jprint_ z end.
 end.
 )
