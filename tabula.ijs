@@ -1447,7 +1447,7 @@ toolbar_make''
 sess 'start_tab_: completed'
 empty inputfocus''
 wd 'pshow'
-wdloop^:(-.IFJ6)''
+evtloop^:(-.IFJ6)''
 )
 
 stept=: 3 : 0
