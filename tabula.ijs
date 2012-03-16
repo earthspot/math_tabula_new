@@ -1680,7 +1680,7 @@ end.
 win=: 3 : 0
 	NB. convert path for Windows
 y
-if. IFWIN32 +. IFWINNT do. y rplc SL ; BS end.
+if. IFWIN +. IFWINNT do. y rplc SL ; BS end.
 )
 
 window_close=: 3 : 0
