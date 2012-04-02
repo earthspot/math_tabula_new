@@ -23,4 +23,4 @@ RELEASE=: 'j602 j701'
 
 LABCATEGORY=: 'Math'
 
-PLATFORMS=: 'win linux darwin'
+PLATFORMS=: ''
