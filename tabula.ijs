@@ -1,5 +1,5 @@
-NB. Thu 01 Dec 2011 04:39:47 TABULA scientific calculator topend
-NB. based on JWD gui: j7 not supported
+NB. Thu 26 Apr 2012 03:18:10 TABULA scientific calculator topend
+NB. based on JWD gui: adapted for jgtk under j7 // jhs not supported
 
 require 'gtkwd'	NB. for: J7 wd
 require 'strings'	NB. for: rplc
@@ -108,6 +108,11 @@ menusep;
 menu print "Print" "" "Print current ttable" "print ttable";
 menusep;
 menu quit "&Quit" "Ctrl+Shift+Q" "Quit TABULA" "quit";
+menusep;
+menu mru0 "Open: <MRU0>" "Ctrl+Shift+0" "Open MRU0" "mru0";
+menu mru1 "Open: <MRU1>" "Ctrl+Shift+1" "Open MRU1" "mru1";
+menu mru2 "Open: <MRU2>" "Ctrl+Shift+2" "Open MRU2" "mru2";
+menu mru3 "Open: <MRU3>" "Ctrl+Shift+3" "Open MRU3" "mru3";
 menupopz;
 menupop "Edit";
 menu undo "&Undo" "Ctrl+U" "Undo last action" "undo";
@@ -226,11 +231,11 @@ menu Lsqrl "Squared Line" "" "Append squared line" "squared";
 menu Lcbtl "Cube Root Line" "" "Append cube-rooted line" "cubert";
 menu Lcubl "Cubed Line" "" "Append cubed line" "cubed";
 menu Lexpl "Exp Line" "" "Append exponential line" "exp";
-menu Lextl "10^ Line" "" "Append 10^ line" "exp";
-menu Letwl "2^ Line" "" "Append 2^ line" "exp";
+menu Lextl "10^ Line" "" "Append 10^ line" "10^";
+menu Letwl "2^ Line" "" "Append 2^ line" "2^";
 menu Llnnl "Ln Line" "" "Append natural-log line" "ln";
-menu Lltnl "Log-10 Line" "" "Append log-10 line" "log";
-menu Lltwl "Log-2 Line" "" "Append log-10 line" "log";
+menu Lltnl "Log-10 Line" "" "Append log-10 line" "log10";
+menu Lltwl "Log-2 Line" "" "Append log-2 line" "log2";
 menusep;
 menu Lpiml "Times-π Line" "" "Append line times π" "*π";
 menu Lptml "Times-2π Line" "" "Append line times 2π" "*2π";
@@ -754,7 +759,13 @@ n=. {:conl 1
 save__n ''
 )
 
-immx=: runimmx0_jijs_
+immx=: 3 : 0
+	NB. builtin copy of runimmx1_jijs_
+IMMX=: utf8 y
+9!:27 '0!:100 IMMX'
+9!:29 [ 1
+)
+
 inc1=: 3 : 'y{1 _1'
 
 increment=: 3 : 0
@@ -866,11 +877,6 @@ if. -.setL 0 do. return. end.
 setcalco QT,(tabengine 'NAME' ; L0)
 )
 
-lob=: 3 : 0
-Handler 'lob'
-load '~user/lobrow.ijs'
-)
-
 maybeep=: 3 : 0
 	NB. decides if message: y needs beep
 if. -.isLit y do. return. end.
@@ -934,6 +940,30 @@ selline i
 )
 
 movud=: mvitu shift movit
+
+mru=: 3 : 0
+0 mru y
+:
+	NB. Most Recently Used facility
+	NB. y is string	-append new entry (y) to MRU
+	NB. y-:_	-clear down MRU
+	NB. y>:0	-the (x)-latest entry of MRU|MRU0
+	NB. x-:0	-read from MRU0 instead of MRU
+maxe=. 4	NB. maximum number of MRU entries
+if. y-:_ do. MRU=: maxe $ <'' return. end.
+if. _1=4!:0<'MRU' do. MRU=: maxe $ <'' end.
+if. 2=3!:0 y do. MRU=: maxe {. ~. (<tolower,y),MRU return.
+else.
+  if. x-:0 do.	> ((0>. <:#MRU0) <. |y) { MRU0
+  else.		> ((0>. <:#MRU) <. |y) { MRU
+  end.
+end.
+)
+
+mru0=: openu bind 0
+mru1=: openu bind 1
+mru2=: openu bind 2
+mru3=: openu bind 3
 
 mulitems=: 3 : 0
 Handler 'mulitems'
@@ -1050,7 +1080,28 @@ nom=. nom rplc BS ; SL
 if. 0=#nom do.
   confirm '>>>' ; x ; '...cancelled'
 else.
-  1 tabenginex cmd ; fprefix nom
+  'path nom1'=. fpathname nom
+	NB. Update ttables folder with path of: nom ...
+  if. SL e. path do. TPATH_TTABLES_z_=: path end.
+  mru '.' taketo nom1
+  1 tabenginex cmd ; nom1
+  clearunits''
+  ttinf''
+  immx 'inputfocus_tab_ 0'
+end.
+)
+
+openu=: 3 : 0
+Handler 'openu'	NB. Handler generator
+	NB. open (y)-most-recently-used ttable
+	NB. y-:'' (called as a handler) same as: y-:0
+if. 0=#y do. y=. 0 end.	NB. the most-recently-used
+if. -. preload'' do. return. end.
+if. 0=# nom=. mru y do.
+  confirm '>>> not enough MRU yet:' ; y
+else.
+  mru nom
+  1 tabenginex 'open' ; nom
   clearunits''
   ttinf''
   immx 'inputfocus_tab_ 0'
@@ -1226,10 +1277,9 @@ sellines PLOTY	NB. indicate which have been plotted
 )
 
 repos=: 3 : 0
-return.
 Handler 'repos'	NB. reset form pos+size to value in XYWH
 if. (y-:0) or (heldshift'') do. XYWH=: XYWH0 end.
-wd nb 'psel tab; pmovex' ; XYWH
+wd :: 0: nb 'psel tab; pmovex' ; XYWH
 )
 
 restart=: 3 : 0
@@ -1249,7 +1299,8 @@ nom=. wd nb 'mbsave' ; (dquote mytitle) ; (dquote mydir)
 if. 0=#nom do.
   confirm '>>> Save As... cancelled'
 else.
-  1 tabenginex 'save' ; fprefix nom
+  mru nom=. fprefix nom
+  tabenginex 'save' ; nom
 end.
 )
 
@@ -1263,7 +1314,8 @@ savet=: 3 : 0
 	NB. Use savea if title undefined
 Handler 'savet'
 if. (title'')-:tabengine'TITU' do. savea'' return. end.
-tabenginex 'save' ; goodfn title''
+mru nom=. goodfn title''
+tabenginex 'save' ; nom
 )
 
 savex=: 3 : 0
@@ -1358,9 +1410,9 @@ setunits=: 3 : 0
 y_tab_=: y
 sess log 'y L0 L1 xunit xunit_select'
 if. -.setL 0 do. return. end.
-if. y do.	NB. called with y=1: change units
+if. y do.	NB. called with y=1 -change units
   tabenginex nb 'unit' ; L0 ; xunit
-else.		NB. called with y=0: set units in combo
+else.		NB. called with y=0 -set units in combo
   z=. any2f tabengine nb 'UCOM' ; L0
   wd 'psel tab; set xunit *',utf8 z
   wd 'psel tab; setselect xunit 0'	NB. -current unit
@@ -1396,11 +1448,11 @@ end.
 
 start=: 3 : 0
 	NB. start the app: create form and init: cal
-if. 0[ -.IFJ6 do.
-  smoutput '>>> TABULA is not yet supported in this JVERSION:'
-  smoutput JVERSION
-  return.
-end.
+NB. if. +./ 'j7' E. JVERSION do.
+NB.   smoutput '>>> TABULA is not yet supported in this JVERSION:'
+NB.   smoutput JVERSION
+NB.   return.
+NB. end.
 load :: 0: TPATH_TABULA,'manifest.ijs'	NB. sets VERSION
 RUNTIME_z_=: 0 default 'RUNTIME_z_'
 if. coldstart=. 0=#y do.
@@ -1418,10 +1470,11 @@ L1=: 0
 sysmodifiers=: ,'0'
 searchc=: searchf=: ''
 MAXLINE=: 0
+winpos''		NB. init MRU, XYWH
 if. coldstart do.
 	window_close''	NB. close any existing window
 	TABNDX=: 0	NB. tab_tabs_button sets it to current tab
-	wd TABU
+	wd TABU rplc '<MRU0>';(mru 0);'<MRU1>';(mru 1);'<MRU2>';(mru 2);'<MRU3>';(mru 3)
 	tabgroups=: 'ttable';'consts';'functs';'inf'	NB. wd-ids of sub-forms
 	wd 'set tabs "Ttable" "Consts" "Functs" "Info"'	NB. labels in their tabs
 	wd 'creategroup tabs'
@@ -1438,7 +1491,7 @@ sess 'start_tab_: init the form'
 paneL0'' [panel_select=: ,'1'
 setpreci 3	NB. set precision in dropdown
 setunits 0
-winpos''	NB. restore saved window position,size
+repos''		NB. move window to XYWH
 wd^:(-.IFJ6) 'pshow;pshow sw_hide'
 wd 'pn "Tabula"'
 	NB. Define toolbar buttons ...
@@ -1495,14 +1548,16 @@ tab_g_focuslost=: empty
 tab_g_mbldown=: click@(1"_)
 tab_g_mblup=: click@(0"_)
 tab_g_mmove=: mousemove
+
 3 : 0''
 if. -.IFJ6 do.
-if. 3=GTKVER_j_ do.
-tab_g_paint=: 3 : 'for_i. i.32 do. 0 drawico i end.'
-end.
+  if. 3=GTKVER_j_ do.
+    tab_g_paint=: 3 : 'for_i. i.32 do. 0 drawico i end.'
+  end.
 end.
 ''
 )
+
 tab_run=: start
 tab_tabs_button=: clicktab
 tabengine=: tabengine_cal_
@@ -1699,10 +1754,14 @@ posfi=. TPATH_TABULA,'posn.ijs'
 if. y-:1 do.	NB. write out...
  xywh''
  z=. 'XYWH=: ',":XYWH
+ z=. z,LF,'TPATH_TTABLES_z_=: ',quote TPATH_TTABLES_z_
+ if. 0=4!:0<'MRU' do. z=. z,LF,'MRU=: ',cr'MRU' end.
  z fwrite posfi
 else.		NB. read back...
  XYWH=: XYWH0
- load :: 0: posfi
+ mru _		NB. init MRU (empty)
+ if. fexist posfi do. load posfi end.	NB. override XYWH MRU
+ MRU0=: MRU
  repos''
 end.
 )
