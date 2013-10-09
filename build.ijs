@@ -1,7 +1,7 @@
 NB. build
 
 f=. 3 : 0
-(jpath '~addons/math/tabula/',y) fcopynew jpath '~Addons/math/tabula/',y
+(jpath '~addons/math/tabula/',y) (fcopynew ::0:) jpath '~Addons/math/tabula/',y
 )
 
 mkdir_j_ jpath '~addons/math/tabula'
