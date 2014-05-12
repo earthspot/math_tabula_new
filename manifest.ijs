@@ -2,7 +2,7 @@ NB. tabula manifest
 
 CAPTION=: 'TABULA - scientific calculator'
 
-VERSION=: '1.0.14'
+VERSION=: '1.0.15'
 
 FILES=: 0 : 0
 manifest.ijs
