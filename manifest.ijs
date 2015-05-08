@@ -2,7 +2,7 @@ NB. tabula manifest
 
 CAPTION=: 'TABULA - scientific calculator'
 
-VERSION=: '1.0.19'
+VERSION=: '1.0.20'
 
 FILES=: 0 : 0
 manifest.ijs
@@ -14,6 +14,11 @@ TABULA is a backfitting scientific calculator with many built-in physical consta
 )
 
 RELEASE=: 'j802 j803 j804'
+
+DEPENDS=: 0 : 0
+graphics/plot
+math/cal
+)
 
 LABCATEGORY=: 'Math'
 

@@ -2493,7 +2493,7 @@ stup=: 3 : 0
 Handler 'stup'
 efx=. 'load ''math/tabula'''
 z=. freads fi=. jpath '~config/startup.ijs'
-if. z-:freads'' do. NB, startup file is absent
+if. z-:freads'' do. NB. startup file is absent
   rc=. efx fwrites fi
   confirm 'startup file created' ; (brack rc)
 else.
