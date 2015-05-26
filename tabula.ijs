@@ -1827,7 +1827,7 @@ winpos=: 3 : 0
 posfi=. '~config/tabula.dat'
 if. y-:1 do.
   z=. 'XYWH=: ',wd 'psel tab; qform;'
-  z fwrite posfi
+  z fwrite ::0: posfi
 else.
   XYWH=: XYWH0
   load :: 0: posfi
@@ -1922,7 +1922,7 @@ z rplc '_' ; '-'
 panelselect=: 3 : 'panel_select'
 pix=: 4 : 0
 'X Y'=. 32 * bnxy x
-glpixels X,Y, 32 32 ,, convicon y
+glpixels ::0: X,Y, 32 32 ,, convicon y
 )
 showtabevents=: 3 : 0
 if. -. 'tab_g' -: 5 {. sysevent do.
