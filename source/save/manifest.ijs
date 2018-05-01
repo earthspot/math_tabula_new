@@ -13,7 +13,9 @@ DESCRIPTION=: 0 : 0
 TABULA is a backfitting scientific calculator with many built-in physical constants, which knows about units of measurement.
 )
 
-RELEASE=: 'j802'
+RELEASE=: ''
+
+FOLDER=: 'math/tabula'
 
 LABCATEGORY=: 'Math'
 
