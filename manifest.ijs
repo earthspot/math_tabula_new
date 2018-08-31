@@ -1,8 +1,9 @@
 NB. tabula manifest
+NB. IAC Friday 31 August 2018  20:41:09
 
 CAPTION=: 'TABULA - scientific calculator'
 
-VERSION=: '1.0.25'
+VERSION=: '1.1.00'
 
 FILES=: 0 : 0
 manifest.ijs
@@ -18,7 +19,6 @@ RELEASE=: ''
 FOLDER=: 'math/tabula'
 
 DEPENDS=: 0 : 0
-graphics/plot
 math/cal
 )
 

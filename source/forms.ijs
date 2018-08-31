@@ -1,52 +1,40 @@
-'==================== qt darwin.ijs ===================='
-NB. IAC Mon 29 Jun 2015  12:13:06
-
-NB. =========================================================
-  NB. These verbs filter TABU in tab_open [qt] show.ijs
-darwin=: ]
-
-mswin=: 3 : 0
-y=.y rplc '&Quit' ; '&Exit'  NB. for illustration only
-y=.y rplc '"Quit Tabula"' ; '"Exit Tabula"'  NB. for illustration only
+ 	NB. tabby - forms.ijs
+'==================== [tabby] forms ===================='
+0 :0
+Friday 31 August 2018  21:52:55
 )
-NB. =========================================================
+
+coclass 'tabby'
 
 TABU=: 0 : 0
-pc tab;pn Tabula;
+pc tab;pn Tabby;
 menupop "File";
-menu newtt "&New" "Ctrl+N" "Start a new t-table" "new";
-menu opens "Open Sample" "Ctrl+Shift+O" "Open the sample t-table" "sample";
-menu opent "&Open..." "Ctrl+O" "Open a t-table from user library" "open...";
-menu appet "&Append..." "" "Append a t-table from user library" "append...";
-menu reopn "&Re-open" "Ctrl+Alt+O" "Re-open current t-table as last saved" "reopn";
-menu savex "&Save" "Ctrl+S" "Save current t-table under existing name" "savex";
-menu saves "Save Copy As Sample" "" "Save current t-table as default sample" "saves";
-menu savet "Save As Title" "" "Save current t-table under title shown" "savet";
-menu savea "Save As..." "" "Save current t-table under new name" "save as...";
+menu newtt "&New" "Ctrl+N" "Start a new ttable" "new";
+menu opens "Open Sample" "Ctrl+Shift+O" "Open a sample ttable" "sample";
+menu opent "&Open..." "Ctrl+O" "Open a ttable from user library" "open...";
+menu appet "&Append..." "" "Append a ttable from user library" "append...";
+menu savex "&Save" "Ctrl+S" "Save current ttable under existing name" "savex";
+menu saves "Save As Sample" "" "Save current ttable as default sample" "saves";
+menu savet "Save As Title" "" "Save current ttable under title shown" "savet";
+menu savea "Save As..." "" "Save current ttable under new name" "save as...";
 menusep;
-menu deltt "Delete This T-table" "" "Delete current t-table" "deltt";
-menu deltf "Delete T-table..." "" "Delete a t-table from user library" "deltf";
-menusep;
-menu step0 "Plot 0 to (value)" "" "plot 0 values" "plot";
-menu step1 "Plot 1 to (value)" "" "plot 1 values" "plot";
-menu step2 "Plot (-value) to (value)" "" "plot -v2v values" "plot";
-menusep;
+menu stept "Plot 0 to (value)" "" "plot values" "plot";
 menu plotl "Line Chart" "" "Specify plot: line" "line";
 menu plotb "Bar Chart" "" "Specify plot: bar" "bar";
 menu plotp "Pie Chart" "" "Specify plot: pie" "pie";
 menu plots "Surface Chart" "" "Specify plot: surface" "surface";
 menusep;
-menu close "Close" "" "Close current t-table" "close t-table";
+menu close "Close" "" "Close current ttable" "close ttable";
 menusep;
-menu print "Print" "" "Print current t-table" "print t-table";
+menu print "Print" "" "Print current ttable" "print ttable";
 menusep;
-menu quit "&Quit" "Ctrl+Shift+Q" "Quit Tabula" "quit";
+menu quit "&Quit" "Ctrl+Shift+Q" "Quit TABULA" "quit";
 menupopz;
 menupop "Edit";
 menu undo "&Undo" "Ctrl+U" "Undo last action" "undo";
 menu redo "&Redo" "Ctrl+Shift+U" "Redo last action" "redo";
 menusep;
-menu copal "&Copy T-table" "Ctrl+Shift+C" "copyall" "copy-all";
+menu copal "&Copy Ttable" "Ctrl+Shift+C" "copyall" "copy-all";
 menusep;
 menu label "Edit Item Name" "Ctrl+Shift+N" "Edit name" "name";
 menu formu "Edit Formula" "Ctrl+Shift+F" "Edit formula" "formula";
@@ -61,8 +49,10 @@ menu merge "Merge lines" "Ctrl+M" "Merge lines..." "merge";
 menu delit "Delete Line" "" "Delete this line" "delete";
 menu dupit "Duplicate Line" "Ctrl+D" "Duplicate this line" "dup";
 menusep;
-menu updex "Update Exchange Rates" "" "Update currency exchange rates for this t-table" "upd-exch";
-menu updin "Update Info" "" "Update info for this t-table" "upd-inf";
+menu updex "Update Exchange Rates" "" "Update currency exchange rates for this ttable" "upd-exch";
+menu updin "Update Info" "" "Update info for this ttable" "upd-inf";
+rem menusep;
+rem menu stup "Startup with TABULA" "" "Fix startup" "stup";
 menupopz;
 menupop "Command";
 menu repet "Repeat" "Ctrl+Shift+R" "Repeat last action" "repeat";
@@ -73,10 +63,10 @@ menusep;
 menu hidel "Hide Line(s)" "" "Hide selected lines" "hide";
 menu unhid "Unhide All Lines" "" "Unhide all hidden lines" "unhide";
 menusep;
-menu ttabl "Show T-table" "Ctrl+T" "Show t-table display" "t-table";
+menu ttabl "Show Ttable" "Ctrl+T" "Show ttable display" "ttable";
 menu conss "Show Constants List" "" "Show consts tab" "consts";
 menu funcs "Show Functions List" "" "Show functs tab" "functs";
-menu infor "Show T-table Info" "Ctrl+I" "Show info tab" "info";
+menu infor "Show Ttable Info" "Ctrl+I" "Show info tab" "info";
 menusep;
 menu trace "Toggle TRACE" "Ctrl+Shift+T" "Toggle trace" "trace";
 menu trach "Toggle TRACH" "" "Toggle Handler1 trace" "handler";
@@ -176,9 +166,9 @@ menu Lt2dl "By-100 Line" "" "Append line divided by 100" "/100";
 menu Lt3dl "By-1000 Line" "" "Append line divided by 1000" "/1000";
 menupopz;
 menupop "Help";
-menu hlpt "Help for Tabula" "" "Tabula help" "help";
+menu hlpt "Help for TABULA" "" "TABULA help" "help";
 menu hlpc "Help for 1-char comands" "" "cmds help" "cmds";
-menu hinf "Info for this t-table" "" "t-table info" "info";
+menu hinf "Info for this ttable" "" "ttable info" "info";
 menupopz;
 cc g isidraw;
 cc tabs tab;
