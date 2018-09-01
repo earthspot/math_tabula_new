@@ -5,8 +5,8 @@ Friday 31 August 2018  21:27:06
 open BUILTFILE
 )
 
-NB. TO LOAD JUST THIS BUILDFILE:	fn⌘F9	-build only
-NB. DITTO + RUN IT AFTERWARDS:	fnF9	-build and run
+NB. TO LOAD JUST THIS BUILTFILE:	fn⌘F9
+NB. DITTO THEN RUN:		fnF9
 
 smoutput '--- TABBY build: started'
 

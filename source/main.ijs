@@ -7,6 +7,7 @@ Friday 31 August 2018  21:14:03
 coclass 'tabby'
 
 tab_open=: 3 : 0
+  NB. serves: start
 window_close''
 wd TABU
 wd 'psel tab'
@@ -93,28 +94,6 @@ wd 'psel tab; set sbar setlabel status ',dquote ":,y
 
 line=: smoutput bind '==============================='
 
-click=: 3 : 0
-if. y=1 do.		NB. mouseDown
-NB.   ssw '... click: mouseDown, sysdata=(sysdata)'
-  1 fill_tools TOOLID
-else.			NB. mouseUp
-NB.   ssw '... click: mouseUp,   sysdata=(sysdata)'
-  doit TOOLID
-end.
-inputfocus''
-)
-
-doit=: 3 : 0		NB. STUB ONLY
-  NB. do the tool action: y
-if. -. y e. i.32 do. return. end.
-action=. dtb 3 }. 13 {. y{TOOLHINT
-ssw '... doit: y=(y) action=[(action)]'
-NB. This verb should execute the FULL HANDLER NAME for: action.
-NB. This should avoid superfluous levels of indirection.
-NB. Perhaps if handler name doesn't exist, execute a name=tag verb,
-NB. e.g. set1u
-)
-
 clicktab=: 3 : 0
 n=. ".tabs_select
 select. n
@@ -122,8 +101,8 @@ case. 1 do. fillconsts''
 case. 2 do. fillfuncts''
 case. 3 do. ttinf''
 end.
-setshow n
-inputfocus''
+activateTabWithId n
+restoreFocusToInputField''
 )
 
 fillttable=: 3 : 0
@@ -147,9 +126,11 @@ putsb CONTENT_CONFIRM=: y
 y return.
 )
 
-setshow=: 3 : 'wd ''psel tab; set tabs active '',":TABNDX=: y'
+activateTabWithId=: 3 : 0
+wd 'psel tab; set tabs active ',":TABNDX=: y
+)
 
-inputfocus=: 3 : 0
+restoreFocusToInputField=: 3 : 0
 wd 'psel tab; pactive'
 select. TABNDX
 case. 0 do. wd 'psel tab; setfocus calco'
@@ -158,20 +139,6 @@ case. 2 do. wd 'psel tab; setfocus searchf'
 case. 3 do. wd 'psel tab; setfocus info'
 end.
 empty''
-)
-
-clickpanel=: 3 : 0
-for_row. >cutopen panel do.
-z=. '{' takeafter row
-]line=. ". '}' taketo z
-]z=. dlb '}' takeafter z
-]i=. {. I. '  ' E. z  NB. where qty ends
-qty=. i{.z
-com=. dlb i}. z
-sval=. ' ' taketo qty
-unit=. ' ' takeafter qty
-smoutput line ; sval ; unit ; com
-end.
 )
 
 ttinf=: 1 ddefine  NB. modified from: ~Gittab/tabula.ijs
@@ -189,9 +156,10 @@ end.
 )
 
 tabenginex=: 0&$: :(4 : 0)
+  NB. TRY TO ELIMINATE THIS VERB and its baroque apparatus
 if. isBoxed y do. y=. nb y end.
 x refresh confirm tabengine INSTR_z_=: ,y
-setshow 0
+activateTabWithId 0
 )
 
 refresh=: 0&$: :(4 : 0)
@@ -209,7 +177,7 @@ end.
 if. x e. 4 5 do.   	NB. LASTLINE (=4)
   selline nitems''
   setunits 0
-  inputfocus''
+  restoreFocusToInputField''
 end.
 )
 

@@ -1,5 +1,5 @@
 0 :0
-2018-09-01  00:15:17
+2018-09-01  19:16:31
 -
 TABBY: scientific units conversion package
 )
@@ -7,13 +7,15 @@ TABBY: scientific units conversion package
 clear 'tabby'
 coclass 'tabby'
 coinsert 'jgl2'
-AABUILT=: '2018-09-01  00:15:17'
+AABUILT=: '2018-09-01  19:16:31'
 
 '==================== [tabby] constants ===================='
 
 cocurrent 'tabby'
 
 0 :0
+	EXTRACTED FROM TOOLHINT
+	-trash if not needed
 15 ttcont    Edit code of ttable as saved                         
 16 restart   Show Term window / Restart TABULA    
 28 eduu      Edit consts / Edit functs
@@ -34,7 +36,7 @@ TOOLHINT=: >cutopen 0 : 0
 10 stept     Plot 0 to (value) / Plot (-value) to (+value)
 11 replot    Replot selected items only / Replot all items
 12 movud     Move line up / Move line down
-13 mov??     Move line to top / Move line to bottom
+13 movtb     Move line to top / Move line to bottom
 14 newsl     New line
 15 equal     New line = selected line
 16 repos     Reset window pos+size / Reset original window pos+size
@@ -48,8 +50,8 @@ TOOLHINT=: >cutopen 0 : 0
 24 addpc     Add 1% / Subtract 1%
 25 by2pi     Times PI / Times 2*PI
 26 siunt     Convert to SI Units
-27 user?     User function (red)
-28 user?     User function (green)
+27 red       User function
+28 green     User function
 29 merge     Merge selected lines
 30 hlpt      Help for TABULA
 31 showttinf Show ttable info / edit ttable info
@@ -313,32 +315,83 @@ set sbar addlabelp sinf1;
 set sbar addlabelp sinf2;
 )
 
+'==================== [tabby] tools ===================='
+0 :0
+These pseudo-handlers are executed by tab_g_mblup
+which is triggered by a mouseUp on the toolbar.
+)
+
+cocurrent 'tabby'
+
+0 :0
+	EXTRACTED FROM TOOLHINT
+	-trash if not needed
+15 ttcont    Edit code of ttable as saved                         
+16 restart   Show Term window / Restart TABULA    
+28 eduu      Edit consts / Edit functs
+29 hlpca     Commands for CAL-engine / About CAL-engine                        
+)
+
+TOOLHINT=: >cutopen 0 : 0
+0  newtt     New empty ttable
+1  opent     Open ttable... / Open SAMPLE
+2  savts     Save ttable as Title / Save ttable as SAMPLE
+3  copal     Copy entire ttable
+4  undoredo  Undo / Redo
+5  additems  Add all selected items
+6  subitems  Item 1 minus item 2 / Item 2 minus item 1
+7  mulitems  Multiply all selected items
+8  divitems  Divide item 1 by item 2 / Divide item 2 by item 1
+9  powitems  Item 1 ^ item 2 / Item 2 ^ item 1
+10 stept     Plot 0 to (value) / Plot (-value) to (+value)
+11 replot    Replot selected items only / Replot all items
+12 movud     Move line up / Move line down
+13 movtb     Move line to top / Move line to bottom
+14 newsl     New line
+15 equal     New line = selected line
+16 repos     Reset window pos+size / Reset original window pos+size
+17 delit     Delete line
+18 hold      Toggle Hold / Toggle Transient Hold
+19 traca     Toggle TRACE (action-verbs) / Toggle TRACI (Handler1)
+20 iedit     Edit item name / Edit item formula
+21 setv0     Set value to 0
+22 set1u     Set value to 1 / Set value to -1
+23 add1u     Add 1 / Subtract 1
+24 addpc     Add 1% / Subtract 1%
+25 by2pi     Times PI / Times 2*PI
+26 siunt     Convert to SI Units
+27 red       User function
+28 green     User function
+29 merge     Merge selected lines
+30 hlpt      Help for TABULA
+31 showttinf Show ttable info / edit ttable info
+)
+
+shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
+
+red=: 3 : 0
+smoutput ' '
+)
+
+green=: 3 : 0
+smoutput '============================='
+)
+
+setv0=: tab_Vzero_button
+
+set1u=: tab_Vonep_button shift tab_Vonen_button
+
 '==================== [tabby] handlers.ijs ===================='
 0 :0
-Friday 31 August 2018  21:14:03
+Saturday 1 September 2018  18:04:43
 )
 
 coclass 'tabby'
 
-0 :0
-tab_close=:                  quit
-tab_default=:                dofn
-tab_run=:                    start
-newc=: nohnd bind 'newc'
-quit=: nohnd bind 'quit'
-dofn=: nohnd bind 'dofn'
-newf=: nohnd bind 'newf'
-pickunits=: nohnd bind 'pickunits'
-setpreci=: nohnd bind 'setpreci'
-)
-
 tab_default=: 3 : 0
-ssw '(sysevent)=: define_action'
+sllog 'tab_default syschild sysparent syshandler sysevent'
 )
-
-nohnd=: 3 : 0
-ssw '>>> NOT IMPLEMENTED: (sysevent) [(y)]'
-)
+tab_g_mbldbl=: empty
 
 tab_calco_button=:           calcmd
 tab_calco_changed=: empty
@@ -353,11 +406,7 @@ tab_func_button=:            newf
 tab_func_select=: empty
 tab_g_focus=: empty
 tab_g_focuslost=: empty
-tab_g_mbldown=:              click bind 1
-tab_g_mblup=:                click bind 0
 tab_g_resize=: empty
-tab_panel_button=:           clickpanel
-tab_panel_select=:           clickpanel
 tab_preci_select=:           setpreci
 tab_resize=: empty
 tab_searchc_button=:         fillconsts
@@ -376,7 +425,6 @@ ssw '>>> changed: casec=(casec) searchc=[(searchc)] searchc_select=(searchc_sele
 tab_searchf_changed=: 3 : 0
 ssw '>>> changed: casef=(casef) searchf=[(searchf)] searchf_select=(searchf_select)'
 )
-
 
 tab_g_mmove=: 3 : 0
 n=. 16
@@ -402,12 +450,61 @@ tab_newtt_button=: 3 : 0
 DESELECT tabenginex 'newt'
 clearunits''
 ttinf''
-inputfocus''
+restoreFocusToInputField''
 )
 
-tab_opens_button=: define_action
-tab_opent_button=: define_action
-tab_appet_button=: define_action
+tab_panel_select=: 3 : 0
+
+sllog 'tab_panel_select syschild sysparent syshandler sysevent'
+for_row. >cutopen panel do.
+z=. '{' takeafter row
+]line=. ". '}' taketo z
+]z=. dlb '}' takeafter z
+]i=. {. I. '  ' E. z
+qty=. i{.z
+com=. dlb i}. z
+sval=. ' ' taketo qty
+unit=. ' ' takeafter qty
+smoutput line ; sval ; unit ; com
+end.
+)
+
+tab_panel_button=: tab_panel_select
+
+tab_g_mbldown=: 3 : 0
+
+
+1 fill_tools TOOLID
+restoreFocusToInputField''
+)
+
+tab_g_mblup=: 3 : 0
+
+
+if. -. TOOLID e. i.32 do.
+  smoutput '>>> tab_g_mblup: BAD TOOLID: ',":TOOLID
+  return.
+end.
+tool=. dtb 3 }. 13 {. TOOLID{TOOLHINT
+if. -.absent tool do. (tool~)'' return. end.
+sllog 'tab_g_mblup TOOLID tool'
+restoreFocusToInputField''
+)
+
+tab_Vzero_button=: 3 : 0
+smoutput '+++ tab_Vzero_button: ENTERED'
+smoutput '--- tab_Vzero_button: EXITS'
+)
+
+tab_Vonep_button=: 3 : 0
+smoutput '+++ tab_Vonep_button: ENTERED'
+smoutput '--- tab_Vonep_button: EXITS'
+)
+
+tab_Vonen_button=: 3 : 0
+smoutput '+++ tab_Vonen_button: ENTERED'
+smoutput '--- tab_Vonen_button: EXITS'
+)
 
 '==================== [tabby] utilities ===================='
 
@@ -421,6 +518,7 @@ Friday 31 August 2018  21:14:03
 coclass 'tabby'
 
 tab_open=: 3 : 0
+
 window_close''
 wd TABU
 wd 'psel tab'
@@ -493,22 +591,6 @@ wd 'psel tab; set sbar setlabel status ',dquote ":,y
 
 line=: smoutput bind '==============================='
 
-click=: 3 : 0
-if. y=1 do.
-  1 fill_tools TOOLID
-else.
-  doit TOOLID
-end.
-inputfocus''
-)
-
-doit=: 3 : 0
-
-if. -. y e. i.32 do. return. end.
-action=. dtb 3 }. 13 {. y{TOOLHINT
-ssw '... doit: y=(y) action=[(action)]'
-)
-
 clicktab=: 3 : 0
 n=. ".tabs_select
 select. n
@@ -516,8 +598,8 @@ case. 1 do. fillconsts''
 case. 2 do. fillfuncts''
 case. 3 do. ttinf''
 end.
-setshow n
-inputfocus''
+activateTabWithId n
+restoreFocusToInputField''
 )
 
 fillttable=: 3 : 0
@@ -539,9 +621,9 @@ putsb CONTENT_CONFIRM=: y
 y return.
 )
 
-setshow=: 3 : 'wd ''psel tab; set tabs active '',":TABNDX=: y'
+activateTabWithId=: 3 : 'wd ''psel tab; set tabs active '',":TABNDX=: y'
 
-inputfocus=: 3 : 0
+restoreFocusToInputField=: 3 : 0
 wd 'psel tab; pactive'
 select. TABNDX
 case. 0 do. wd 'psel tab; setfocus calco'
@@ -550,20 +632,6 @@ case. 2 do. wd 'psel tab; setfocus searchf'
 case. 3 do. wd 'psel tab; setfocus info'
 end.
 empty''
-)
-
-clickpanel=: 3 : 0
-for_row. >cutopen panel do.
-z=. '{' takeafter row
-]line=. ". '}' taketo z
-]z=. dlb '}' takeafter z
-]i=. {. I. '  ' E. z
-qty=. i{.z
-com=. dlb i}. z
-sval=. ' ' taketo qty
-unit=. ' ' takeafter qty
-smoutput line ; sval ; unit ; com
-end.
 )
 
 ttinf=: 1 ddefine
@@ -581,12 +649,14 @@ end.
 )
 
 tabenginex=: 0&$: :(4 : 0)
+
 if. isBoxed y do. y=. nb y end.
 x refresh confirm tabengine INSTR_z_=: ,y
-setshow 0
+activateTabWithId 0
 )
 
 refresh=: 0&$: :(4 : 0)
+
 putpanel tabengine 'CTBU'
 if. x e. 1 3 5 do.
   sellinex''
@@ -600,7 +670,7 @@ end.
 if. x e. 4 5 do.
   selline nitems''
   setunits 0
-  inputfocus''
+  restoreFocusToInputField''
 end.
 )
 

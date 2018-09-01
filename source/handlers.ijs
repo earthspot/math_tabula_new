@@ -1,32 +1,17 @@
 	NB. tabby - handlers.ijs
 '==================== [tabby] handlers.ijs ===================='
 0 :0
-Friday 31 August 2018  21:14:03
+Saturday 1 September 2018  18:04:43
 )
 
 coclass 'tabby'
 
-0 :0
-tab_close=:                  quit
-tab_default=:                dofn
-tab_run=:                    start
-newc=: nohnd bind 'newc'
-quit=: nohnd bind 'quit'
-dofn=: nohnd bind 'dofn'
-newf=: nohnd bind 'newf'
-pickunits=: nohnd bind 'pickunits'
-setpreci=: nohnd bind 'setpreci'
-)
-
 tab_default=: 3 : 0
-NB. ssw LF,LF,'>>> tab_default: handler needed for last action:'
-NB. ssw '(sysevent)=:             nohnd bind ''describe_action''(LF,LF)'
-ssw '(sysevent)=: define_action'
+sllog 'tab_default syschild sysparent syshandler sysevent'
 )
 
-nohnd=: 3 : 0
-ssw '>>> NOT IMPLEMENTED: (sysevent) [(y)]'
-)
+NB. >>> WE NOW HAVE A doubleclick event for the toolbar...
+tab_g_mbldbl=: empty
 
 tab_calco_button=:           calcmd
 tab_calco_changed=: empty
@@ -41,11 +26,7 @@ tab_func_button=:            newf
 tab_func_select=: empty
 tab_g_focus=: empty
 tab_g_focuslost=: empty
-tab_g_mbldown=:              click bind 1
-tab_g_mblup=:                click bind 0
 tab_g_resize=: empty
-tab_panel_button=:           clickpanel
-tab_panel_select=:           clickpanel
 tab_preci_select=:           setpreci
 tab_resize=: empty
 tab_searchc_button=:         fillconsts
@@ -65,7 +46,6 @@ tab_searchf_changed=: 3 : 0
 ssw '>>> changed: casef=(casef) searchf=[(searchf)] searchf_select=(searchf_select)'
 )
 
-
 tab_g_mmove=: 3 : 0
 n=. 16  NB. (count) number of icons in a row
 h=. w=. 32 NB. (px) height and width of an icon
@@ -82,7 +62,7 @@ wd'timer ',":TIMER_HOVER
 
 hover_off=: 3 : 0
 wd 'timer 0'
-fill_tools''
+fill_tools''  NB. redraw toolbar with no hilite
 )
 
 tab_close=: window_close
@@ -91,13 +71,62 @@ tab_newtt_button=: 3 : 0
 DESELECT tabenginex 'newt'
 clearunits''
 ttinf''
-inputfocus''
+restoreFocusToInputField''
 )
 
-tab_opens_button=: define_action	NB. Open Sample…
-tab_opent_button=: define_action	NB. Open…
-tab_appet_button=: define_action	NB. Append…
+tab_panel_select=: 3 : 0
+  NB. handles click on row of t-table, or arrow-selection
+sllog 'tab_panel_select syschild sysparent syshandler sysevent'
+for_row. >cutopen panel do.
+z=. '{' takeafter row
+]line=. ". '}' taketo z
+]z=. dlb '}' takeafter z
+]i=. {. I. '  ' E. z  NB. where qty ends
+qty=. i{.z
+com=. dlb i}. z
+sval=. ' ' taketo qty
+unit=. ' ' takeafter qty
+smoutput line ; sval ; unit ; com
+end.
+)
 
-NB. APPEND HANDLERS FOR ALL TAGS in TABU
-NB. Where a verb like: newtt was once defined,
-NB.  merge it with the full handler name above.
+tab_panel_button=: tab_panel_select  NB. IS IT EVER TRIGGERED?
+
+tab_g_mbldown=: 3 : 0
+  NB. mouseDown on toolbar
+  NB. TOOLID is repeatedly assigned by: tab_g_mmove
+1 fill_tools TOOLID
+restoreFocusToInputField''
+)
+
+tab_g_mblup=: 3 : 0
+  NB. mouseUp on toolbar: executes the tool
+  NB. TOOLID is repeatedly assigned by: tab_g_mmove
+if. -. TOOLID e. i.32 do.
+  smoutput '>>> tab_g_mblup: BAD TOOLID: ',":TOOLID
+  return.
+end.
+tool=. dtb 3 }. 13 {. TOOLID{TOOLHINT
+NB. This verb should execute the FULL HANDLER NAME for: action.
+NB. This should avoid superfluous levels of indirection.
+NB. Perhaps if handler name doesn't exist, execute a name=tag verb,
+NB. e.g. set1u
+if. -.absent tool do. (tool~)'' return. end.
+sllog 'tab_g_mblup TOOLID tool'
+restoreFocusToInputField''
+)
+
+tab_Vzero_button=: 3 : 0
+smoutput '+++ tab_Vzero_button: ENTERED'
+smoutput '--- tab_Vzero_button: EXITS'
+)
+
+tab_Vonep_button=: 3 : 0
+smoutput '+++ tab_Vonep_button: ENTERED'
+smoutput '--- tab_Vonep_button: EXITS'
+)
+
+tab_Vonen_button=: 3 : 0
+smoutput '+++ tab_Vonen_button: ENTERED'
+smoutput '--- tab_Vonen_button: EXITS'
+)
