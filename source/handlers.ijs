@@ -67,26 +67,22 @@ fill_tools''  NB. redraw toolbar with no hilite
 
 tab_close=: window_close
 
-tab_newtt_button=: 3 : 0
-DESELECT tabenginex 'newt'
-clearunits''
-ttinf''
-restoreFocusToInputField''
-)
+tab_newtt_button=: newtt
 
 tab_panel_select=: 3 : 0
   NB. handles click on row of t-table, or arrow-selection
-sllog 'tab_panel_select syschild sysparent syshandler sysevent'
+sllog 'tab_panel_select panel_select syschild'
+sllog 'sysparent syshandler sysevent'
 for_row. >cutopen panel do.
-z=. '{' takeafter row
-]line=. ". '}' taketo z
+z=. '{' takeafter row -. '@'
+]lineNo=. ". '}' taketo z
 ]z=. dlb '}' takeafter z
 ]i=. {. I. '  ' E. z  NB. where qty ends
 qty=. i{.z
 com=. dlb i}. z
 sval=. ' ' taketo qty
 unit=. ' ' takeafter qty
-smoutput line ; sval ; unit ; com
+sllog 'tab_panel_select lineNo sval unit com'
 end.
 )
 

@@ -1,61 +1,36 @@
 0 :0
-2018-09-01  19:16:31
--
-TABBY: scientific units conversion package
+TABULA: scientific units conversion package
+simplified architecture
 )
+
+require '~Gituu/uu.ijs'
+require '~Gitcal/cal.ijs'
 
 clear 'tabby'
 coclass 'tabby'
 coinsert 'jgl2'
-AABUILT=: '2018-09-01  19:16:31'
+
+AABUILT=: '2018-09-02  17:24:57'
+AABUILT=: '2018-09-02  17:25:32'
+
+AABUILT=: '2018-09-02  17:49:35'
+AABUILT=: '2018-09-02  17:53:42'
+AABUILT=: '2018-09-02  17:55:48'
+AABUILT=: '2018-09-02  17:57:58'
+AABUILT=: '2018-09-02  18:00:11'
+AABUILT=: '2018-09-02  18:02:31'
+AABUILT=: '2018-09-02  18:08:21'
+AABUILT=: '2018-09-02  18:11:50'
+AABUILT=: '2018-09-02  18:13:23'
+AABUILT=: '2018-09-02  18:14:32'
+AABUILT=: '2018-09-02  18:19:06'
 
 '==================== [tabby] constants ===================='
 
 cocurrent 'tabby'
 
-0 :0
-	EXTRACTED FROM TOOLHINT
-	-trash if not needed
-15 ttcont    Edit code of ttable as saved                         
-16 restart   Show Term window / Restart TABULA    
-28 eduu      Edit consts / Edit functs
-29 hlpca     Commands for CAL-engine / About CAL-engine                        
-)
+sysmodifiers=: ,'0'
 
-TOOLHINT=: >cutopen 0 : 0
-0  newtt     New empty ttable
-1  opent     Open ttable... / Open SAMPLE
-2  savts     Save ttable as Title / Save ttable as SAMPLE
-3  copal     Copy entire ttable
-4  undoredo  Undo / Redo
-5  additems  Add all selected items
-6  subitems  Item 1 minus item 2 / Item 2 minus item 1
-7  mulitems  Multiply all selected items
-8  divitems  Divide item 1 by item 2 / Divide item 2 by item 1
-9  powitems  Item 1 ^ item 2 / Item 2 ^ item 1
-10 stept     Plot 0 to (value) / Plot (-value) to (+value)
-11 replot    Replot selected items only / Replot all items
-12 movud     Move line up / Move line down
-13 movtb     Move line to top / Move line to bottom
-14 newsl     New line
-15 equal     New line = selected line
-16 repos     Reset window pos+size / Reset original window pos+size
-17 delit     Delete line
-18 hold      Toggle Hold / Toggle Transient Hold
-19 traca     Toggle TRACE (action-verbs) / Toggle TRACI (Handler1)
-20 iedit     Edit item name / Edit item formula
-21 setv0     Set value to 0
-22 set1u     Set value to 1 / Set value to -1
-23 add1u     Add 1 / Subtract 1
-24 addpc     Add 1% / Subtract 1%
-25 by2pi     Times PI / Times 2*PI
-26 siunt     Convert to SI Units
-27 red       User function
-28 green     User function
-29 merge     Merge selected lines
-30 hlpt      Help for TABULA
-31 showttinf Show ttable info / edit ttable info
-)
 
 CONTENT_TTABLE=: 0 : 0
 Pseudogravity by rotation
@@ -316,10 +291,6 @@ set sbar addlabelp sinf2;
 )
 
 '==================== [tabby] tools ===================='
-0 :0
-These pseudo-handlers are executed by tab_g_mblup
-which is triggered by a mouseUp on the toolbar.
-)
 
 cocurrent 'tabby'
 
@@ -367,13 +338,11 @@ TOOLHINT=: >cutopen 0 : 0
 31 showttinf Show ttable info / edit ttable info
 )
 
-shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
-
-red=: 3 : 0
+green=: 3 : 0
 smoutput ' '
 )
 
-green=: 3 : 0
+red=: 3 : 0
 smoutput '============================='
 )
 
@@ -446,26 +415,21 @@ fill_tools''
 
 tab_close=: window_close
 
-tab_newtt_button=: 3 : 0
-DESELECT tabenginex 'newt'
-clearunits''
-ttinf''
-restoreFocusToInputField''
-)
+tab_newtt_button=: newtt
 
 tab_panel_select=: 3 : 0
 
-sllog 'tab_panel_select syschild sysparent syshandler sysevent'
+sllog 'tab_panel_select panel_select syschild sysparent syshandler sysevent'
 for_row. >cutopen panel do.
-z=. '{' takeafter row
-]line=. ". '}' taketo z
+z=. '{' takeafter row -. '@'
+]lineNo=. ". '}' taketo z
 ]z=. dlb '}' takeafter z
 ]i=. {. I. '  ' E. z
 qty=. i{.z
 com=. dlb i}. z
 sval=. ' ' taketo qty
 unit=. ' ' takeafter qty
-smoutput line ; sval ; unit ; com
+sllog 'tab_panel_select lineNo sval unit com'
 end.
 )
 
@@ -510,12 +474,38 @@ smoutput '--- tab_Vonen_button: EXITS'
 
 cocurrent 'tabby'
 
+shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
+
 '==================== [tabby] main ===================='
 0 :0
 Friday 31 August 2018  21:14:03
 )
 
 coclass 'tabby'
+
+showTtable=: 3 : 0
+wd 'psel tab; set panel items *',tabengine'CTBU'
+restoreFocusToInputField''
+)
+
+newtt=: 3 : 0
+tabengine'newt'
+showTtable''
+)
+
+opent=: opentt shift opens
+
+opentt=: 3 : 0
+
+tabengine'open 3'
+showTtable''
+)
+
+opens=: 3 : 0
+
+tabengine'open $$'
+showTtable''
+)
 
 tab_open=: 3 : 0
 
@@ -588,9 +578,6 @@ ssw '>>> calcmd: not implemented, calco=[(calco)]'
 putsb=: 3 : 0
 wd 'psel tab; set sbar setlabel status ',dquote ":,y
 )
-
-line=: smoutput bind '==============================='
-
 clicktab=: 3 : 0
 n=. ".tabs_select
 select. n
@@ -621,7 +608,9 @@ putsb CONTENT_CONFIRM=: y
 y return.
 )
 
-activateTabWithId=: 3 : 'wd ''psel tab; set tabs active '',":TABNDX=: y'
+activateTabWithId=: 3 : 0
+wd 'psel tab; set tabs active ',":TABNDX=: y
+)
 
 restoreFocusToInputField=: 3 : 0
 wd 'psel tab; pactive'
@@ -648,42 +637,18 @@ elseif. do.
 end.
 )
 
-tabenginex=: 0&$: :(4 : 0)
-
-if. isBoxed y do. y=. nb y end.
-x refresh confirm tabengine INSTR_z_=: ,y
-activateTabWithId 0
-)
-
-refresh=: 0&$: :(4 : 0)
-
-putpanel tabengine 'CTBU'
-if. x e. 1 3 5 do.
-  sellinex''
-else.
-  if. L0>0 do. wd nb 'set panel select' ; L0 end.
-  if. L1>0 do. wd nb 'set panel select' ; L1 end.
-end.
-if. x e. 2 3 do.
-else. wd 'psel tab; set calco text'
-end.
-if. x e. 4 5 do.
-  selline nitems''
-  setunits 0
-  restoreFocusToInputField''
-end.
-)
-
-clearunits=: 3 : 'wd ''psel tab; set xunit items ""'''
-
 '==================== [tabby] start ===================='
 
 cocurrent 'tabby'
 
 start=: 3 : 0
 wd 'timer 0'
+tabengine=: tabengine_cal_
+tt_z_=: tabengine_z_=: tabengine
+
 tab_open''
-fillttable''
+tabengine'Init'
+wd 'psel tab; set panel items *',tabengine'CTBU'
 )
 
 start''

@@ -6,6 +6,30 @@ Friday 31 August 2018  21:14:03
 
 coclass 'tabby'
 
+showTtable=: 3 : 0
+wd 'psel tab; set panel items *',tabengine'CTBU'
+restoreFocusToInputField''
+)
+
+newtt=: 3 : 0
+tabengine'newt'
+showTtable''
+)
+
+opent=: opentt shift opens
+
+opentt=: 3 : 0
+  NB. open selected t-table
+tabengine'open 3'  NB. TEST <<<<<<<<<<<<<<<<<<<<<
+showTtable''
+)
+
+opens=: 3 : 0
+  NB. open SAMPLE
+tabengine'open $$'
+showTtable''
+)
+
 tab_open=: 3 : 0
   NB. serves: start
 window_close''
@@ -92,7 +116,7 @@ putsb=: 3 : 0
 wd 'psel tab; set sbar setlabel status ',dquote ":,y
 )
 
-line=: smoutput bind '==============================='
+NB. line=: smoutput bind '==============================='
 
 clicktab=: 3 : 0
 n=. ".tabs_select
@@ -154,31 +178,3 @@ elseif. do.
   confirm sw 'Info: $=($y) updated in t-table: (NAME_TTABLE)'
 end.
 )
-
-tabenginex=: 0&$: :(4 : 0)
-  NB. TRY TO ELIMINATE THIS VERB and its baroque apparatus
-if. isBoxed y do. y=. nb y end.
-x refresh confirm tabengine INSTR_z_=: ,y
-activateTabWithId 0
-)
-
-refresh=: 0&$: :(4 : 0)
-  NB. may need to re-implement ????
-putpanel tabengine 'CTBU'
-if. x e. 1 3 5 do.		NB. DESELECT (=1)
-  sellinex''
-else.
-  if. L0>0 do. wd nb 'set panel select' ; L0 end.
-  if. L1>0 do. wd nb 'set panel select' ; L1 end.
-end.
-if. x e. 2 3 do.   	NB. KEEPCALCO (=2)
-else. wd 'psel tab; set calco text'
-end.
-if. x e. 4 5 do.   	NB. LASTLINE (=4)
-  selline nitems''
-  setunits 0
-  restoreFocusToInputField''
-end.
-)
-
-clearunits=: 3 : 'wd ''psel tab; set xunit items ""'''

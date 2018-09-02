@@ -1,6 +1,6 @@
 NB. tabby - build
 0 :0
-Friday 31 August 2018  21:27:06
+Sunday 2 September 2018  17:18:32
 -
 open BUILTFILE
 )
@@ -16,20 +16,21 @@ BUILTFILE_z_=: 1!:1 <jpath'~Gittab/builtfile'	NB. '~Gittab/tabula.ijs'
 
 RB=: ')'
 
-  NB. Re-create header.ijs with current date written into it
-ferase HEADERFILE
-HEADERFILE fappend~ sw 0 :0
-0 :0
-(NOW)
--
-TABBY: scientific units conversion package
-(RB)
-
-clear 'tabby'	NB. >>>>> DELETE THIS LINE IN RELEASED ADDON
-coclass 'tabby'
-coinsert 'jgl2'
-AABUILT=: '(NOW)'
-)
+  NB. Modify header.ijs with current date written into it
+HEADERFILE fappend~ LF,'AABUILT=: ',quote NOW
+NB. ferase HEADERFILE
+NB. HEADERFILE fappend~ sw 0 :0
+NB. 0 :0
+NB. (NOW)
+NB. -
+NB. TABBY: scientific units conversion package
+NB. (RB)
+NB.
+NB. clear 'tabby'	NB. >>>>> DELETE THIS LINE IN RELEASED ADDON
+NB. coclass 'tabby'
+NB. coinsert 'jgl2'
+NB. AABUILT=: '(NOW)'
+NB. )
 
   NB. build BUILTFILE
 writesourcex_jp_ '~Gittab/source';BUILTFILE
