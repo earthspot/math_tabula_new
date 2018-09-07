@@ -1,12 +1,14 @@
 0 :0
-Monday 3 September 2018  00:51:54
+Thursday 6 September 2018  18:09:10
 -
 TABULA: scientific units calculator - simplified architecture
 )
 
-require '~Gitcal/cal.ijs'  NB. see also: start.ijs
-
 clear 'tabby'	NB. >>>>> DELETE THIS LINE IN RELEASED ADDON
-coclass 'tabby'
-coinsert 'jgl2'
-AABUILT=: '2018-09-02  18:19:06'
+coclass LOC=.'tabby'
+clear LOC
+BLOC=: <,LOC	NB. used as self-locator
+coinsert 'jgl2'	NB. use gl2 verbs to paint the window
+
+AABUILT=: '2018-09-06  18:14:17'
+AABUILT=: '2018-09-06  18:48:26'

@@ -1,29 +1,17 @@
 0 :0
-TABULA: scientific units conversion package
-simplified architecture
+Thursday 6 September 2018  18:09:10
+-
+TABULA: scientific units calculator - simplified architecture
 )
 
-require '~Gituu/uu.ijs'
-require '~Gitcal/cal.ijs'
-
 clear 'tabby'
-coclass 'tabby'
+coclass LOC=.'tabby'
+clear LOC
+BLOC=: <,LOC
 coinsert 'jgl2'
 
-AABUILT=: '2018-09-02  17:24:57'
-AABUILT=: '2018-09-02  17:25:32'
-
-AABUILT=: '2018-09-02  17:49:35'
-AABUILT=: '2018-09-02  17:53:42'
-AABUILT=: '2018-09-02  17:55:48'
-AABUILT=: '2018-09-02  17:57:58'
-AABUILT=: '2018-09-02  18:00:11'
-AABUILT=: '2018-09-02  18:02:31'
-AABUILT=: '2018-09-02  18:08:21'
-AABUILT=: '2018-09-02  18:11:50'
-AABUILT=: '2018-09-02  18:13:23'
-AABUILT=: '2018-09-02  18:14:32'
-AABUILT=: '2018-09-02  18:19:06'
+AABUILT=: '2018-09-06  18:14:17'
+AABUILT=: '2018-09-06  18:48:26'
 
 '==================== [tabby] constants ===================='
 
@@ -356,10 +344,6 @@ Saturday 1 September 2018  18:04:43
 )
 
 coclass 'tabby'
-
-tab_default=: 3 : 0
-sllog 'tab_default syschild sysparent syshandler sysevent'
-)
 tab_g_mbldbl=: empty
 
 tab_calco_button=:           calcmd
@@ -419,7 +403,8 @@ tab_newtt_button=: newtt
 
 tab_panel_select=: 3 : 0
 
-sllog 'tab_panel_select panel_select syschild sysparent syshandler sysevent'
+sllog 'tab_panel_select panel_select syschild'
+sllog 'sysparent syshandler sysevent'
 for_row. >cutopen panel do.
 z=. '{' takeafter row -. '@'
 ]lineNo=. ". '}' taketo z
@@ -455,20 +440,12 @@ sllog 'tab_g_mblup TOOLID tool'
 restoreFocusToInputField''
 )
 
-tab_Vzero_button=: 3 : 0
-smoutput '+++ tab_Vzero_button: ENTERED'
-smoutput '--- tab_Vzero_button: EXITS'
+tab_default=: 3 : 0
+instr=. instr4event sysevent
+sllog 'tab_default instr sysevent syschild sysparent syshandler'
 )
 
-tab_Vonep_button=: 3 : 0
-smoutput '+++ tab_Vonep_button: ENTERED'
-smoutput '--- tab_Vonep_button: EXITS'
-)
-
-tab_Vonen_button=: 3 : 0
-smoutput '+++ tab_Vonen_button: ENTERED'
-smoutput '--- tab_Vonen_button: EXITS'
-)
+instr4event=: 3 : 'UL taketo UL takeafter y'
 
 '==================== [tabby] utilities ===================='
 
@@ -578,6 +555,7 @@ ssw '>>> calcmd: not implemented, calco=[(calco)]'
 putsb=: 3 : 0
 wd 'psel tab; set sbar setlabel status ',dquote ":,y
 )
+
 clicktab=: 3 : 0
 n=. ".tabs_select
 select. n
@@ -590,15 +568,18 @@ restoreFocusToInputField''
 )
 
 fillttable=: 3 : 0
+
 wd 'psel tab; set panel items *',CONTENT_TTABLE,date''
 )
 
 fillconsts=: 3 : 0
+
 set_ucase casec-: ,'0'
 wd 'psel tab; set cons items *',CONTENT_CONSTANTS,date''
 )
 
 fillfuncts=: 3 : 0
+
 set_ucase casef-: ,'0'
 wd 'psel tab; set func items *',CONTENT_FUNCTIONS,date''
 )
@@ -643,9 +624,11 @@ cocurrent 'tabby'
 
 start=: 3 : 0
 wd 'timer 0'
-tabengine=: tabengine_cal_
-tt_z_=: tabengine_z_=: tabengine
+TRACI=: 0
+require '~Gitcal/cal.ijs'
 
+tabengine=: tabengine_cal_
+tt_z_=: tabengine_z_=: tabengine f.
 tab_open''
 tabengine'Init'
 wd 'psel tab; set panel items *',tabengine'CTBU'

@@ -1,8 +1,9 @@
 NB. tabby - run
 0 :0
-Friday 31 August 2018  21:17:51
+Thursday 6 September 2018  17:45:29
 -
 open BUILTFILE
+open TESTFILE
 )
 
 cocurrent 'base'

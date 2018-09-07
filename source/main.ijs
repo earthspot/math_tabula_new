@@ -116,8 +116,6 @@ putsb=: 3 : 0
 wd 'psel tab; set sbar setlabel status ',dquote ":,y
 )
 
-NB. line=: smoutput bind '==============================='
-
 clicktab=: 3 : 0
 n=. ".tabs_select
 select. n
@@ -130,16 +128,19 @@ restoreFocusToInputField''
 )
 
 fillttable=: 3 : 0
+  NB. ELIMINATE
 wd 'psel tab; set panel items *',CONTENT_TTABLE,date''
 )
 
 fillconsts=: 3 : 0
+  NB. ELIMINATE
 set_ucase casec-: ,'0'
 NB. wd 'psel tab; set cons items *',x2f uurowsc searchc
 wd 'psel tab; set cons items *',CONTENT_CONSTANTS,date''
 )
 
 fillfuncts=: 3 : 0
+  NB. ELIMINATE
 set_ucase casef-: ,'0'
 NB. wd 'psel tab; set func items *',x2f uurowsf searchf
 wd 'psel tab; set func items *',CONTENT_FUNCTIONS,date''
