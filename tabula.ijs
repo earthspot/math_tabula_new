@@ -15,6 +15,12 @@ AABUILT=: '2018-09-06  18:48:26'
 AABUILT=: '2018-09-08  00:10:46'
 AABUILT=: '2018-09-08  00:15:35'
 AABUILT=: '2018-09-08  00:27:41'
+AABUILT=: '2018-09-08  19:17:18'
+AABUILT=: '2018-09-08  19:21:27'
+AABUILT=: '2018-09-08  19:23:33'
+AABUILT=: '2018-09-08  19:26:55'
+AABUILT=: '2018-09-08  19:28:02'
+AABUILT=: '2018-09-08  19:34:02'
 
 '==================== [tabby] constants ===================='
 
@@ -67,6 +73,8 @@ COLOR_WHITE=: 255 255 255
 COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
 DIAMETER=: 30
+L0=: 0
+L1=: 1
 NAME_TTABLE=: 'SAMPLE'
 PEN_WIDTH=: 3
 PNG=: temp 'tabula-toolbar.png'
@@ -74,6 +82,10 @@ TABNDX=: 0
 TIMER_HOVER=: 1000
 UNSET=: '<UNSET>'
 XYWH=: 1500 22 536 450
+
+
+UNDEFINED_z_=: _.
+INVALID_z_=: _.j_.
 
 '==================== [tabby] forms ===================='
 0 :0
@@ -337,10 +349,6 @@ red=: 3 : 0
 smoutput '============================='
 )
 
-setv0=: tab_Vzero_button
-
-set1u=: tab_Vonep_button shift tab_Vonen_button
-
 '==================== [tabby] handlers.ijs ===================='
 0 :0
 Saturday 1 September 2018  18:04:43
@@ -389,7 +397,7 @@ h=. w=. 32
 z=. n* Y>h
 TOOLID=: z + <. X%w
 fill_tools TOOLID
- confirm 13 }. TOOLID { TOOLHINT
+confirm 3 }. TOOLID { TOOLHINT
 
 sys_timer_z_=: hover_off_tabby_
 wd'timer ',":TIMER_HOVER
@@ -406,18 +414,10 @@ tab_newtt_button=: newtt
 
 tab_panel_select=: 3 : 0
 
-sllog 'tab_panel_select panel_select syschild'
-sllog 'sysparent syshandler sysevent'
-for_row. >cutopen panel do.
-z=. '{' takeafter row -. '@'
-]lineNo=. ". '}' taketo z
-]z=. dlb '}' takeafter z
-]i=. {. I. '  ' E. z
-qty=. i{.z
-com=. dlb i}. z
-sval=. ' ' taketo qty
-unit=. ' ' takeafter qty
-sllog 'tab_panel_select lineNo sval unit com'
+sllog 'tab_panel_select panel_select'
+L0=: 0{ ".panel_select
+try. L1=: 1{ ".panel_select
+catch. L1=: L0
 end.
 )
 
@@ -439,11 +439,7 @@ if. -. TOOLID e. i.32 do.
 end.
 TOOL=: dtb 3 }. 13 {. TOOLID{TOOLHINT
 sllog 'tab_g_mblup TOOLID TOOL'
-try. (TOOL~)''
-catch.
-  if. tabengine 'QCMD ',TOOL do.
-  end.
-end.
+(TOOL~)''
 restoreFocusToInputField''
 )
 
@@ -458,9 +454,6 @@ tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
 selectedLines=: 3 : 0
 1 3
 )
-
-L0=: 1
-L1=: 3
 0 :0
 STRATEGY
 Develop a working scheme for one or two *standard* handlers.
@@ -471,6 +464,8 @@ Don't define compound ancillaries yet like:
 -
 heldshift gives better-looking code than (conjunction) shift.
 )
+
+heldshift=: 3 : '1=".sysmodifiers'
 
 savts=: savt shift savs
 savt=: 3 : 0
@@ -557,33 +552,48 @@ iedit=: 3 : 0
 )
 
 setv0=: 3 : 0
-  confirm tabengine sw 'zero (L0)'
+smoutput '+++ setv0'
+sllog 'setv0 L0 panel_select'
+confirm tabengine 'zero ',":L0
+wd 'psel tab; set panel items *',tabengine'CTBU'
+wd 'psel tab; set panel select ',panel_select
 )
 
-set1u=: onep shift onen
-onep=: 3 : 0
-  confirm tabengine sw 'onep (L0)'
-)
-onen=: 3 : 0
-  confirm tabengine sw 'onen (L0)'
+set1u=: 3 : 0
+sllog 'set1u L0 panel_select'
+if. heldshift'' do. confirm tabengine sw 'onen (L0)'
+else.               confirm tabengine sw 'onep (L0)'
+end.
+wd 'psel tab; set panel items *',tabengine'CTBU'
+wd 'psel tab; set panel select ',panel_select
+
 )
 
 add1u=: 3 : 0
+sllog 'add1u L0 panel_select'
 if. heldshift'' do. confirm tabengine sw 'subv (L0) 1'
 else.               confirm tabengine sw 'addv (L0) 1'
 end.
+wd 'psel tab; set panel items *',tabengine'CTBU'
+wd 'psel tab; set panel select ',panel_select
 )
 
 addpc=: 3 : 0
+sllog 'addpc L0 panel_select'
 if. heldshift'' do. confirm tabengine sw 'subp (L0) 1'
 else.               confirm tabengine sw 'addp (L0) 1'
 end.
+wd 'psel tab; set panel items *',tabengine'CTBU'
+wd 'psel tab; set panel select ',panel_select
 )
 
 by2pi=: 3 : 0
+sllog 'by2pi L0 panel_select'
 if. heldshift'' do. confirm tabengine sw 'ptmv (L0)'
 else.               confirm tabengine sw 'pimv (L0)'
 end.
+wd 'psel tab; set panel items *',tabengine'CTBU'
+wd 'psel tab; set panel select ',panel_select
 )
 
 siunt=: 3 : 0
@@ -778,14 +788,17 @@ end.
 cocurrent 'tabby'
 
 start=: 3 : 0
+ sllog=: smoutput@llog
+ sllog=: empty
+ TRACI=: 0
 wd 'timer 0'
-TRACI=: 0
 require '~Gitcal/cal.ijs'
 
 tabengine=: tabengine_cal_
+ sesi_z_=: smoutput
 tt_z_=: tabengine_z_=: tabengine f.
+ tabengine'Init'
 tab_open''
-tabengine'Init'
 wd 'psel tab; set panel items *',tabengine'CTBU'
 )
 

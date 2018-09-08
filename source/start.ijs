@@ -11,10 +11,10 @@ wd 'timer 0'
 require '~Gitcal/cal.ijs'   NB. makes UU available too
   NB. ...but all access to UU should be done via CAL instructions
 tabengine=: tabengine_cal_  NB. replace dummy local CAL link
+ sesi_z_=: smoutput NB. FUDGE to make sesi visible
 tt_z_=: tabengine_z_=: tabengine f.  NB. make visible everywhere
+tabengine'Init' NB. initialize and load a t-table to show in: panel
 tab_open''
-NB. fillttable'' --no longer need dummy data.
-tabengine'Init'
 wd 'psel tab; set panel items *',tabengine'CTBU'
 )
 
