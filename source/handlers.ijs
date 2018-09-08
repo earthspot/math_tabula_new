@@ -49,8 +49,8 @@ h=. w=. 32 NB. (px) height and width of an icon
 z=. n* Y>h
 TOOLID=: z + <. X%w
 fill_tools TOOLID  NB. hilite hovered tool
- confirm 13 }. TOOLID { TOOLHINT
-NB.  confirm sw 'X=(X) Y=(Y) TOOLID=(TOOLID)'
+NB. confirm 13 }. TOOLID { TOOLHINT
+confirm 3 }. TOOLID { TOOLHINT  NB. drop just the tool id
   NB. Don't let hilite stay on forever…
 sys_timer_z_=: hover_off_tabby_
 wd'timer ',":TIMER_HOVER
@@ -67,19 +67,22 @@ tab_newtt_button=: newtt
 
 tab_panel_select=: 3 : 0
   NB. handles click on row of t-table, or arrow-selection
-sllog 'tab_panel_select panel_select syschild'
-sllog 'sysparent syshandler sysevent'
-for_row. >cutopen panel do.
-z=. '{' takeafter row -. '@'
-]lineNo=. ". '}' taketo z
-]z=. dlb '}' takeafter z
-]i=. {. I. '  ' E. z  NB. where qty ends
-qty=. i{.z
-com=. dlb i}. z
-sval=. ' ' taketo qty
-unit=. ' ' takeafter qty
-sllog 'tab_panel_select lineNo sval unit com'
+sllog 'tab_panel_select panel_select'
+L0=: 0{ ".panel_select
+try. L1=: 1{ ".panel_select
+catch. L1=: L0
 end.
+NB. for_row. >cutopen panel do.
+NB.   z=. '{' takeafter row -. '@'
+NB.   ]lineNo=. ". '}' taketo z
+NB.   ]z=. dlb '}' takeafter z
+NB.   ]i=. {. I. '  ' E. z  NB. where qty ends
+NB.   qty=. i{.z
+NB.   com=. dlb i}. z
+NB.   sval=. ' ' taketo qty
+NB.   unit=. ' ' takeafter qty
+NB.   sllog 'tab_panel_select lineNo sval unit com'
+NB. end.
 )
 
 tab_panel_button=: tab_panel_select  NB. IS IT EVER TRIGGERED?
@@ -101,10 +104,7 @@ end.
 TOOL=: dtb 3 }. 13 {. TOOLID{TOOLHINT
 NB. There should exist a "tool" for every tool name in TOOLHINT
 sllog 'tab_g_mblup TOOLID TOOL'
-try. (TOOL~)''
-catch.
-  if. tabengine 'QCMD ',TOOL do. 
-end.
+(TOOL~)''
 restoreFocusToInputField''
 )
 
@@ -121,9 +121,6 @@ selectedLines=: 3 : 0
 NB. need to set L0 L1 also set of lines L012 (for add)
 )
 
-L0=: 1
-L1=: 3
-
 NB. toolbar pseudo-handlers...
 
 0 :0
@@ -136,6 +133,8 @@ Don't define compound ancillaries yet like:
 -
 heldshift gives better-looking code than (conjunction) shift.
 )
+
+heldshift=: 3 : '1=".sysmodifiers'
 
 savts=: savt shift savs  NB. Save ttable as Title / Save ttable as SAMPLE   
 savt=: 3 : 0  NB. Save ttable as Title
@@ -222,33 +221,53 @@ iedit=: 3 : 0  NB. Edit item name / Edit item formula
 )
 
 setv0=: 3 : 0  NB. Set value to 0
-  confirm tabengine sw 'zero (L0)'
+smoutput '+++ setv0'
+NB. L0 set by: tab_panel_select when panel is clicked.
+sllog 'setv0 L0 panel_select'
+confirm tabengine 'zero ',":L0
+wd 'psel tab; set panel items *',tabengine'CTBU'
+wd 'psel tab; set panel select ',panel_select
 )
 
-set1u=: onep shift onen
-onep=: 3 : 0  NB. Set value to 1
-  confirm tabengine sw 'onep (L0)'
-)
-onen=: 3 : 0  NB. Set value to -1
-  confirm tabengine sw 'onen (L0)'
+set1u=: 3 : 0  NB. Set value to 1 / Set value to -1
+NB. L0 L1 set by: tab_panel_select when panel is clicked.
+sllog 'set1u L0 panel_select'
+if. heldshift'' do. confirm tabengine sw 'onen (L0)'
+else.               confirm tabengine sw 'onep (L0)'
+end.
+wd 'psel tab; set panel items *',tabengine'CTBU'
+wd 'psel tab; set panel select ',panel_select
+	NB. ---but only restores FIRST line# in: panel_select
 )
 
 add1u=: 3 : 0  NB. Add 1 / Subtract 1
+NB. L0 L1 set by: tab_panel_select when panel is clicked.
+sllog 'add1u L0 panel_select'
 if. heldshift'' do. confirm tabengine sw 'subv (L0) 1'
 else.               confirm tabengine sw 'addv (L0) 1'
 end.
+wd 'psel tab; set panel items *',tabengine'CTBU'
+wd 'psel tab; set panel select ',panel_select
 )
 
-addpc=: 3 : 0
+addpc=: 3 : 0  NB. Add 1 / Subtract 1
+NB. L0 L1 set by: tab_panel_select when panel is clicked.
+sllog 'addpc L0 panel_select'
 if. heldshift'' do. confirm tabengine sw 'subp (L0) 1'
 else.               confirm tabengine sw 'addp (L0) 1'
 end.
+wd 'psel tab; set panel items *',tabengine'CTBU'
+wd 'psel tab; set panel select ',panel_select
 )
 
 by2pi=: 3 : 0
+NB. L0 L1 set by: tab_panel_select when panel is clicked.
+sllog 'by2pi L0 panel_select'
 if. heldshift'' do. confirm tabengine sw 'ptmv (L0)'
 else.               confirm tabengine sw 'pimv (L0)'
 end.
+wd 'psel tab; set panel items *',tabengine'CTBU'
+wd 'psel tab; set panel select ',panel_select
 )
 
 siunt=: 3 : 0  NB. Convert to SI Units

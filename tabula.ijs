@@ -12,6 +12,9 @@ coinsert 'jgl2'
 
 AABUILT=: '2018-09-06  18:14:17'
 AABUILT=: '2018-09-06  18:48:26'
+AABUILT=: '2018-09-08  00:10:46'
+AABUILT=: '2018-09-08  00:15:35'
+AABUILT=: '2018-09-08  00:27:41'
 
 '==================== [tabby] constants ===================='
 
@@ -434,9 +437,13 @@ if. -. TOOLID e. i.32 do.
   smoutput '>>> tab_g_mblup: BAD TOOLID: ',":TOOLID
   return.
 end.
-tool=. dtb 3 }. 13 {. TOOLID{TOOLHINT
-if. -.absent tool do. (tool~)'' return. end.
-sllog 'tab_g_mblup TOOLID tool'
+TOOL=: dtb 3 }. 13 {. TOOLID{TOOLHINT
+sllog 'tab_g_mblup TOOLID TOOL'
+try. (TOOL~)''
+catch.
+  if. tabengine 'QCMD ',TOOL do.
+  end.
+end.
 restoreFocusToInputField''
 )
 
@@ -446,6 +453,154 @@ sllog 'tab_default instr sysevent syschild sysparent syshandler'
 )
 
 instr4event=: 3 : 'UL taketo UL takeafter y'
+tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
+
+selectedLines=: 3 : 0
+1 3
+)
+
+L0=: 1
+L1=: 3
+0 :0
+STRATEGY
+Develop a working scheme for one or two *standard* handlers.
+Once debugged, propagate to other handlers labelled: LIKE add1u
+-
+Don't define compound ancillaries yet like:
+   ctsw=: [: confirm [: tabengine sw
+-
+heldshift gives better-looking code than (conjunction) shift.
+)
+
+savts=: savt shift savs
+savt=: 3 : 0
+  confirm tabengine 'savt'
+)
+savs=: 3 : 0
+  confirm tabengine 'savs'
+)
+
+copal=: 3 : 0
+wd 'psel tab; clipcopy *',tabengine 'CTBU'
+)
+
+undoredo=: undo shift redo
+undo=: 3 : 0
+  confirm tabengine 'Undo'
+)
+redo=: 3 : 0
+  confirm tabengine 'Redo'
+)
+
+additems=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+subitems=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+mulitems=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+divitems=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+powitems=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+stept=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+replot=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+movud=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+movtb=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+newsl=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+equal=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+repos=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+delit=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+hold=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+traca=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+iedit=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+setv0=: 3 : 0
+  confirm tabengine sw 'zero (L0)'
+)
+
+set1u=: onep shift onen
+onep=: 3 : 0
+  confirm tabengine sw 'onep (L0)'
+)
+onen=: 3 : 0
+  confirm tabengine sw 'onen (L0)'
+)
+
+add1u=: 3 : 0
+if. heldshift'' do. confirm tabengine sw 'subv (L0) 1'
+else.               confirm tabengine sw 'addv (L0) 1'
+end.
+)
+
+addpc=: 3 : 0
+if. heldshift'' do. confirm tabengine sw 'subp (L0) 1'
+else.               confirm tabengine sw 'addp (L0) 1'
+end.
+)
+
+by2pi=: 3 : 0
+if. heldshift'' do. confirm tabengine sw 'ptmv (L0)'
+else.               confirm tabengine sw 'pimv (L0)'
+end.
+)
+
+siunt=: 3 : 0
+  confirm tabengine sw 'cvsi (L0)'
+)
+
+merge=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+hlpt=: 3 : 0
+  confirm tabengine 'xxxx'
+)
+
+showttinf=: 3 : 0
+  confirm tabengine 'xxxx'
+)
 
 '==================== [tabby] utilities ===================='
 

@@ -12,3 +12,6 @@ coinsert 'jgl2'	NB. use gl2 verbs to paint the window
 
 AABUILT=: '2018-09-06  18:14:17'
 AABUILT=: '2018-09-06  18:48:26'
+AABUILT=: '2018-09-08  00:10:46'
+AABUILT=: '2018-09-08  00:15:35'
+AABUILT=: '2018-09-08  00:27:41'

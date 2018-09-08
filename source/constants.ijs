@@ -50,6 +50,8 @@ COLOR_WHITE=: 255 255 255
 COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
 DIAMETER=: 30
+L0=: 0
+L1=: 1
 NAME_TTABLE=: 'SAMPLE'
 PEN_WIDTH=: 3
 PNG=: temp 'tabula-toolbar.png'
@@ -57,3 +59,7 @@ TABNDX=: 0
 TIMER_HOVER=: 1000 NB. (millisecs) delay before sys_timer_z_''
 UNSET=: '<UNSET>'
 XYWH=: 1500 22 536 450
+
+  NB. ---seem to be absent in CAL...
+UNDEFINED_z_=: _.
+INVALID_z_=: _.j_.

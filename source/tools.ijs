@@ -59,7 +59,3 @@ smoutput ' '
 red=: 3 : 0
 smoutput '============================='
 )
-
-setv0=: tab_Vzero_button
-
-set1u=: tab_Vonep_button shift tab_Vonen_button
