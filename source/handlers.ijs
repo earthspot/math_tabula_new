@@ -134,7 +134,14 @@ Don't define compound ancillaries yet like:
 heldshift gives better-looking code than (conjunction) shift.
 )
 
-heldshift=: 3 : '1=".sysmodifiers'
+  NB. These are probably platform-specific
+heldshift=: 	3 : '1=".sysmodifiers'
+heldcmnd=: 	3 : '2=".sysmodifiers'
+heldshiftcmnd=:	3 : '3=".sysmodifiers'
+heldalt=: 	3 : '4=".sysmodifiers'
+heldshiftalt=:	3 : '5=".sysmodifiers'
+
+opent=: opentt shift opens
 
 savts=: savt shift savs  NB. Save ttable as Title / Save ttable as SAMPLE   
 savt=: 3 : 0  NB. Save ttable as Title
@@ -148,12 +155,9 @@ copal=: 3 : 0  NB. Copy entire ttable
 wd 'psel tab; clipcopy *',tabengine 'CTBU'
 )
 
-undoredo=: undo shift redo
-undo=: 3 : 0
-  confirm tabengine 'Undo'
-)
-redo=: 3 : 0
-  confirm tabengine 'Redo'
+undoredo=: 3 : 0
+confirm tabengine (heldshift'') pick ;:'Undo Redo'
+showTtable''
 )
 
 additems=: 3 : 0  NB. Add all selected items
@@ -204,12 +208,16 @@ repos=: 3 : 0  NB. Reset window pos+size / Reset original window pos+size
   confirm tabengine 'xxxx'
 )
 
-delit=: 3 : 0  NB. Delete line
-  confirm tabengine 'xxxx'
+delit=: 3 : 0
+  NB. Delete line
+confirm tabengine 'dele ',panel_select
+showTtable''
 )
 
 hold=: 3 : 0  NB. Toggle Hold / Toggle Transient Hold
-  confirm tabengine 'xxxx'
+inst=. (heldshift'') pick ;:'holm hold'
+confirm tabengine inst,SP,panel_select
+showTtable 1
 )
 
 traca=: 3 : 0  NB. Toggle TRACE (action-verbs) / Toggle TRACI (Handler1)
@@ -276,6 +284,17 @@ siunt=: 3 : 0  NB. Convert to SI Units
 
 merge=: 3 : 0  NB. Merge selected lines
   confirm tabengine 'xxxx'
+)
+
+red=: 3 : 0
+smoutput '============================='
+)
+
+green=: 3 : 0
+smoutput ' '
+smoutput ('Undo'"_) shift ('Redo'"_)''
+smoutput (heldshift'') pick ;:'Undo Redo'
+NB. smoutput sw 'heldshift=(heldshift _) heldalt=(heldalt _) sysmodifiers=(sysmodifiers)'
 )
 
 hlpt=: 3 : 0  NB. Help for TABULA

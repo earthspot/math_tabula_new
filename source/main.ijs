@@ -8,25 +8,20 @@ coclass 'tabby'
 
 showTtable=: 3 : 0
 wd 'psel tab; set panel items *',tabengine'CTBU'
+restoreSelection y
 restoreFocusToInputField''
+)
+
+restoreSelection=: 3 : 0
+  NB. DOES NOT WORK: wd 'set…' only actions 1st index#
+if. y=0 do. i.0 0 return. end.
+for_i. ".panel_select do.
+  wd 'psel tab; set panel select ',":i
+end.
 )
 
 newtt=: 3 : 0
 tabengine'newt'
-showTtable''
-)
-
-opent=: opentt shift opens
-
-opentt=: 3 : 0
-  NB. open selected t-table
-tabengine'open 3'  NB. TEST <<<<<<<<<<<<<<<<<<<<<
-showTtable''
-)
-
-opens=: 3 : 0
-  NB. open SAMPLE
-tabengine'open $$'
 showTtable''
 )
 
@@ -93,14 +88,14 @@ radius=. <.DIAMETER%2
 glellipse (xy - radius) , wh
 )
 
-tabengine=: 3 : 0
-  NB. dummy simulator replaced by tabengine_cal_
-select. 4{.y
-case. 'Init' do. TABENGINE_RESPONSE_Init
-case. 'INFO' do. TABENGINE_RESPONSE_INFO
-case.        do. TABENGINE_RESPONSE_NOT_IMPLEMENTED,y
-end.
-)
+NB. tabengine=: 3 : 0
+NB.   NB. dummy simulator replaced by tabengine_cal_
+NB. select. 4{.y
+NB. case. 'Init' do. TABENGINE_RESPONSE_Init
+NB. case. 'INFO' do. TABENGINE_RESPONSE_INFO
+NB. case.        do. TABENGINE_RESPONSE_NOT_IMPLEMENTED,y
+NB. end.
+NB. )
 
 set_ucase=: 3 : 0
   NB. dummy placeholder replaced by set_ucase_uu_
@@ -127,20 +122,15 @@ activateTabWithId n
 restoreFocusToInputField''
 )
 
-fillttable=: 3 : 0
-  NB. ELIMINATE
-wd 'psel tab; set panel items *',CONTENT_TTABLE,date''
-)
-
 fillconsts=: 3 : 0
-  NB. ELIMINATE
+  NB. Expand to interrogate CAL for (filtered) list
 set_ucase casec-: ,'0'
 NB. wd 'psel tab; set cons items *',x2f uurowsc searchc
 wd 'psel tab; set cons items *',CONTENT_CONSTANTS,date''
 )
 
 fillfuncts=: 3 : 0
-  NB. ELIMINATE
+  NB. Expand to interrogate CAL for (filtered) list
 set_ucase casef-: ,'0'
 NB. wd 'psel tab; set func items *',x2f uurowsf searchf
 wd 'psel tab; set func items *',CONTENT_FUNCTIONS,date''

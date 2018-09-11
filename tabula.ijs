@@ -21,6 +21,13 @@ AABUILT=: '2018-09-08  19:23:33'
 AABUILT=: '2018-09-08  19:26:55'
 AABUILT=: '2018-09-08  19:28:02'
 AABUILT=: '2018-09-08  19:34:02'
+AABUILT=: '2018-09-11  01:22:55'
+AABUILT=: '2018-09-11  01:26:20'
+AABUILT=: '2018-09-11  02:05:25'
+AABUILT=: '2018-09-11  02:19:33'
+AABUILT=: '2018-09-11  02:44:07'
+AABUILT=: '2018-09-11  04:25:30'
+AABUILT=: '2018-09-11  04:34:33'
 
 '==================== [tabby] constants ===================='
 
@@ -67,6 +74,7 @@ TABENGINE_RESPONSE_NOT_IMPLEMENTED=: 0 : 0
 dummy tabengine NOT IMPLEMENTED--
 )
 
+BS=: '\'
 COLOR_HOVER=: 255 200 0
 COLOR_CLICK=: 255 100 0
 COLOR_WHITE=: 255 255 255
@@ -78,6 +86,7 @@ L1=: 1
 NAME_TTABLE=: 'SAMPLE'
 PEN_WIDTH=: 3
 PNG=: temp 'tabula-toolbar.png'
+SL=: '/'
 TABNDX=: 0
 TIMER_HOVER=: 1000
 UNSET=: '<UNSET>'
@@ -323,30 +332,22 @@ TOOLHINT=: >cutopen 0 : 0
 13 movtb     Move line to top / Move line to bottom
 14 newsl     New line
 15 equal     New line = selected line
-16 repos     Reset window pos+size / Reset original window pos+size
-17 delit     Delete line
+16 hlpt      Help for TABULA
+17 showttinf Show ttable info / edit ttable info
 18 hold      Toggle Hold / Toggle Transient Hold
-19 traca     Toggle TRACE (action-verbs) / Toggle TRACI (Handler1)
+19 siunt     Convert to SI Units
 20 iedit     Edit item name / Edit item formula
 21 setv0     Set value to 0
 22 set1u     Set value to 1 / Set value to -1
 23 add1u     Add 1 / Subtract 1
 24 addpc     Add 1% / Subtract 1%
 25 by2pi     Times PI / Times 2*PI
-26 siunt     Convert to SI Units
+26 black     User function
 27 red       User function
 28 green     User function
-29 merge     Merge selected lines
-30 hlpt      Help for TABULA
-31 showttinf Show ttable info / edit ttable info
-)
-
-green=: 3 : 0
-smoutput ' '
-)
-
-red=: 3 : 0
-smoutput '============================='
+29 blue      User function
+30 delit     Delete line
+31 merge     Merge selected lines
 )
 
 '==================== [tabby] handlers.ijs ===================='
@@ -465,7 +466,14 @@ Don't define compound ancillaries yet like:
 heldshift gives better-looking code than (conjunction) shift.
 )
 
-heldshift=: 3 : '1=".sysmodifiers'
+
+heldshift=: 	3 : '1=".sysmodifiers'
+heldcmnd=: 	3 : '2=".sysmodifiers'
+heldshiftcmnd=:	3 : '3=".sysmodifiers'
+heldalt=: 	3 : '4=".sysmodifiers'
+heldshiftalt=:	3 : '5=".sysmodifiers'
+
+opent=: opentt shift opens
 
 savts=: savt shift savs
 savt=: 3 : 0
@@ -479,12 +487,9 @@ copal=: 3 : 0
 wd 'psel tab; clipcopy *',tabengine 'CTBU'
 )
 
-undoredo=: undo shift redo
-undo=: 3 : 0
-  confirm tabengine 'Undo'
-)
-redo=: 3 : 0
-  confirm tabengine 'Redo'
+undoredo=: 3 : 0
+confirm tabengine (heldshift'') pick ;:'Undo Redo'
+showTtable''
 )
 
 additems=: 3 : 0
@@ -536,11 +541,15 @@ repos=: 3 : 0
 )
 
 delit=: 3 : 0
-  confirm tabengine 'xxxx'
+
+confirm tabengine 'dele ',panel_select
+showTtable''
 )
 
 hold=: 3 : 0
-  confirm tabengine 'xxxx'
+inst=. (heldshift'') pick ;:'holm hold'
+confirm tabengine inst,SP,panel_select
+showTtable 1
 )
 
 traca=: 3 : 0
@@ -604,6 +613,16 @@ merge=: 3 : 0
   confirm tabengine 'xxxx'
 )
 
+red=: 3 : 0
+smoutput '============================='
+)
+
+green=: 3 : 0
+smoutput ' '
+smoutput ('Undo'"_) shift ('Redo'"_)''
+smoutput (heldshift'') pick ;:'Undo Redo'
+)
+
 hlpt=: 3 : 0
   confirm tabengine 'xxxx'
 )
@@ -612,11 +631,98 @@ showttinf=: 3 : 0
   confirm tabengine 'xxxx'
 )
 
+'==================== [tabby] open.ijs ===================='
+0 :0
+Tuesday 11 September 2018  01:47:13
+-
+CONTAINS IN-LINE MESSAGES --replace if MESSAGE table provided
+-
+
+)
+
+coclass 'tabby'
+
+hasChanged=: 3 : 0
+if. (tabengine 'DIRT') and -.heldalt'' do.
+  prompt=. 'Save current ttable?'
+  ask=. 'Ttable: ',tabengine 'TITL'
+  ask=. ask,LF,'has unsaved structural changes.'
+  ask=. ask,LF,'OK to continue (and lose the changes)?'
+  if. wdquery prompt;ask do.
+    confirm '>>> New/load ttable -cancelled'
+    1 return.
+  end.
+end.
+0 return.
+)
+
+opens=: 3 : 0
+
+tabengine'open $$'
+showTtable''
+)
+
+launder=: 3 : 0
+
+'\/'charsub y -. CRLF
+)
+
+pathof=: ] {.~ [: >: SL i:~ ]
+
+opentt=: 'open' ddefine
+
+
+
+
+
+if. hasChanged'' do. return. end.
+inst=. 4{.x
+invalplot''
+title=. sw 'Choose a ttable to (x)…'
+
+path=. launder wd sw 'mb open "(title)" *',TPATH_TTABLES
+if. 0=#path do. confirm sw '>>> (x)...cancelled' return. end.
+TPATH_TTABLES=: pathof path
+confirm tabengine inst,SP,path
+showTtable''
+)
+
+
+'==================== [tabby] plot.ijs ===================='
+0 :0
+Tuesday 11 September 2018  00:11:15
+-
+copied raw from math/tabula
+)
+
+coclass 'tabby'
+
+invalplot=: erase&listnameswithprefix bind 'PLOT'
+plotb=: 3 : 'replot PLOTF=:''bar'''
+plotl=: 3 : 'replot PLOTF=:''line'''
+plotp=: 3 : 'replot PLOTF=:''pie'''
+plots=: 3 : 'replot PLOTF=:''surface'''
+
+plotx=: 3 : 0
+smoutput sw 'plotx: y=(y)'
+if. -.setL 0 do. return. end.
+PLOTX=: L0
+PLOT=: tabengine 'PLOT' ; PLOTX ; y
+undo''
+Y=. {: i.#PLOT
+PLOTY=: Y default 'PLOTY'
+PLOTF=: 'line' default 'PLOTF'
+PLOTF plot (PLOTX{PLOT) ; (PLOTY{PLOT)
+sellines PLOTY
+)
+
+
 '==================== [tabby] utilities ===================='
 
 cocurrent 'tabby'
 
 shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
+isEmpty=: 0 = [: */ $
 
 '==================== [tabby] main ===================='
 0 :0
@@ -627,25 +733,20 @@ coclass 'tabby'
 
 showTtable=: 3 : 0
 wd 'psel tab; set panel items *',tabengine'CTBU'
+restoreSelection y
 restoreFocusToInputField''
+)
+
+restoreSelection=: 3 : 0
+
+if. y=0 do. i.0 0 return. end.
+for_i. ".panel_select do.
+  wd 'psel tab; set panel select ',":i
+end.
 )
 
 newtt=: 3 : 0
 tabengine'newt'
-showTtable''
-)
-
-opent=: opentt shift opens
-
-opentt=: 3 : 0
-
-tabengine'open 3'
-showTtable''
-)
-
-opens=: 3 : 0
-
-tabengine'open $$'
 showTtable''
 )
 
@@ -697,16 +798,6 @@ wh=. 2#DIAMETER
 radius=. <.DIAMETER%2
 glellipse (xy - radius) , wh
 )
-
-tabengine=: 3 : 0
-
-select. 4{.y
-case. 'Init' do. TABENGINE_RESPONSE_Init
-case. 'INFO' do. TABENGINE_RESPONSE_INFO
-case.        do. TABENGINE_RESPONSE_NOT_IMPLEMENTED,y
-end.
-)
-
 set_ucase=: 3 : 0
 
 ssw '>>> set_ucase: dummy placeholder, y=(y)'
@@ -730,11 +821,6 @@ case. 3 do. ttinf''
 end.
 activateTabWithId n
 restoreFocusToInputField''
-)
-
-fillttable=: 3 : 0
-
-wd 'psel tab; set panel items *',CONTENT_TTABLE,date''
 )
 
 fillconsts=: 3 : 0
@@ -797,7 +883,7 @@ require '~Gitcal/cal.ijs'
 tabengine=: tabengine_cal_
  sesi_z_=: smoutput
 tt_z_=: tabengine_z_=: tabengine f.
- tabengine'Init'
+tabengine'Init'
 tab_open''
 wd 'psel tab; set panel items *',tabengine'CTBU'
 )

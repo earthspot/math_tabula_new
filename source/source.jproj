@@ -3,6 +3,8 @@ constants.ijs
 forms.ijs
 tools.ijs
 handlers.ijs
+open.ijs
+plot.ijs
 utilities.ijs
 main.ijs
 start.ijs

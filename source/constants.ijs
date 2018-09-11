@@ -44,6 +44,7 @@ TABENGINE_RESPONSE_NOT_IMPLEMENTED=: 0 : 0
 dummy tabengine NOT IMPLEMENTED--
 )
 
+BS=: '\'
 COLOR_HOVER=: 255 200 0
 COLOR_CLICK=: 255 100 0
 COLOR_WHITE=: 255 255 255
@@ -55,6 +56,7 @@ L1=: 1
 NAME_TTABLE=: 'SAMPLE'
 PEN_WIDTH=: 3
 PNG=: temp 'tabula-toolbar.png'
+SL=: '/'
 TABNDX=: 0
 TIMER_HOVER=: 1000 NB. (millisecs) delay before sys_timer_z_''
 UNSET=: '<UNSET>'

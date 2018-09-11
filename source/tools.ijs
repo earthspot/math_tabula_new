@@ -34,28 +34,20 @@ TOOLHINT=: >cutopen 0 : 0
 13 movtb     Move line to top / Move line to bottom
 14 newsl     New line
 15 equal     New line = selected line
-16 repos     Reset window pos+size / Reset original window pos+size
-17 delit     Delete line
+16 hlpt      Help for TABULA
+17 showttinf Show ttable info / edit ttable info
 18 hold      Toggle Hold / Toggle Transient Hold
-19 traca     Toggle TRACE (action-verbs) / Toggle TRACI (Handler1)
+19 siunt     Convert to SI Units
 20 iedit     Edit item name / Edit item formula
 21 setv0     Set value to 0
 22 set1u     Set value to 1 / Set value to -1
 23 add1u     Add 1 / Subtract 1
 24 addpc     Add 1% / Subtract 1%
 25 by2pi     Times PI / Times 2*PI
-26 siunt     Convert to SI Units
+26 black     User function
 27 red       User function
 28 green     User function
-29 merge     Merge selected lines
-30 hlpt      Help for TABULA
-31 showttinf Show ttable info / edit ttable info
-)
-
-green=: 3 : 0
-smoutput ' '
-)
-
-red=: 3 : 0
-smoutput '============================='
+29 blue      User function
+30 delit     Delete line
+31 merge     Merge selected lines
 )
