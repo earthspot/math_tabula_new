@@ -32,6 +32,23 @@ Second line
 line 3 --
 )
 
+HELP=: 0 : 0
+Help for TABULA (when getting started)…
+
+++ To plot a ttable:
+   (…a suitable test-ttable sample is "plot_test")
+1. Select the item to become the x-axis.
+2. Give the item a minimum or maximum value to be plotted
+       eg. _10 or 10
+3. Click "steps" tool
+   or pick menu: File > Plot 0 to (value)
+   --The plot window will appear, showing a plot of
+     the LAST item in the ttable.
+4. Reselect the lines you prefer to plot,
+   then click the "replot" icon in the toolbar,
+   or pick menu: File > Line Chart [Bar Chart ...]
+)
+
 TABENGINE_RESPONSE_Init=: 0 : 0
 dummy tabengine Init confirmation
 )
@@ -51,6 +68,7 @@ COLOR_WHITE=: 255 255 255
 COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
 DIAMETER=: 30
+ITEMS=: i.0  NB. cache of valid item ids after last tabengine call
 L0=: 0
 L1=: 1
 NAME_TTABLE=: 'SAMPLE'

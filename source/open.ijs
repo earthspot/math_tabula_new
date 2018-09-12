@@ -24,7 +24,7 @@ end.
 0 return.
 )
 
-opens=: 3 : 0
+openss=: 3 : 0
   NB. open SAMPLE
 tabengine'open $$'
 showTtable''
@@ -41,8 +41,7 @@ opentt=: 'open' ddefine
   NB. x=='open' - open selected t-table
   NB. x=='append' - append selected t-table
   NB. Reassigns visible TPATH_TTABLES to path of last t-table
-  NB. TPATH_TTABLES_z_ is created by this locale's CAL copy
-  NB. Don't reassign TPATH_TTABLES_z_ itself: affects other CALs
+  NB. A LOCAL copy: TPATH_TTABLES_tabby_ is created by: start
 if. hasChanged'' do. return. end.
 inst=. 4{.x
 invalplot''
@@ -55,3 +54,8 @@ confirm tabengine inst,SP,path
 showTtable''
 )
 
+NB. opent=: opentt shift openss  NB. doesn't work here!
+
+opent=: 3 : 0
+if. heldshift'' do. openss'' else. opentt'' end.
+)

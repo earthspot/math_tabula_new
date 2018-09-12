@@ -10,24 +10,15 @@ clear LOC
 BLOC=: <,LOC
 coinsert 'jgl2'
 
-AABUILT=: '2018-09-06  18:14:17'
-AABUILT=: '2018-09-06  18:48:26'
-AABUILT=: '2018-09-08  00:10:46'
-AABUILT=: '2018-09-08  00:15:35'
-AABUILT=: '2018-09-08  00:27:41'
-AABUILT=: '2018-09-08  19:17:18'
-AABUILT=: '2018-09-08  19:21:27'
-AABUILT=: '2018-09-08  19:23:33'
-AABUILT=: '2018-09-08  19:26:55'
-AABUILT=: '2018-09-08  19:28:02'
-AABUILT=: '2018-09-08  19:34:02'
-AABUILT=: '2018-09-11  01:22:55'
-AABUILT=: '2018-09-11  01:26:20'
-AABUILT=: '2018-09-11  02:05:25'
-AABUILT=: '2018-09-11  02:19:33'
-AABUILT=: '2018-09-11  02:44:07'
-AABUILT=: '2018-09-11  04:25:30'
-AABUILT=: '2018-09-11  04:34:33'
+AABUILT=: '2018-09-12  03:19:38'
+AABUILT=: '2018-09-12  05:18:15'
+AABUILT=: '2018-09-12  05:21:35'
+AABUILT=: '2018-09-12  05:29:12'
+AABUILT=: '2018-09-12  05:32:41'
+AABUILT=: '2018-09-12  05:41:10'
+AABUILT=: '2018-09-12  05:49:03'
+AABUILT=: '2018-09-12  05:50:10'
+AABUILT=: '2018-09-12  06:11:58'
 
 '==================== [tabby] constants ===================='
 
@@ -62,6 +53,23 @@ Second line
 line 3 --
 )
 
+HELP=: 0 : 0
+Help for TABULA (when getting started)…
+
+++ To plot a ttable:
+   (…a suitable test-ttable sample is "plot_test")
+1. Select the item to become the x-axis.
+2. Give the item a minimum or maximum value to be plotted
+       eg. _10 or 10
+3. Click "steps" tool
+   or pick menu: File > Plot 0 to (value)
+   --The plot window will appear, showing a plot of
+     the LAST item in the ttable.
+4. Reselect the lines you prefer to plot,
+   then click the "replot" icon in the toolbar,
+   or pick menu: File > Line Chart [Bar Chart ...]
+)
+
 TABENGINE_RESPONSE_Init=: 0 : 0
 dummy tabengine Init confirmation
 )
@@ -81,6 +89,7 @@ COLOR_WHITE=: 255 255 255
 COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
 DIAMETER=: 30
+ITEMS=: i.0
 L0=: 0
 L1=: 1
 NAME_TTABLE=: 'SAMPLE'
@@ -375,20 +384,44 @@ tab_g_resize=: empty
 tab_preci_select=:           setpreci
 tab_resize=: empty
 tab_searchc_button=:         fillconsts
+tab_searchc_changed=:        fillconsts
 tab_searchc_char=: empty
 tab_searchf_button=:         fillfuncts
+tab_searchf_changed=:        fillfuncts
 tab_searchf_char=: empty
 tab_tabs_button=:            clicktab
 tab_tabs_select=:            clicktab
 tab_xunit_button=: empty
 tab_xunit_select=:           pickunits
 
-tab_searchc_changed=: 3 : 0
-ssw '>>> changed: casec=(casec) searchc=[(searchc)] searchc_select=(searchc_select)'
+holdcons=: '=' ,~ ]
+
+newc=: 3 : 0
+cons newc y
+:
+if. 0=#x-.SP do.
+  confirm '>>> No action: select a single line'
+else.
+  tabengine 'cons ',holdcons x
+  showTtable''
+  activateTabWithId 0
+  setSelection _
+  restoreFocusToInputField''
+end.
 )
 
-tab_searchf_changed=: 3 : 0
-ssw '>>> changed: casef=(casef) searchf=[(searchf)] searchf_select=(searchf_select)'
+newf=: 3 : 0
+func newf y
+:
+if. 0=#x-.SP do.
+  confirm '>>> No action: select a single line'
+else.
+  tabengine 'func ',x
+  showTtable''
+  activateTabWithId 0
+  setSelection _
+  restoreFocusToInputField''
+end.
 )
 
 tab_g_mmove=: 3 : 0
@@ -451,184 +484,171 @@ sllog 'tab_default instr sysevent syschild sysparent syshandler'
 
 instr4event=: 3 : 'UL taketo UL takeafter y'
 tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
-
-selectedLines=: 3 : 0
-1 3
-)
 0 :0
 STRATEGY
 Develop a working scheme for one or two *standard* handlers.
 Once debugged, propagate to other handlers labelled: LIKE add1u
--
-Don't define compound ancillaries yet like:
-   ctsw=: [: confirm [: tabengine sw
--
-heldshift gives better-looking code than (conjunction) shift.
 )
 
-
-heldshift=: 	3 : '1=".sysmodifiers'
-heldcmnd=: 	3 : '2=".sysmodifiers'
-heldshiftcmnd=:	3 : '3=".sysmodifiers'
-heldalt=: 	3 : '4=".sysmodifiers'
-heldshiftalt=:	3 : '5=".sysmodifiers'
-
-opent=: opentt shift opens
-
-savts=: savt shift savs
-savt=: 3 : 0
-  confirm tabengine 'savt'
-)
-savs=: 3 : 0
-  confirm tabengine 'savs'
+newtt=: newtt_like=: 'newt' ddefine
+confirm tabengine x
+showTtable''
 )
 
 copal=: 3 : 0
+
 wd 'psel tab; clipcopy *',tabengine 'CTBU'
 )
 
-undoredo=: 3 : 0
-confirm tabengine (heldshift'') pick ;:'Undo Redo'
+undoredo=: undoredo_like=: 'Undo Redo' ddefine
+
+confirm tabengine pickshift 2$ ;:x
 showTtable''
+restoreFocusToInputField''
 )
 
-additems=: 3 : 0
-  confirm tabengine 'xxxx'
+savts=: 'savt savs'&undoredo_like
+
+additems=: additems_like=: 'plus' ddefine
+
+confirm tabengine x,SP,panel_select
+showTtable''
+restoreFocusToInputField''
 )
 
-subitems=: 3 : 0
-  confirm tabengine 'xxxx'
+mulitems=: 'mult'&additems_like
+
+subitems=: subitems_like=: 'minu' ddefine
+
+if. heldshift'' do. confirm tabengine x,SP,":L1,L0
+else.               confirm tabengine x,SP,":L0,L1
+end.
+showTtable''
+restoreSelection''
 )
 
-mulitems=: 3 : 0
-  confirm tabengine 'xxxx'
-)
-
-divitems=: 3 : 0
-  confirm tabengine 'xxxx'
-)
-
-powitems=: 3 : 0
-  confirm tabengine 'xxxx'
-)
+divitems=: 'divi'&subitems_like
+powitems=: 'powe'&subitems_like
 
 stept=: 3 : 0
-  confirm tabengine 'xxxx'
+  notImplemented''
 )
 
 replot=: 3 : 0
-  confirm tabengine 'xxxx'
+  notImplemented''
 )
 
 movud=: 3 : 0
-  confirm tabengine 'xxxx'
+
+if. heldshift'' do.
+  confirm tabengine 'movd ',":L0
+  showTtable''
+  incSelection 1
+else.
+  confirm tabengine 'movu ',":L0
+  showTtable''
+  incSelection _1
+end.
+restoreFocusToInputField''
 )
 
 movtb=: 3 : 0
-  confirm tabengine 'xxxx'
+
+if. heldshift'' do.
+  confirm tabengine 'movb ',":L0
+  showTtable''
+  setSelection _
+else.
+  confirm tabengine 'movt ',":L0
+  showTtable''
+  setSelection 1
+end.
+restoreFocusToInputField''
 )
 
 newsl=: 3 : 0
-  confirm tabengine 'xxxx'
+  notImplemented''
 )
 
 equal=: 3 : 0
-  confirm tabengine 'xxxx'
+  notImplemented''
 )
 
-repos=: 3 : 0
-  confirm tabengine 'xxxx'
-)
-
-delit=: 3 : 0
-
-confirm tabengine 'dele ',panel_select
-showTtable''
-)
+delit=: 'dele'&additems_like
 
 hold=: 3 : 0
-inst=. (heldshift'') pick ;:'holm hold'
-confirm tabengine inst,SP,panel_select
-showTtable 1
-)
 
-traca=: 3 : 0
-  confirm tabengine 'xxxx'
+inst=. pickshift ;:'holm hold'
+confirm tabengine inst,SP,panel_select
+showTtable''
+restoreSelection''
+restoreFocusToInputField''
 )
 
 iedit=: 3 : 0
-  confirm tabengine 'xxxx'
+
+if. heldshift'' do. formu'' else. label'' end.
 )
 
-setv0=: 3 : 0
-smoutput '+++ setv0'
-sllog 'setv0 L0 panel_select'
-confirm tabengine 'zero ',":L0
-wd 'psel tab; set panel items *',tabengine'CTBU'
-wd 'psel tab; set panel select ',panel_select
+setv0=: setv0_like=: 'zero' ddefine
+
+confirm tabengine sw '(x) (L0)'
+showTtable''
+restoreSelection''
 )
 
-set1u=: 3 : 0
-sllog 'set1u L0 panel_select'
-if. heldshift'' do. confirm tabengine sw 'onen (L0)'
-else.               confirm tabengine sw 'onep (L0)'
-end.
-wd 'psel tab; set panel items *',tabengine'CTBU'
-wd 'psel tab; set panel select ',panel_select
+siunt=: 'cvsi'&setv0_like
 
+set1u=: set1u_like=: 'onep onen' ddefine
+
+inst=. pickshift 2$ ;:x
+confirm tabengine sw '(inst) (L0)'
+showTtable''
+restoreSelection''
 )
 
-add1u=: 3 : 0
-sllog 'add1u L0 panel_select'
-if. heldshift'' do. confirm tabengine sw 'subv (L0) 1'
-else.               confirm tabengine sw 'addv (L0) 1'
-end.
-wd 'psel tab; set panel items *',tabengine'CTBU'
-wd 'psel tab; set panel select ',panel_select
+add1u=: add1u_like=: 'addv subv' ddefine
+
+inst=. pickshift 2$ ;:x
+confirm tabengine sw '(inst) (L0) 1'
+showTtable''
+restoreSelection''
 )
 
-addpc=: 3 : 0
-sllog 'addpc L0 panel_select'
-if. heldshift'' do. confirm tabengine sw 'subp (L0) 1'
-else.               confirm tabengine sw 'addp (L0) 1'
-end.
-wd 'psel tab; set panel items *',tabengine'CTBU'
-wd 'psel tab; set panel select ',panel_select
-)
-
-by2pi=: 3 : 0
-sllog 'by2pi L0 panel_select'
-if. heldshift'' do. confirm tabengine sw 'ptmv (L0)'
-else.               confirm tabengine sw 'pimv (L0)'
-end.
-wd 'psel tab; set panel items *',tabengine'CTBU'
-wd 'psel tab; set panel select ',panel_select
-)
-
-siunt=: 3 : 0
-  confirm tabengine sw 'cvsi (L0)'
-)
-
+addpc=: 'addp subp'&add1u_like
+by2pi=: 'pimv ptmv'&set1u_like
 merge=: 3 : 0
-  confirm tabengine 'xxxx'
+notImplemented''
+)
+
+black=: 3 : 0
+
+smoutput '>>> black: not implemented'
 )
 
 red=: 3 : 0
+
 smoutput '============================='
 )
 
 green=: 3 : 0
+
 smoutput ' '
-smoutput ('Undo'"_) shift ('Redo'"_)''
-smoutput (heldshift'') pick ;:'Undo Redo'
+)
+
+blue=: 3 : 0
+
+smoutput '>>> blue: not implemented'
 )
 
 hlpt=: 3 : 0
-  confirm tabengine 'xxxx'
+
+textview HELP
 )
 
 showttinf=: 3 : 0
-  confirm tabengine 'xxxx'
+
+  notImplemented''
 )
 
 '==================== [tabby] open.ijs ===================='
@@ -656,7 +676,7 @@ end.
 0 return.
 )
 
-opens=: 3 : 0
+openss=: 3 : 0
 
 tabengine'open $$'
 showTtable''
@@ -674,7 +694,6 @@ opentt=: 'open' ddefine
 
 
 
-
 if. hasChanged'' do. return. end.
 inst=. 4{.x
 invalplot''
@@ -686,7 +705,9 @@ TPATH_TTABLES=: pathof path
 confirm tabengine inst,SP,path
 showTtable''
 )
-
+opent=: 3 : 0
+if. heldshift'' do. openss'' else. opentt'' end.
+)
 
 '==================== [tabby] plot.ijs ===================='
 0 :0
@@ -731,23 +752,39 @@ Friday 31 August 2018  21:14:03
 
 coclass 'tabby'
 
+
+heldshift=: 	3 : '1=".sysmodifiers'
+heldcmnd=: 	3 : '2=".sysmodifiers'
+heldshiftcmnd=:	3 : '3=".sysmodifiers'
+heldalt=: 	3 : '4=".sysmodifiers'
+heldshiftalt=:	3 : '5=".sysmodifiers'
+
+pickshift=: 3 : 0
+
+
+(heldshift'') pick 2$boxopen y
+)
+
 showTtable=: 3 : 0
 wd 'psel tab; set panel items *',tabengine'CTBU'
-restoreSelection y
-restoreFocusToInputField''
+ITEMS=: tabengine'ITMS'
 )
 
 restoreSelection=: 3 : 0
-
-if. y=0 do. i.0 0 return. end.
-for_i. ".panel_select do.
-  wd 'psel tab; set panel select ',":i
-end.
+wd 'psel tab; set panel select ',panel_select
 )
 
-newtt=: 3 : 0
-tabengine'newt'
-showTtable''
+curb=: 3 : 0
+
+($ITEMS) min y max 1
+)
+
+setSelection=: 3 : 0
+wd 'psel tab; set panel select ',":curb y
+)
+
+incSelection=: 3 : 0
+wd 'psel tab; set panel select ',":curb L0=:L0+y
 )
 
 tab_open=: 3 : 0
@@ -826,13 +863,13 @@ restoreFocusToInputField''
 fillconsts=: 3 : 0
 
 set_ucase casec-: ,'0'
-wd 'psel tab; set cons items *',CONTENT_CONSTANTS,date''
+wd 'psel tab; set cons items *',LF,~TEXT=:tabengine 'VUUC ',searchc
 )
 
 fillfuncts=: 3 : 0
 
 set_ucase casef-: ,'0'
-wd 'psel tab; set func items *',CONTENT_FUNCTIONS,date''
+wd 'psel tab; set func items *',LF,~TEXT=:tabengine'VUUF ',searchf
 )
 
 confirm=: 0 ddefine
@@ -852,7 +889,7 @@ case. 1 do. wd 'psel tab; setfocus searchc'
 case. 2 do. wd 'psel tab; setfocus searchf'
 case. 3 do. wd 'psel tab; setfocus info'
 end.
-empty''
+i.0 0
 )
 
 ttinf=: 1 ddefine
@@ -884,6 +921,7 @@ tabengine=: tabengine_cal_
  sesi_z_=: smoutput
 tt_z_=: tabengine_z_=: tabengine f.
 tabengine'Init'
+TPATH_TTABLES=: tabengine'TPTT'
 tab_open''
 wd 'psel tab; set panel items *',tabengine'CTBU'
 )

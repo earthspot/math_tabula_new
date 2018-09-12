@@ -14,6 +14,7 @@ tabengine=: tabengine_cal_  NB. replace dummy local CAL link
  sesi_z_=: smoutput NB. FUDGE to make sesi visible
 tt_z_=: tabengine_z_=: tabengine f.  NB. make visible everywhere
 tabengine'Init' NB. initialize and load a t-table to show in: panel
+TPATH_TTABLES=: tabengine'TPTT'  NB. make a local copy
 tab_open''
 wd 'psel tab; set panel items *',tabengine'CTBU'
 )

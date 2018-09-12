@@ -6,23 +6,39 @@ Friday 31 August 2018  21:14:03
 
 coclass 'tabby'
 
+  NB. These are probably platform-specific
+heldshift=: 	3 : '1=".sysmodifiers'
+heldcmnd=: 	3 : '2=".sysmodifiers'
+heldshiftcmnd=:	3 : '3=".sysmodifiers'
+heldalt=: 	3 : '4=".sysmodifiers'
+heldshiftalt=:	3 : '5=".sysmodifiers'
+
+pickshift=: 3 : 0
+  NB. return (0 pick y) or 1 pick y)
+  NB. accept single-entry y
+(heldshift'') pick 2$boxopen y
+)
+
 showTtable=: 3 : 0
 wd 'psel tab; set panel items *',tabengine'CTBU'
-restoreSelection y
-restoreFocusToInputField''
+ITEMS=: tabengine'ITMS'
 )
 
 restoreSelection=: 3 : 0
-  NB. DOES NOT WORK: wd 'set…' only actions 1st index#
-if. y=0 do. i.0 0 return. end.
-for_i. ".panel_select do.
-  wd 'psel tab; set panel select ',":i
-end.
+wd 'psel tab; set panel select ',panel_select
 )
 
-newtt=: 3 : 0
-tabengine'newt'
-showTtable''
+curb=: 3 : 0
+  NB. limit id y to 1 2 … (last line)
+($ITEMS) min y max 1
+)
+
+setSelection=: 3 : 0
+wd 'psel tab; set panel select ',":curb y
+)
+
+incSelection=: 3 : 0
+wd 'psel tab; set panel select ',":curb L0=:L0+y
 )
 
 tab_open=: 3 : 0
@@ -126,14 +142,16 @@ fillconsts=: 3 : 0
   NB. Expand to interrogate CAL for (filtered) list
 set_ucase casec-: ,'0'
 NB. wd 'psel tab; set cons items *',x2f uurowsc searchc
-wd 'psel tab; set cons items *',CONTENT_CONSTANTS,date''
+NB. wd 'psel tab; set cons items *',CONTENT_CONSTANTS,date''
+wd 'psel tab; set cons items *',LF,~TEXT=:tabengine 'VUUC ',searchc
 )
 
 fillfuncts=: 3 : 0
   NB. Expand to interrogate CAL for (filtered) list
 set_ucase casef-: ,'0'
 NB. wd 'psel tab; set func items *',x2f uurowsf searchf
-wd 'psel tab; set func items *',CONTENT_FUNCTIONS,date''
+NB. wd 'psel tab; set func items *',CONTENT_FUNCTIONS,date''
+wd 'psel tab; set func items *',LF,~TEXT=:tabengine'VUUF ',searchf
 )
 
 confirm=: 0 ddefine
@@ -153,7 +171,7 @@ case. 1 do. wd 'psel tab; setfocus searchc'
 case. 2 do. wd 'psel tab; setfocus searchf'
 case. 3 do. wd 'psel tab; setfocus info'
 end.
-empty''
+i.0 0
 )
 
 ttinf=: 1 ddefine  NB. modified from: ~Gittab/tabula.ijs

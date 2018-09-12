@@ -26,20 +26,44 @@ tab_g_resize=: empty
 tab_preci_select=:           setpreci
 tab_resize=: empty
 tab_searchc_button=:         fillconsts
+tab_searchc_changed=:        fillconsts
 tab_searchc_char=: empty
 tab_searchf_button=:         fillfuncts
+tab_searchf_changed=:        fillfuncts
 tab_searchf_char=: empty
 tab_tabs_button=:            clicktab
 tab_tabs_select=:            clicktab
 tab_xunit_button=: empty
 tab_xunit_select=:           pickunits
 
-tab_searchc_changed=: 3 : 0
-ssw '>>> changed: casec=(casec) searchc=[(searchc)] searchc_select=(searchc_select)'
+holdcons=: '=' ,~ ]
+
+newc=: 3 : 0
+cons newc y
+:
+if. 0=#x-.SP do.
+  confirm '>>> No action: select a single line'
+else.
+  tabengine 'cons ',holdcons x
+  showTtable''
+  activateTabWithId 0
+  setSelection _
+  restoreFocusToInputField''
+end.
 )
 
-tab_searchf_changed=: 3 : 0
-ssw '>>> changed: casef=(casef) searchf=[(searchf)] searchf_select=(searchf_select)'
+newf=: 3 : 0
+func newf y
+:
+if. 0=#x-.SP do.
+  confirm '>>> No action: select a single line'
+else.
+  tabengine 'func ',x
+  showTtable''
+  activateTabWithId 0
+  setSelection _
+  restoreFocusToInputField''
+end.
 )
 
 tab_g_mmove=: 3 : 0
@@ -72,17 +96,6 @@ L0=: 0{ ".panel_select
 try. L1=: 1{ ".panel_select
 catch. L1=: L0
 end.
-NB. for_row. >cutopen panel do.
-NB.   z=. '{' takeafter row -. '@'
-NB.   ]lineNo=. ". '}' taketo z
-NB.   ]z=. dlb '}' takeafter z
-NB.   ]i=. {. I. '  ' E. z  NB. where qty ends
-NB.   qty=. i{.z
-NB.   com=. dlb i}. z
-NB.   sval=. ' ' taketo qty
-NB.   unit=. ' ' takeafter qty
-NB.   sllog 'tab_panel_select lineNo sval unit com'
-NB. end.
 )
 
 tab_panel_button=: tab_panel_select  NB. IS IT EVER TRIGGERED?
@@ -116,191 +129,194 @@ sllog 'tab_default instr sysevent syschild sysparent syshandler'
 instr4event=: 3 : 'UL taketo UL takeafter y'
 tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
 
-selectedLines=: 3 : 0
-1 3  NB. TEST ONLY <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-NB. need to set L0 L1 also set of lines L012 (for add)
-)
-
 NB. toolbar pseudo-handlers...
 
 0 :0
 STRATEGY
 Develop a working scheme for one or two *standard* handlers.
 Once debugged, propagate to other handlers labelled: LIKE add1u
--
-Don't define compound ancillaries yet like:
-   ctsw=: [: confirm [: tabengine sw
--
-heldshift gives better-looking code than (conjunction) shift.
 )
 
-  NB. These are probably platform-specific
-heldshift=: 	3 : '1=".sysmodifiers'
-heldcmnd=: 	3 : '2=".sysmodifiers'
-heldshiftcmnd=:	3 : '3=".sysmodifiers'
-heldalt=: 	3 : '4=".sysmodifiers'
-heldshiftalt=:	3 : '5=".sysmodifiers'
-
-opent=: opentt shift opens
-
-savts=: savt shift savs  NB. Save ttable as Title / Save ttable as SAMPLE   
-savt=: 3 : 0  NB. Save ttable as Title
-  confirm tabengine 'savt'
-)
-savs=: 3 : 0  NB. Save ttable as SAMPLE
-  confirm tabengine 'savs'
+newtt=: newtt_like=: 'newt' ddefine
+confirm tabengine x
+showTtable''
 )
 
-copal=: 3 : 0  NB. Copy entire ttable
+copal=: 3 : 0
+  NB. Copy entire ttable
 wd 'psel tab; clipcopy *',tabengine 'CTBU'
 )
 
-undoredo=: 3 : 0
-confirm tabengine (heldshift'') pick ;:'Undo Redo'
+undoredo=: undoredo_like=: 'Undo Redo' ddefine
+  NB. Undo / Redo -last action
+confirm tabengine pickshift 2$ ;:x
 showTtable''
+restoreFocusToInputField''
 )
 
-additems=: 3 : 0  NB. Add all selected items
-  confirm tabengine 'xxxx'
+savts=: 'savt savs'&undoredo_like
+
+additems=: additems_like=: 'plus' ddefine
+  NB. Add all selected items
+confirm tabengine x,SP,panel_select
+showTtable''
+restoreFocusToInputField''
 )
 
-subitems=: 3 : 0  NB. Item 1 minus item 2 / Item 2 minus item 1
-  confirm tabengine 'xxxx'
+mulitems=: 'mult'&additems_like  NB. Multiply all selected items                           
+
+subitems=: subitems_like=: 'minu' ddefine
+  NB. item 1-2 / item 2-1
+if. heldshift'' do. confirm tabengine x,SP,":L1,L0
+else.               confirm tabengine x,SP,":L0,L1
+end.
+showTtable''
+restoreSelection''
+NB. restoreFocusToInputField''
 )
 
-mulitems=: 3 : 0  NB. Multiply all selected items                           
-  confirm tabengine 'xxxx'
-)
-
-divitems=: 3 : 0  NB. Divide item 1 by item 2 / Divide item 2 by item 1
-  confirm tabengine 'xxxx'
-)
-
-powitems=: 3 : 0  NB. Item 1 ^ item 2 / Item 2 ^ item 1
-  confirm tabengine 'xxxx'
-)
+divitems=: 'divi'&subitems_like  NB. item 1÷2 / item 2÷1
+powitems=: 'powe'&subitems_like  NB. item 1^2 / item 2^1
 
 stept=: 3 : 0  NB. Plot 0 to (value) / Plot (-value) to (+value)
-  confirm tabengine 'xxxx'
+  notImplemented''
 )
 
 replot=: 3 : 0  NB. Replot selected items only / Replot all items
-  confirm tabengine 'xxxx'
+  notImplemented''
 )
 
-movud=: 3 : 0  NB. Move line up / Move line down
-  confirm tabengine 'xxxx'
+movud=: 3 : 0
+  NB. Move line up / Move line down
+if. heldshift'' do.
+  confirm tabengine 'movd ',":L0
+  showTtable''
+  incSelection 1
+else.
+  confirm tabengine 'movu ',":L0
+  showTtable''
+  incSelection _1
+end.
+restoreFocusToInputField''
 )
 
-movtb=: 3 : 0  NB. Move line to top / Move line to bottom
-  confirm tabengine 'xxxx'
+movtb=: 3 : 0
+  NB. Move line to top / Move line to bottom
+if. heldshift'' do.
+  confirm tabengine 'movb ',":L0
+  showTtable''
+  setSelection _
+else.
+  confirm tabengine 'movt ',":L0
+  showTtable''
+  setSelection 1
+end.
+restoreFocusToInputField''
 )
 
 newsl=: 3 : 0  NB. New line
-  confirm tabengine 'xxxx'
+  notImplemented''
 )
 
 equal=: 3 : 0  NB. New line = selected line
-  confirm tabengine 'xxxx'
+  notImplemented''
 )
 
-repos=: 3 : 0  NB. Reset window pos+size / Reset original window pos+size
-  confirm tabengine 'xxxx'
-)
+delit=: 'dele'&additems_like  NB. Delete selected lines
 
-delit=: 3 : 0
-  NB. Delete line
-confirm tabengine 'dele ',panel_select
-showTtable''
-)
-
-hold=: 3 : 0  NB. Toggle Hold / Toggle Transient Hold
-inst=. (heldshift'') pick ;:'holm hold'
+hold=: 3 : 0
+  NB. Toggle Hold / Toggle Transient Hold
+inst=. pickshift ;:'holm hold'
 confirm tabengine inst,SP,panel_select
-showTtable 1
+showTtable''
+restoreSelection''
+restoreFocusToInputField''
 )
 
-traca=: 3 : 0  NB. Toggle TRACE (action-verbs) / Toggle TRACI (Handler1)
-  confirm tabengine 'xxxx'
+iedit=: 3 : 0
+  NB. Edit item name / Edit item formula
+if. heldshift'' do. formu'' else. label'' end.
 )
 
-iedit=: 3 : 0  NB. Edit item name / Edit item formula
-  confirm tabengine 'xxxx'
+setv0=: setv0_like=: 'zero' ddefine
+  NB. Set value to 0
+confirm tabengine sw '(x) (L0)'
+showTtable''
+restoreSelection''
+NB. restoreFocusToInputField''
 )
 
-setv0=: 3 : 0  NB. Set value to 0
-smoutput '+++ setv0'
-NB. L0 set by: tab_panel_select when panel is clicked.
-sllog 'setv0 L0 panel_select'
-confirm tabengine 'zero ',":L0
-wd 'psel tab; set panel items *',tabengine'CTBU'
-wd 'psel tab; set panel select ',panel_select
+siunt=: 'cvsi'&setv0_like
+
+set1u=: set1u_like=: 'onep onen' ddefine
+  NB. Set value to 1 / Set value to -1
+inst=. pickshift 2$ ;:x
+confirm tabengine sw '(inst) (L0)'
+showTtable''
+restoreSelection''
+NB. restoreFocusToInputField''
 )
 
-set1u=: 3 : 0  NB. Set value to 1 / Set value to -1
-NB. L0 L1 set by: tab_panel_select when panel is clicked.
-sllog 'set1u L0 panel_select'
-if. heldshift'' do. confirm tabengine sw 'onen (L0)'
-else.               confirm tabengine sw 'onep (L0)'
-end.
-wd 'psel tab; set panel items *',tabengine'CTBU'
-wd 'psel tab; set panel select ',panel_select
-	NB. ---but only restores FIRST line# in: panel_select
+add1u=: add1u_like=: 'addv subv' ddefine
+  NB. Add 1 to / Subtract 1 from -single item
+inst=. pickshift 2$ ;:x
+confirm tabengine sw '(inst) (L0) 1'
+showTtable''
+restoreSelection''
+NB. restoreFocusToInputField''
 )
 
-add1u=: 3 : 0  NB. Add 1 / Subtract 1
-NB. L0 L1 set by: tab_panel_select when panel is clicked.
-sllog 'add1u L0 panel_select'
-if. heldshift'' do. confirm tabengine sw 'subv (L0) 1'
-else.               confirm tabengine sw 'addv (L0) 1'
-end.
-wd 'psel tab; set panel items *',tabengine'CTBU'
-wd 'psel tab; set panel select ',panel_select
-)
+addpc=: 'addp subp'&add1u_like  NB. Add 1% / Subtract 1%
+NB. sllog 'addpc L0 panel_select'
+NB. if. heldshift'' do. confirm tabengine sw 'subp (L0) 1'
+NB. else.               confirm tabengine sw 'addp (L0) 1'
+NB. end.
+NB. wd 'psel tab; set panel items *',tabengine'CTBU'
+NB. wd 'psel tab; set panel select ',panel_select
+NB. )
 
-addpc=: 3 : 0  NB. Add 1 / Subtract 1
-NB. L0 L1 set by: tab_panel_select when panel is clicked.
-sllog 'addpc L0 panel_select'
-if. heldshift'' do. confirm tabengine sw 'subp (L0) 1'
-else.               confirm tabengine sw 'addp (L0) 1'
-end.
-wd 'psel tab; set panel items *',tabengine'CTBU'
-wd 'psel tab; set panel select ',panel_select
-)
-
-by2pi=: 3 : 0
-NB. L0 L1 set by: tab_panel_select when panel is clicked.
-sllog 'by2pi L0 panel_select'
-if. heldshift'' do. confirm tabengine sw 'ptmv (L0)'
-else.               confirm tabengine sw 'pimv (L0)'
-end.
-wd 'psel tab; set panel items *',tabengine'CTBU'
-wd 'psel tab; set panel select ',panel_select
-)
-
-siunt=: 3 : 0  NB. Convert to SI Units
-  confirm tabengine sw 'cvsi (L0)'
-)
+by2pi=: 'pimv ptmv'&set1u_like  NB. times PI / times 2*PI
+NB. sllog 'by2pi L0 panel_select'
+NB. if. heldshift'' do. confirm tabengine sw 'ptmv (L0)'
+NB. else.               confirm tabengine sw 'pimv (L0)'
+NB. end.
+NB. wd 'psel tab; set panel items *',tabengine'CTBU'
+NB. wd 'psel tab; set panel select ',panel_select
+NB. )
 
 merge=: 3 : 0  NB. Merge selected lines
-  confirm tabengine 'xxxx'
+notImplemented''
+)
+
+black=: 3 : 0
+  NB. user-defined tool
+smoutput '>>> black: not implemented'
 )
 
 red=: 3 : 0
+  NB. user-defined tool
 smoutput '============================='
 )
 
 green=: 3 : 0
+  NB. user-defined tool
 smoutput ' '
-smoutput ('Undo'"_) shift ('Redo'"_)''
-smoutput (heldshift'') pick ;:'Undo Redo'
+NB. smoutput ('Undo'"_) shift ('Redo'"_)''
+NB. smoutput (heldshift'') pick ;:'Undo Redo'
 NB. smoutput sw 'heldshift=(heldshift _) heldalt=(heldalt _) sysmodifiers=(sysmodifiers)'
 )
 
-hlpt=: 3 : 0  NB. Help for TABULA
-  confirm tabengine 'xxxx'
+blue=: 3 : 0
+  NB. user-defined tool
+smoutput '>>> blue: not implemented'
 )
 
-showttinf=: 3 : 0  NB. Show ttable info / edit ttable info
-  confirm tabengine 'xxxx'
+hlpt=: 3 : 0
+  NB. Help for TABULA
+textview HELP
+)
+
+showttinf=: 3 : 0
+  NB. Show ttable info / edit ttable info
+  notImplemented''
 )
