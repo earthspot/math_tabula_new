@@ -1,7 +1,15 @@
 	NB. tabby - handlers.ijs
 '==================== [tabby] handlers.ijs ===================='
 0 :0
-Saturday 1 September 2018  18:04:43
+Wednesday 12 September 2018  17:22:44
+-
+Templates for handlers:
+additems_like	>0 selected lines, ignores shift
+set1u_like	1 selected line, restores selection
+add1u_like	set1u_like but puts v=1 in CAL instruction
+setv0_like	set1u_like but ignores shift
+subitems_like	2 selected lines, order significant
+undoredo_like	ignores line selection
 )
 
 coclass 'tabby'
@@ -24,6 +32,7 @@ tab_g_focus=: empty
 tab_g_focuslost=: empty
 tab_g_resize=: empty
 tab_preci_select=:           setpreci
+tab_unico_select=:           setunico
 tab_resize=: empty
 tab_searchc_button=:         fillconsts
 tab_searchc_changed=:        fillconsts
@@ -34,7 +43,13 @@ tab_searchf_char=: empty
 tab_tabs_button=:            clicktab
 tab_tabs_select=:            clicktab
 tab_xunit_button=: empty
-tab_xunit_select=:           pickunits
+
+tab_xunit_select=: 3 : 0
+confirm tabengine 'unit '; L0 ; xunit
+showTtable''
+restoreSelection''
+restoreFocusToInputField''
+)
 
 holdcons=: '=' ,~ ]
 
@@ -96,6 +111,17 @@ L0=: 0{ ".panel_select
 try. L1=: 1{ ".panel_select
 catch. L1=: L0
 end.
+if. L0>0 do.
+  setunits''
+  setcalco scino tabengine 'VALU' ; L0
+elseif. panel_select-:'_1' do.
+  setcalco ''
+elseif. L0=0 do.
+  setcalco panel -. LF
+elseif. do.
+  smoutput '>>> tab_panel_select: no action defined'
+end.
+confirm details L0
 )
 
 tab_panel_button=: tab_panel_select  NB. IS IT EVER TRIGGERED?
@@ -137,10 +163,13 @@ Develop a working scheme for one or two *standard* handlers.
 Once debugged, propagate to other handlers labelled: LIKE add1u
 )
 
-newtt=: newtt_like=: 'newt' ddefine
-confirm tabengine x
-showTtable''
-)
+NB. newtt=: newtt_like=: 'newt' ddefine
+NB. confirm tabengine x
+NB. showTtable''
+NB. restoreFocusToInputField''
+NB. )
+
+newtt=: 'newt'&undoredo_like
 
 copal=: 3 : 0
   NB. Copy entire ttable
@@ -160,40 +189,33 @@ additems=: additems_like=: 'plus' ddefine
   NB. Add all selected items
 confirm tabengine x,SP,panel_select
 showTtable''
+setSelection _
 restoreFocusToInputField''
 )
 
 mulitems=: 'mult'&additems_like  NB. Multiply all selected items                           
 
 subitems=: subitems_like=: 'minu' ddefine
-  NB. item 1-2 / item 2-1
-if. heldshift'' do. confirm tabengine x,SP,":L1,L0
-else.               confirm tabengine x,SP,":L0,L1
+  NB. item 1 - 2 / item 2 - 1
+if. heldshift'' do. confirm tabengine x ; L1 ; L0
+else.               confirm tabengine x ; L0 ; L1
 end.
 showTtable''
-restoreSelection''
-NB. restoreFocusToInputField''
+setSelection _
+restoreFocusToInputField''
 )
 
 divitems=: 'divi'&subitems_like  NB. item 1÷2 / item 2÷1
 powitems=: 'powe'&subitems_like  NB. item 1^2 / item 2^1
 
-stept=: 3 : 0  NB. Plot 0 to (value) / Plot (-value) to (+value)
-  notImplemented''
-)
-
-replot=: 3 : 0  NB. Replot selected items only / Replot all items
-  notImplemented''
-)
-
 movud=: 3 : 0
   NB. Move line up / Move line down
 if. heldshift'' do.
-  confirm tabengine 'movd ',":L0
+  confirm tabengine 'movd' ; L0
   showTtable''
   incSelection 1
 else.
-  confirm tabengine 'movu ',":L0
+  confirm tabengine 'movu' ; L0
   showTtable''
   incSelection _1
 end.
@@ -203,25 +225,26 @@ restoreFocusToInputField''
 movtb=: 3 : 0
   NB. Move line to top / Move line to bottom
 if. heldshift'' do.
-  confirm tabengine 'movb ',":L0
+  confirm tabengine 'movb' ; L0
   showTtable''
   setSelection _
 else.
-  confirm tabengine 'movt ',":L0
+  confirm tabengine 'movt' ; L0
   showTtable''
   setSelection 1
 end.
 restoreFocusToInputField''
 )
 
-newsl=: 3 : 0  NB. New line
-  notImplemented''
+newsl=: 3 : 0
+  NB. New line
+confirm tabengine 'newu /'  NB. CAL needs to be told '/' explicitly
+showTtable''
+setSelection _
+restoreFocusToInputField''
 )
 
-equal=: 3 : 0  NB. New line = selected line
-  notImplemented''
-)
-
+equal=: 'equl'&additems_like  NB. New line = selected line
 delit=: 'dele'&additems_like  NB. Delete selected lines
 
 hold=: 3 : 0
@@ -240,10 +263,10 @@ if. heldshift'' do. formu'' else. label'' end.
 
 setv0=: setv0_like=: 'zero' ddefine
   NB. Set value to 0
-confirm tabengine sw '(x) (L0)'
+confirm tabengine x ; L0
 showTtable''
 restoreSelection''
-NB. restoreFocusToInputField''
+restoreFocusToInputField''
 )
 
 siunt=: 'cvsi'&setv0_like
@@ -251,42 +274,25 @@ siunt=: 'cvsi'&setv0_like
 set1u=: set1u_like=: 'onep onen' ddefine
   NB. Set value to 1 / Set value to -1
 inst=. pickshift 2$ ;:x
-confirm tabengine sw '(inst) (L0)'
+confirm tabengine inst ; L0
 showTtable''
 restoreSelection''
-NB. restoreFocusToInputField''
+restoreFocusToInputField''
 )
 
 add1u=: add1u_like=: 'addv subv' ddefine
-  NB. Add 1 to / Subtract 1 from -single item
+  NB. Add 1 to / Subtract 1 from single item
 inst=. pickshift 2$ ;:x
-confirm tabengine sw '(inst) (L0) 1'
+confirm tabengine inst ; L0 ; 1
 showTtable''
 restoreSelection''
-NB. restoreFocusToInputField''
+restoreFocusToInputField''
 )
 
+NB. add1u=: 'add1 sub1'&set1u_like
 addpc=: 'addp subp'&add1u_like  NB. Add 1% / Subtract 1%
-NB. sllog 'addpc L0 panel_select'
-NB. if. heldshift'' do. confirm tabengine sw 'subp (L0) 1'
-NB. else.               confirm tabengine sw 'addp (L0) 1'
-NB. end.
-NB. wd 'psel tab; set panel items *',tabengine'CTBU'
-NB. wd 'psel tab; set panel select ',panel_select
-NB. )
-
 by2pi=: 'pimv ptmv'&set1u_like  NB. times PI / times 2*PI
-NB. sllog 'by2pi L0 panel_select'
-NB. if. heldshift'' do. confirm tabengine sw 'ptmv (L0)'
-NB. else.               confirm tabengine sw 'pimv (L0)'
-NB. end.
-NB. wd 'psel tab; set panel items *',tabengine'CTBU'
-NB. wd 'psel tab; set panel select ',panel_select
-NB. )
-
-merge=: 3 : 0  NB. Merge selected lines
-notImplemented''
-)
+merge=: 'merg'&subitems_like  NB. Merge selected lines
 
 black=: 3 : 0
   NB. user-defined tool
@@ -318,5 +324,6 @@ textview HELP
 
 showttinf=: 3 : 0
   NB. Show ttable info / edit ttable info
-  notImplemented''
+ttinf''
+activateTabWithId 3
 )

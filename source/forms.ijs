@@ -176,6 +176,7 @@ tabnew T-table;
 bin h;
 cc preci combobox;
 cc calco edit;
+cc unico combobox;
 cc xunit combobox;
 bin z;
 cc panel listbox multiple;

@@ -65,6 +65,7 @@ NB. end.
 wd 'set func font fixfont'
 wd 'set func items *',x2f t
 wd 'set preci items *', o2f ": i.16
+wd 'set unico items *',CONTENT_UNICO
 wd 'set panel font fixfont'
 wd 'set panel items *',UNSET
 confirm 'Click a line and perform some operation on it...'
@@ -104,23 +105,9 @@ radius=. <.DIAMETER%2
 glellipse (xy - radius) , wh
 )
 
-NB. tabengine=: 3 : 0
-NB.   NB. dummy simulator replaced by tabengine_cal_
-NB. select. 4{.y
-NB. case. 'Init' do. TABENGINE_RESPONSE_Init
-NB. case. 'INFO' do. TABENGINE_RESPONSE_INFO
-NB. case.        do. TABENGINE_RESPONSE_NOT_IMPLEMENTED,y
-NB. end.
-NB. )
-
 set_ucase=: 3 : 0
   NB. dummy placeholder replaced by set_ucase_uu_
 ssw '>>> set_ucase: dummy placeholder, y=(y)'
-)
-
-calcmd=: 3 : 0
-  NB. dummy placeholder --will use formatIN_uu_
-ssw '>>> calcmd: not implemented, calco=[(calco)]'
 )
 
 putsb=: 3 : 0
@@ -182,8 +169,50 @@ if. x-:1 do.
 elseif. x-:0 do.
   wd 'psel tab; set info text ""'
 elseif. do.
-  if. 0=#y do. y=. info end.
-  tabenginex 'info' ; y
-  confirm sw 'Info: $=($y) updated in t-table: (NAME_TTABLE)'
+  if. 0=#y do. y=. info end.  NB. ==cached content of info field
+  tabengine 'info ',y
+  nom=. '_ 'charsub tabengine'TNAM'
+  confirm sw 'Info: $=($y) updated in t-table: (nom)'
+end.
+)
+
+setpreci=: 3 : 0
+  NB. i is combobox index to select -as string, not int.
+if. 0=#y do. i=. preci_select else. i=. ":y end.
+wd 'psel tab; set preci select ',i
+tabengine 'prec ',i
+showTtable''
+restoreSelection''
+restoreFocusToInputField''
+)
+
+setunico=: 3 : 0
+  NB. i is combobox index to select -as string, not int.
+if. 0=#y do. i=. unico_select else. i=. ":y end.
+wd 'psel tab; set unico select ',i
+tabengine 'ssic ',i
+showTtable''
+restoreSelection''
+restoreFocusToInputField''
+)
+
+setunits=: 3 : 0
+z=. tabengine 'UCOM' ; L0
+z=. ~. z ,~ tabengine 'UNIS' ; L0  NB. include equiv SI units in the list
+z=. ~. z ,~ tabengine 'UNIT' ; L0  NB. include existing units in the list
+wd 'psel tab; set xunit items *',utf8 f4b z
+wd 'psel tab; set xunit select 0'
+)
+
+scino=: ":  NB. DUMMY ONLY <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+setcalco=: 3 : 0
+wd 'psel tab; set calco text *',calco=:,":y
+)
+
+details=: 3 : 0
+  NB. lit details of (line) y
+if. y=0 do. 'To update title: overtype it and press Enter'
+else. (brace y),SP,tabengine 'FMLA ',":y
 end.
 )

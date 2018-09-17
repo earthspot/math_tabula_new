@@ -16,7 +16,9 @@ tt_z_=: tabengine_z_=: tabengine f.  NB. make visible everywhere
 tabengine'Init' NB. initialize and load a t-table to show in: panel
 TPATH_TTABLES=: tabengine'TPTT'  NB. make a local copy
 tab_open''
-wd 'psel tab; set panel items *',tabengine'CTBU'
+setpreci 3  NB. set numeric precision for value column
+setunico 1  NB. set SI conformance level for units column
+NB. wd 'psel tab; set panel items *',tabengine'CTBU' ---redundant
 )
 
 start''

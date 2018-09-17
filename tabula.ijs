@@ -19,6 +19,16 @@ AABUILT=: '2018-09-12  05:41:10'
 AABUILT=: '2018-09-12  05:49:03'
 AABUILT=: '2018-09-12  05:50:10'
 AABUILT=: '2018-09-12  06:11:58'
+AABUILT=: '2018-09-12  16:39:23'
+AABUILT=: '2018-09-12  17:52:46'
+AABUILT=: '2018-09-15  11:57:14'
+AABUILT=: '2018-09-16  23:23:25'
+AABUILT=: '2018-09-16  23:53:51'
+AABUILT=: '2018-09-17  00:01:36'
+AABUILT=: '2018-09-17  00:04:37'
+AABUILT=: '2018-09-17  00:24:49'
+AABUILT=: '2018-09-17  01:57:42'
+AABUILT=: '2018-09-17  03:27:38'
 
 '==================== [tabby] constants ===================='
 
@@ -26,6 +36,21 @@ cocurrent 'tabby'
 
 sysmodifiers=: ,'0'
 
+
+
+CONTENT_UNICO=: 0 : 0
+ m^3/kg/s^2
+ m³/(kg s²)
+ m³ kg⁻¹ s⁻²
+ m³·kg⁻¹·s⁻²
+)
+
+CONTENT_UNICO=: 0 : 0
+ m/kg/s^2
+ m/(kg s²)
+ m kg⁻¹ s⁻²
+ m·kg⁻¹·s⁻²
+)
 
 CONTENT_TTABLE=: 0 : 0
 Pseudogravity by rotation
@@ -92,7 +117,6 @@ DIAMETER=: 30
 ITEMS=: i.0
 L0=: 0
 L1=: 1
-NAME_TTABLE=: 'SAMPLE'
 PEN_WIDTH=: 3
 PNG=: temp 'tabula-toolbar.png'
 SL=: '/'
@@ -104,6 +128,48 @@ XYWH=: 1500 22 536 450
 
 UNDEFINED_z_=: _.
 INVALID_z_=: _.j_.
+
+
+
+calco                              =: UNSET
+calco_select                       =: '0 0'
+casec                              =: ,'0'
+casef                              =: ,'0'
+cons                               =: UNSET
+cons_select                        =: '_1'
+func                               =: UNSET
+func_select                        =: '_1'
+info                               =: UNSET
+info_scroll                        =: ,'0'
+info_select                        =: '0 0'
+panel                              =: UNSET
+panel_select                       =: '_1'
+preci                              =: ,'0'
+preci_select                       =: '_1'
+searchc                            =: ''
+searchc_select                     =: '0 0'
+searchf                            =: ''
+searchf_select                     =: '0 0'
+syschild                           =: UNSET
+sysdata                            =: UNSET
+sysdefault                         =: UNSET
+sysevent                           =: UNSET
+sysfocus                           =: UNSET
+syshandler                         =: UNSET
+syshwndc                           =: UNSET
+syshwndp                           =: UNSET
+syslastfocus                       =: UNSET
+syslocalec                         =: UNSET
+syslocalep                         =: UNSET
+sysmodifiers                       =: UNSET
+sysparent                          =: UNSET
+systype                            =: UNSET
+tabs                               =: UNSET
+tabs_select                        =: '_1'
+unico                              =: UNSET
+unico_select                       =: '_1'
+xunit                              =: UNSET
+xunit_select                       =: '_1'
 
 '==================== [tabby] forms ===================='
 0 :0
@@ -282,6 +348,7 @@ tabnew T-table;
 bin h;
 cc preci combobox;
 cc calco edit;
+cc unico combobox;
 cc xunit combobox;
 bin z;
 cc panel listbox multiple;
@@ -361,7 +428,15 @@ TOOLHINT=: >cutopen 0 : 0
 
 '==================== [tabby] handlers.ijs ===================='
 0 :0
-Saturday 1 September 2018  18:04:43
+Wednesday 12 September 2018  17:22:44
+-
+Templates for handlers:
+additems_like	>0 selected lines, ignores shift
+set1u_like	1 selected line, restores selection
+add1u_like	set1u_like but puts v=1 in CAL instruction
+setv0_like	set1u_like but ignores shift
+subitems_like	2 selected lines, order significant
+undoredo_like	ignores line selection
 )
 
 coclass 'tabby'
@@ -382,6 +457,7 @@ tab_g_focus=: empty
 tab_g_focuslost=: empty
 tab_g_resize=: empty
 tab_preci_select=:           setpreci
+tab_unico_select=:           setunico
 tab_resize=: empty
 tab_searchc_button=:         fillconsts
 tab_searchc_changed=:        fillconsts
@@ -392,7 +468,13 @@ tab_searchf_char=: empty
 tab_tabs_button=:            clicktab
 tab_tabs_select=:            clicktab
 tab_xunit_button=: empty
-tab_xunit_select=:           pickunits
+
+tab_xunit_select=: 3 : 0
+confirm tabengine 'unit '; L0 ; xunit
+showTtable''
+restoreSelection''
+restoreFocusToInputField''
+)
 
 holdcons=: '=' ,~ ]
 
@@ -453,6 +535,17 @@ L0=: 0{ ".panel_select
 try. L1=: 1{ ".panel_select
 catch. L1=: L0
 end.
+if. L0>0 do.
+  setunits 0
+  setcalco scino tabengine 'VALU' ; L0
+elseif. panel_select-:'_1' do.
+  setcalco ''
+elseif. L0=0 do.
+  setcalco panel -. LF
+elseif. do.
+  smoutput '>>> tab_panel_select: no action defined'
+end.
+confirm details L0
 )
 
 tab_panel_button=: tab_panel_select
@@ -489,11 +582,7 @@ STRATEGY
 Develop a working scheme for one or two *standard* handlers.
 Once debugged, propagate to other handlers labelled: LIKE add1u
 )
-
-newtt=: newtt_like=: 'newt' ddefine
-confirm tabengine x
-showTtable''
-)
+newtt=: 'newt'&undoredo_like
 
 copal=: 3 : 0
 
@@ -520,32 +609,25 @@ mulitems=: 'mult'&additems_like
 
 subitems=: subitems_like=: 'minu' ddefine
 
-if. heldshift'' do. confirm tabengine x,SP,":L1,L0
-else.               confirm tabengine x,SP,":L0,L1
+if. heldshift'' do. confirm tabengine x ; L1 ; L0
+else.               confirm tabengine x ; L0 ; L1
 end.
 showTtable''
 restoreSelection''
+restoreFocusToInputField''
 )
 
 divitems=: 'divi'&subitems_like
 powitems=: 'powe'&subitems_like
 
-stept=: 3 : 0
-  notImplemented''
-)
-
-replot=: 3 : 0
-  notImplemented''
-)
-
 movud=: 3 : 0
 
 if. heldshift'' do.
-  confirm tabengine 'movd ',":L0
+  confirm tabengine 'movd' ; L0
   showTtable''
   incSelection 1
 else.
-  confirm tabengine 'movu ',":L0
+  confirm tabengine 'movu' ; L0
   showTtable''
   incSelection _1
 end.
@@ -555,11 +637,11 @@ restoreFocusToInputField''
 movtb=: 3 : 0
 
 if. heldshift'' do.
-  confirm tabengine 'movb ',":L0
+  confirm tabengine 'movb' ; L0
   showTtable''
   setSelection _
 else.
-  confirm tabengine 'movt ',":L0
+  confirm tabengine 'movt' ; L0
   showTtable''
   setSelection 1
 end.
@@ -567,13 +649,13 @@ restoreFocusToInputField''
 )
 
 newsl=: 3 : 0
-  notImplemented''
+
+confirm tabengine 'newu /'
+showTtable''
+restoreFocusToInputField''
 )
 
-equal=: 3 : 0
-  notImplemented''
-)
-
+equal=: 'equl'&additems_like
 delit=: 'dele'&additems_like
 
 hold=: 3 : 0
@@ -592,9 +674,10 @@ if. heldshift'' do. formu'' else. label'' end.
 
 setv0=: setv0_like=: 'zero' ddefine
 
-confirm tabengine sw '(x) (L0)'
+confirm tabengine x ; L0
 showTtable''
 restoreSelection''
+restoreFocusToInputField''
 )
 
 siunt=: 'cvsi'&setv0_like
@@ -602,24 +685,23 @@ siunt=: 'cvsi'&setv0_like
 set1u=: set1u_like=: 'onep onen' ddefine
 
 inst=. pickshift 2$ ;:x
-confirm tabengine sw '(inst) (L0)'
+confirm tabengine inst ; L0
 showTtable''
 restoreSelection''
+restoreFocusToInputField''
 )
 
 add1u=: add1u_like=: 'addv subv' ddefine
 
 inst=. pickshift 2$ ;:x
-confirm tabengine sw '(inst) (L0) 1'
+confirm tabengine inst ; L0 ; 1
 showTtable''
 restoreSelection''
+restoreFocusToInputField''
 )
-
 addpc=: 'addp subp'&add1u_like
 by2pi=: 'pimv ptmv'&set1u_like
-merge=: 3 : 0
-notImplemented''
-)
+merge=: 'merg'&subitems_like
 
 black=: 3 : 0
 
@@ -648,7 +730,8 @@ textview HELP
 
 showttinf=: 3 : 0
 
-  notImplemented''
+ttinf''
+activateTabWithId 3
 )
 
 '==================== [tabby] open.ijs ===================='
@@ -713,7 +796,7 @@ if. heldshift'' do. openss'' else. opentt'' end.
 0 :0
 Tuesday 11 September 2018  00:11:15
 -
-copied raw from math/tabula
+copied raw from math/tabula-------UNFINISHED
 )
 
 coclass 'tabby'
@@ -726,7 +809,6 @@ plots=: 3 : 'replot PLOTF=:''surface'''
 
 plotx=: 3 : 0
 smoutput sw 'plotx: y=(y)'
-if. -.setL 0 do. return. end.
 PLOTX=: L0
 PLOT=: tabengine 'PLOT' ; PLOTX ; y
 undo''
@@ -737,6 +819,38 @@ PLOTF plot (PLOTX{PLOT) ; (PLOTY{PLOT)
 sellines PLOTY
 )
 
+replot=: 3 : 0
+if. 0~:nc<'PLOT' do.
+  confirm '>>> No action: no plot steps specified yet'
+  return.
+end.
+if. heldshift'' do.
+  PLOTY=: (0,PLOTX) -.~ i.#PLOT
+else.
+  Y=. (0,PLOTX) -.~ ".panel_select
+  if. 0<#Y do. PLOTY=: Y end.
+end.
+PLOTF=: 'line' default 'PLOTF'
+PLOTF plot (PLOTX{PLOT) ; (PLOTY{PLOT)
+sellines PLOTY
+)
+
+stept=: 3 : 0
+selline L0
+val=. | tabengine 'VALU' ; L0
+if. val=0 do.
+  confirm '>>> cannot plot zero-to-zero'
+  return.
+end.
+if. heldshift'' do.
+  z=. (-|val),(|val),100
+else.
+  if. val<0 do. z=. val,0,100 else. z=. 0,val,100 end.
+end.
+calcmd 'steps ',":z
+)
+
+
 
 '==================== [tabby] utilities ===================='
 
@@ -744,6 +858,31 @@ cocurrent 'tabby'
 
 shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
 isEmpty=: 0 = [: */ $
+numeral_i=: [ ([ { [: (([: -. 128!:5) # ]) ]) 0 0 ,~ _. ". [: ": ]
+
+n0=: firstnum=: 0&numeral_i
+secondnum=: 1&numeral_i
+first2nums=: 0 1&numeral_i
+
+smoutput firstnum _55.12 66 77
+smoutput secondnum _55.12 66 77
+smoutput firstnum '_55.12 66 77'
+smoutput secondnum '_55.12 66 77'
+smoutput firstnum 'xx _55.12 66 77'
+smoutput secondnum 'xx _55.12 66 77'
+smoutput firstnum '_55.12 xx 66 77'
+smoutput secondnum '_55.12 xx 66 77'
+smoutput first2nums 'xx _55.12 xx 66 77'
+smoutput first2nums '_55.12 xx 66 77'
+smoutput firstnum ,'1'
+smoutput firstnum '1'
+smoutput firstnum 'x'
+smoutput firstnum 'xx'
+smoutput firstnum ''
+smoutput secondnum '1'
+smoutput secondnum '_55.12 xx'
+smoutput first2nums 'xx _55.12 xx 66 77'
+smoutput first2nums '_55.12 xx 66 77'
 
 '==================== [tabby] main ===================='
 0 :0
@@ -801,6 +940,7 @@ wd 'set cons items *',x2f t
 wd 'set func font fixfont'
 wd 'set func items *',x2f t
 wd 'set preci items *', o2f ": i.16
+wd 'set unico items *',CONTENT_UNICO
 wd 'set panel font fixfont'
 wd 'set panel items *',UNSET
 confirm 'Click a line and perform some operation on it...'
@@ -835,14 +975,10 @@ wh=. 2#DIAMETER
 radius=. <.DIAMETER%2
 glellipse (xy - radius) , wh
 )
+
 set_ucase=: 3 : 0
 
 ssw '>>> set_ucase: dummy placeholder, y=(y)'
-)
-
-calcmd=: 3 : 0
-
-ssw '>>> calcmd: not implemented, calco=[(calco)]'
 )
 
 putsb=: 3 : 0
@@ -901,10 +1037,142 @@ elseif. x-:0 do.
   wd 'psel tab; set info text ""'
 elseif. do.
   if. 0=#y do. y=. info end.
-  tabenginex 'info' ; y
-  confirm sw 'Info: $=($y) updated in t-table: (NAME_TTABLE)'
+  tabengine 'info ',y
+  nom=. '_ 'charsub tabengine'TNAM'
+  confirm sw 'Info: $=($y) updated in t-table: (nom)'
 end.
 )
+
+setpreci=: 3 : 0
+
+if. 0=#y do. i=. preci_select else. i=. ":y end.
+wd 'psel tab; set preci select ',i
+tabengine 'prec ',i
+showTtable''
+restoreSelection''
+restoreFocusToInputField''
+)
+
+setunico=: 3 : 0
+
+if. 0=#y do. i=. unico_select else. i=. ":y end.
+wd 'psel tab; set unico select ',i
+tabengine 'ssic ',i
+showTtable''
+restoreSelection''
+restoreFocusToInputField''
+)
+
+setunits=: 3 : 0
+z=. f4b tabengine 'UCOM' ; L0
+wd 'psel tab; set xunit items *',utf8 z
+wd 'psel tab; set xunit select 0'
+)
+
+scino=: ":
+
+setcalco=: 3 : 0
+wd 'psel tab; set calco text *',calco=:,":y
+)
+
+details=: 3 : 0
+
+if. y=0 do. 'To update title: overtype it and press Enter'
+else. (brace y),SP,tabengine 'FMLA ',":y
+end.
+)
+
+'==================== [tabby] calcmd.ijs ===================='
+0 :0
+Sunday 16 September 2018  23:09:34
+-
+TABULA input line interpreter
+Withdraw the single-char command set
+-
+>>> REALLY NEEDS A DAISYCHAIN !!
+)
+
+nb=: ([: }:@; (<' ') ,.~ ,.)@:(":&.>)
+
+
+
+nb=: ]
+
+tabenginex=: 3 : 0
+
+confirm tabengine y
+showTtable''
+restoreSelection''
+restoreFocusToInputField''
+)
+
+calcmd=: 3 : 0
+
+sess=. empty
+sess=. ssw
+
+
+
+if. 0=#y do. y=. dltb calco end.
+c0=. {.y
+yy=. dlb }.y
+select. c0
+case. '/' do. sess 'calcmd: Engine cmd'
+  tabenginex yy return.
+case. '$' do. sess 'calcmd: load numbered sample: (yy)'
+  tabenginex 'open ',yy return.
+end.
+L0=. {. ".panel_select
+
+if. (0<#y) *. (0-:L0) do.
+  tabenginex 'titl' ; y
+  return.
+end.
+VALUE=: UNDEFINED [ UNITS=: '??' [ RIDER=: ''
+if. ']['-: 2{._1|.y do. sess 'calcmd: units (forced)'
+  if. isunits z=. y -. '][' do.
+    tabenginex nb 'unit' ; L0 ; z
+  else. confirm '>>> bad units:' ; z
+  end.
+elseif. c0='=' do. sess 'calcmd: Formula (yy)'
+  tabenginex nb 'fmla' ; L0 ; yy
+elseif. c0=QT do. sess 'calcmd: label (forced)'
+  tabenginex nb 'name' ; L0 ; yy
+elseif. c0 e. '+-*/^' do. sess 'calcmd: increment (yy)'
+  increment yy
+elseif. isnumeric y do. sess 'calcmd: numeric'
+  tabenginex nb 'valu' ; L0 ; VALUE
+elseif. isunits y do. sess 'calcmd: units'
+  tabenginex nb 'unit' ; L0 ; UNITS
+  setunits 0
+elseif. isvalunits y do. sess 'calcmd: value+units[+rider]'
+  if. 0<#RIDER do.
+    tabengine nb 'name' ; L0 ; RIDER
+  end.
+  setunits 0 [ tabengine nb 'unit' ; L0 ; UNITS
+  tabenginex nb 'valu' ; L0 ; VALUE
+elseif. isnumvec y do. sess 'calcmd: plot instruction'
+  invalplot''
+  plotx y rplc '-' ; '_'
+elseif. do. sess 'calcmd: label (default)'
+  tabenginex nb 'name' ; L0 ; y
+end.
+)
+
+isnumeric=: 3 : 'try. isNo VALUE=: __".y catch. 0 end.'"1
+isunits=: 3 : '-. ''??'' -: >{.convert UNITS=: deb y'
+
+isvalunits=: 3 : 0
+if. 1<#z=. _". y do.
+  if. (_=VALUE=: {.z) +. (_~:1{z) do. 0 return. end.
+else. 0 return.
+end.
+'y r'=. 2{. QT cut y
+RIDER=: dlb r
+if. 0=#UNITS=: deb SP dropto y do. UNITS=: '/' end.
+-. '??' -: >{.convert UNITS
+)
+
 
 '==================== [tabby] start ===================='
 
@@ -923,7 +1191,8 @@ tt_z_=: tabengine_z_=: tabengine f.
 tabengine'Init'
 TPATH_TTABLES=: tabengine'TPTT'
 tab_open''
-wd 'psel tab; set panel items *',tabengine'CTBU'
+setpreci 3
+setunico 1
 )
 
 start''
