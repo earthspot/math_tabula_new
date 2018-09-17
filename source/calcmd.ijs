@@ -13,7 +13,8 @@ tabenginex=: 3 : 0
   NB. serves verb: calcmd below
 confirm tabengine y
 showTtable''
-restoreSelection''
+NB. restoreSelection''
+tab_panel_select 1
 restoreFocusToInputField''
 )
 

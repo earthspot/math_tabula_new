@@ -143,7 +143,7 @@ wd 'psel tab; set func items *',LF,~TEXT=:tabengine'VUUF ',searchf
 
 confirm=: 0 ddefine
 putsb CONTENT_CONFIRM=: y
-y return.
+i.0 0 return.
 )
 
 activateTabWithId=: 3 : 0

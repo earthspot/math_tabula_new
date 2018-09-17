@@ -14,6 +14,138 @@ undoredo_like	ignores line selection
 
 coclass 'tabby'
 
+childlike=: setv0_like
+
+tab_newtt_button=: notimp
+tab_opens_button=: openss
+tab_opent_button=: opent
+tab_appet_button=: notimp
+tab_savex_button=: notimp
+tab_saves_button=: notimp
+tab_savet_button=: notimp
+tab_savea_button=: notimp
+tab_stept_button=: notimp
+tab_plotl_button=: notimp
+tab_plotb_button=: notimp
+tab_plotp_button=: notimp
+tab_plots_button=: notimp
+tab_close_button=: notimp
+tab_print_button=: notimp
+tab_quit_button=:  window_close
+tab_undo_button=:  'Undo'&undoredo_like
+tab_redo_button=:  'Redo'&undoredo_like
+tab_copal_button=: notimp
+tab_label_button=: notimp
+tab_formu_button=: notimp
+tab_erasf_button=: notimp
+tab_siunt_button=: notimp
+tab_movit_button=: notimp
+tab_mvitu_button=: notimp
+tab_newsl_button=: notimp
+tab_merge_button=: notimp
+tab_delit_button=: notimp
+tab_dupit_button=: notimp
+tab_updex_button=: notimp
+tab_updin_button=: notimp
+tab_menu_button=: notimp
+tab_repet_button=: notimp
+tab_tthld_button=: notimp
+tab_thold_button=: notimp
+tab_hidel_button=: notimp
+tab_unhid_button=: notimp
+tab_ttabl_button=: notimp
+tab_conss_button=: notimp
+tab_funcs_button=: notimp
+tab_infor_button=: notimp
+tab_trace_button=: notimp
+tab_trach_button=: notimp
+tab_traci_button=: notimp
+
+tab_additems_button=: notimp
+tab_subitems_button=: notimp
+tab_mulitems_button=: notimp
+tab_divitems_button=: notimp
+tab_powitems_button=: notimp
+
+tab_hlpt_button=: notimp
+tab_hlpc_button=: notimp
+tab_hinf_button=: notimp
+
+tab_Vzero_button=: 'zero'&childlike
+tab_Vonep_button=: 'onep'&childlike
+tab_Vonen_button=: 'onen'&childlike
+tab_Vabsv_button=: 'absv'&childlike
+tab_Vdblv_button=: 'dblv'&childlike
+tab_Vhlvv_button=: 'hlvv'&childlike
+tab_Vintv_button=: 'intv'&childlike
+tab_Vinvv_button=: 'invv'&childlike
+tab_Vnegv_button=: 'negv'&childlike
+tab_Vsqtv_button=: 'sqtv'&childlike
+tab_Vsqrv_button=: 'sqrv'&childlike
+tab_Vcbtv_button=: 'cbtv'&childlike
+tab_Vcubv_button=: 'cubv'&childlike
+tab_Vexpv_button=: 'expv'&childlike
+tab_Vextv_button=: 'extv'&childlike
+tab_Vetwv_button=: 'etwv'&childlike
+tab_Vlnnv_button=: 'lnnv'&childlike
+tab_Vltnv_button=: 'ltnv'&childlike
+tab_Vltwv_button=: 'ltwv'&childlike
+tab_Vpimv_button=: 'pimv'&childlike
+tab_Vptmv_button=: 'ptmv'&childlike
+tab_Vpidv_button=: 'pidv'&childlike
+tab_Vptdv_button=: 'ptdv'&childlike
+tab_Vunsc_button=: 'unsc'&childlike
+tab_Vstpu_button=: 'stpu'&childlike
+tab_Vstpd_button=: 'stpd'&childlike
+tab_Vdeci_button=: 'deci'&childlike
+tab_Vcent_button=: 'cent'&childlike
+tab_Vmill_button=: 'mill'&childlike
+tab_Vmicr_button=: 'micr'&childlike
+tab_Vnano_button=: 'nano'&childlike
+tab_Vpico_button=: 'pico'&childlike
+tab_Vfemt_button=: 'femt'&childlike
+tab_Vatto_button=: 'atto'&childlike
+tab_Vzept_button=: 'zept'&childlike
+tab_Vyoct_button=: 'yoct'&childlike
+tab_Vdeca_button=: 'deca'&childlike
+tab_Vhect_button=: 'hect'&childlike
+tab_Vkilo_button=: 'kilo'&childlike
+tab_Vmega_button=: 'mega'&childlike
+tab_Vgiga_button=: 'giga'&childlike
+tab_Vtera_button=: 'tera'&childlike
+tab_Vpeta_button=: 'peta'&childlike
+tab_Vexaa_button=: 'exaa'&childlike
+tab_Vzett_button=: 'zett'&childlike
+tab_Vyott_button=: 'yott'&childlike
+
+tab_Lequl_button=: 'equl'&childlike
+tab_Labsl_button=: 'absl'&childlike
+tab_Ldbll_button=: 'dbll'&childlike
+tab_Lhlvl_button=: 'hlvl'&childlike
+tab_Lintl_button=: 'intl'&childlike
+tab_Linvl_button=: 'invl'&childlike
+tab_Lnegl_button=: 'negl'&childlike
+tab_Lsqtl_button=: 'sqtl'&childlike
+tab_Lsqrl_button=: 'sqrl'&childlike
+tab_Lcbtl_button=: 'cbtl'&childlike
+tab_Lcubl_button=: 'cubl'&childlike
+tab_Lexpl_button=: 'expl'&childlike
+tab_Lextl_button=: 'extl'&childlike
+tab_Letwl_button=: 'etwl'&childlike
+tab_Llnnl_button=: 'lnnl'&childlike
+tab_Lltnl_button=: 'ltnl'&childlike
+tab_Lltwl_button=: 'ltwl'&childlike
+tab_Lpiml_button=: 'piml'&childlike
+tab_Lptml_button=: 'ptml'&childlike
+tab_Lpidl_button=: 'pidl'&childlike
+tab_Lptdl_button=: 'ptdl'&childlike
+tab_Lt1ml_button=: 't1ml'&childlike
+tab_Lt2ml_button=: 't2ml'&childlike
+tab_Lt3ml_button=: 't3ml'&childlike
+tab_Lt1dl_button=: 't1dl'&childlike
+tab_Lt2dl_button=: 't2dl'&childlike
+tab_Lt3dl_button=: 't3dl'&childlike
+
 NB. >>> WE NOW HAVE A doubleclick event for the toolbar...
 tab_g_mbldbl=: empty
 
@@ -106,7 +238,11 @@ tab_newtt_button=: newtt
 
 tab_panel_select=: 3 : 0
   NB. handles click on row of t-table, or arrow-selection
-sllog 'tab_panel_select panel_select'
+if. 0<#y do.  NB. accept (y) as simulating a panel-click
+  setSelection curb y
+  panel_select=: SP ,~ ":curb y
+end.
+sllog 'tab_panel_select panel_select y'
 L0=: 0{ ".panel_select
 try. L1=: 1{ ".panel_select
 catch. L1=: L0
@@ -148,11 +284,10 @@ restoreFocusToInputField''
 )
 
 tab_default=: 3 : 0
-instr=. instr4event sysevent
-sllog 'tab_default instr sysevent syschild sysparent syshandler'
+sllog 'tab_default sysevent syschild'
 )
 
-instr4event=: 3 : 'UL taketo UL takeafter y'
+NB. instr4event=: 3 : 'UL taketo UL takeafter y' ...use: syschild
 tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
 
 NB. toolbar pseudo-handlers...
@@ -162,12 +297,6 @@ STRATEGY
 Develop a working scheme for one or two *standard* handlers.
 Once debugged, propagate to other handlers labelled: LIKE add1u
 )
-
-NB. newtt=: newtt_like=: 'newt' ddefine
-NB. confirm tabengine x
-NB. showTtable''
-NB. restoreFocusToInputField''
-NB. )
 
 newtt=: 'newt'&undoredo_like
 
@@ -296,7 +425,10 @@ merge=: 'merg'&subitems_like  NB. Merge selected lines
 
 black=: 3 : 0
   NB. user-defined tool
-smoutput '>>> black: not implemented'
+if. 'empty'-: 5!:5<'sllog' do. sllog=: sllog1=: smoutput@llog
+else. sllog=: empty
+end.
+smoutput '>>> black: sllog is: ',5!:5<'sllog'
 )
 
 red=: 3 : 0

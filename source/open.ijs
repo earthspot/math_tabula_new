@@ -28,6 +28,7 @@ openss=: 3 : 0
   NB. open SAMPLE
 tabengine'open $$'
 showTtable''
+tab_panel_select 1
 )
 
 launder=: 3 : 0
@@ -52,6 +53,7 @@ if. 0=#path do. confirm sw '>>> (x)...cancelled' return. end.
 TPATH_TTABLES=: pathof path  NB. change ONLY the local copy
 confirm tabengine inst,SP,path
 showTtable''
+tab_panel_select 1
 )
 
 NB. opent=: opentt shift openss  NB. doesn't work here!

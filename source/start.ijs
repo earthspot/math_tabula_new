@@ -4,9 +4,8 @@
 cocurrent 'tabby'
 
 start=: 3 : 0
- sllog=: smoutput@llog
- sllog=: empty	NB. <<<<<<<<<<<<<<<<<<<<< DISABLE NEW TRACING
- TRACI=: 0
+sllog=: smoutput@llog
+NB.  sllog=: empty	NB. <<<<<<<<<<<<<<<<<<<<< DISABLE NEW TRACING
 wd 'timer 0'
 require '~Gitcal/cal.ijs'   NB. makes UU available too
   NB. ...but all access to UU should be done via CAL instructions
@@ -19,6 +18,7 @@ tab_open''
 setpreci 3  NB. set numeric precision for value column
 setunico 1  NB. set SI conformance level for units column
 NB. wd 'psel tab; set panel items *',tabengine'CTBU' ---redundant
+tab_panel_select 1
 )
 
 start''
