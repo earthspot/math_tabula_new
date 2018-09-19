@@ -1,9 +1,16 @@
 	NB. tabby - handlers.ijs
 '==================== [tabby] handlers.ijs ===================='
 0 :0
-Wednesday 12 September 2018  17:22:44
+Wednesday 19 September 2018  00:05:15
 -
-Templates for handlers:
+===Latest Built Files:
+open '~Gituu/uu.ijs'
+open '~Gitcal/cal.ijs'
+open '~Gitcal/source/CAL_interface.ijs'
+open '~Gittab/tabula.ijs'
+open 'math/tabula'		NB. existing release
+-
+===Templates for handlers:
 additems_like	>0 selected lines, ignores shift
 set1u_like	1 selected line, restores selection
 add1u_like	set1u_like but puts v=1 in CAL instruction
@@ -153,8 +160,8 @@ tab_calco_button=:           calcmd
 tab_calco_changed=: empty
 tab_calco_char=: empty
 tab_cappend_button=:         newc
-tab_casec_button=: empty
-tab_casef_button=: empty
+tab_casec_button=:           fillconsts
+tab_casef_button=:           fillfuncts
 tab_cons_button=:            newc
 tab_cons_select=: empty
 tab_fappend_button=:         newf

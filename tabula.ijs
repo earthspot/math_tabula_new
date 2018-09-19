@@ -47,6 +47,19 @@ AABUILT=: '2018-09-17  15:28:00'
 AABUILT=: '2018-09-17  15:28:44'
 AABUILT=: '2018-09-17  15:28:59'
 AABUILT=: '2018-09-17  15:30:57'
+AABUILT=: '2018-09-18  09:22:33'
+AABUILT=: '2018-09-18  11:30:49'
+AABUILT=: '2018-09-18  12:29:20'
+AABUILT=: '2018-09-18  12:36:53'
+AABUILT=: '2018-09-18  12:50:31'
+AABUILT=: '2018-09-18  13:07:42'
+AABUILT=: '2018-09-18  22:38:51'
+AABUILT=: '2018-09-18  22:49:09'
+AABUILT=: '2018-09-18  22:50:38'
+AABUILT=: '2018-09-18  22:52:18'
+AABUILT=: '2018-09-18  23:30:20'
+AABUILT=: '2018-09-18  23:34:47'
+AABUILT=: '2018-09-18  23:41:46'
 
 '==================== [tabby] constants ===================='
 
@@ -596,8 +609,8 @@ tab_calco_button=:           calcmd
 tab_calco_changed=: empty
 tab_calco_char=: empty
 tab_cappend_button=:         newc
-tab_casec_button=: empty
-tab_casef_button=: empty
+tab_casec_button=:           fillconsts
+tab_casef_button=:           fillfuncts
 tab_cons_button=:            newc
 tab_cons_select=: empty
 tab_fappend_button=:         newf
@@ -681,8 +694,8 @@ tab_newtt_button=: newtt
 tab_panel_select=: 3 : 0
 
 if. 0<#y do.
-  setSelection y
-  panel_select=: SP ,~ ":y
+  setSelection curb y
+  panel_select=: SP ,~ ":curb y
 end.
 sllog 'tab_panel_select panel_select y'
 L0=: 0{ ".panel_select
@@ -893,16 +906,16 @@ activateTabWithId 3
 
 '==================== [tabby] open.ijs ===================='
 0 :0
-Tuesday 11 September 2018  01:47:13
+Tuesday 18 September 2018  09:17:14
 -
-CONTAINS IN-LINE MESSAGES --replace if MESSAGE table provided
--
-
+CONTAINS IN-LINE ERROR/CONFIRMATION MESSAGES
+--replace if MESSAGE table provided in due course.
 )
 
 coclass 'tabby'
 
 hasChanged=: 3 : 0
+
 if. (tabengine 'DIRT') and -.heldalt'' do.
   prompt=. 'Save current ttable?'
   ask=. 'Ttable: ',tabengine 'TITL'
@@ -910,9 +923,7 @@ if. (tabengine 'DIRT') and -.heldalt'' do.
   ask=. ask,LF,'OK to continue (and lose the changes)?'
   if. wdquery prompt;ask do.
     confirm '>>> New/load ttable -cancelled'
-    1 return.
-  end.
-end.
+    1 return.end.end.
 0 return.
 )
 
@@ -1017,13 +1028,14 @@ cocurrent 'tabby'
 
 shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
 isEmpty=: 0 = [: */ $
-numeral_i=: [ ([ { [: (([: -. 128!:5) # ]) ]) 0 0 ,~ _. ". [: ": ]
+isNaN=: 128!:5
+numeral_i=: [ ([ { [: (([: -. isNaN) # ]) ]) 0 0 ,~ _. ". [: ": ]
 
 n0=: firstnum=: 0&numeral_i
 secondnum=: 1&numeral_i
 first2nums=: 0 1&numeral_i
 
-0 :0
+
 smoutput firstnum _55.12 66 77
 smoutput secondnum _55.12 66 77
 smoutput firstnum '_55.12 66 77'
@@ -1036,11 +1048,11 @@ smoutput first2nums 'xx _55.12 xx 66 77'
 smoutput first2nums '_55.12 xx 66 77'
 smoutput firstnum ,'1'
 smoutput firstnum '1'
-smoutput firstnum 'x'
-smoutput firstnum 'xx'
-smoutput firstnum ''
-smoutput secondnum '1'
-smoutput secondnum '_55.12 xx'
+smoutput -.firstnum 'x'
+smoutput -.firstnum 'xx'
+smoutput -.firstnum ''
+smoutput -.secondnum '1'
+smoutput -.secondnum '_55.12 xx'
 smoutput first2nums 'xx _55.12 xx 66 77'
 smoutput first2nums '_55.12 xx 66 77'
 
@@ -1104,6 +1116,7 @@ wd 'set unico items *',CONTENT_UNICO
 wd 'set panel font fixfont'
 wd 'set panel items *',UNSET
 confirm 'Click a line and perform some operation on it...'
+wd 'pmoves 1384 23 536 450'
 wd 'pshow'
 fill_tools ''
 )
@@ -1158,19 +1171,19 @@ restoreFocusToInputField''
 
 fillconsts=: 3 : 0
 
-set_ucase casec-: ,'0'
-wd 'psel tab; set cons items *',LF,~TEXT=:tabengine 'VUUC ',searchc
+inst=. (".casec) pick ;:'VUUC WUUC'
+wd 'psel tab; set cons items *',LF,~TEXT=:tabengine inst ; searchc
 )
 
 fillfuncts=: 3 : 0
 
-set_ucase casef-: ,'0'
-wd 'psel tab; set func items *',LF,~TEXT=:tabengine'VUUF ',searchf
+inst=. (".casef) pick ;:'VUUF WUUF'
+wd 'psel tab; set func items *',LF,~TEXT=:tabengine inst ; searchf
 )
 
 confirm=: 0 ddefine
 putsb CONTENT_CONFIRM=: y
-y return.
+i.0 0 return.
 )
 
 activateTabWithId=: 3 : 0
@@ -1258,7 +1271,7 @@ tabenginex=: 3 : 0
 
 confirm tabengine y
 showTtable''
-restoreSelection''
+tab_panel_select 1
 restoreFocusToInputField''
 )
 
@@ -1342,11 +1355,11 @@ cocurrent 'tabby'
 start=: 3 : 0
 sllog=: smoutput@llog
 wd 'timer 0'
-require '~Gitcal/cal.ijs'
+load '~Gitcal/cal.ijs'
 
 tabengine=: tabengine_cal_
  sesi_z_=: smoutput
-tt_z_=: tabengine_z_=: tabengine f.
+tt_z_=: tabengine_z_=: tabengine
 tabengine'Init'
 TPATH_TTABLES=: tabengine'TPTT'
 tab_open''

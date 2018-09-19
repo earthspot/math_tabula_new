@@ -1,16 +1,16 @@
 	NB. tabby - open.ijs
 '==================== [tabby] open.ijs ===================='
 0 :0
-Tuesday 11 September 2018  01:47:13
+Tuesday 18 September 2018  09:17:14
 -
-CONTAINS IN-LINE MESSAGES --replace if MESSAGE table provided
--
-
+CONTAINS IN-LINE ERROR/CONFIRMATION MESSAGES
+--replace if MESSAGE table provided in due course.
 )
 
 coclass 'tabby'
 
 hasChanged=: 3 : 0
+  NB. avoid losing changes
 if. (tabengine 'DIRT') and -.heldalt'' do.
   prompt=. 'Save current ttable?'
   ask=. 'Ttable: ',tabengine 'TITL'
@@ -18,9 +18,7 @@ if. (tabengine 'DIRT') and -.heldalt'' do.
   ask=. ask,LF,'OK to continue (and lose the changes)?'
   if. wdquery prompt;ask do.
     confirm '>>> New/load ttable -cancelled'
-    1 return.
-  end.
-end.
+    1 return.end.end.
 0 return.
 )
 
@@ -41,8 +39,8 @@ pathof=: ] {.~ [: >: SL i:~ ]
 opentt=: 'open' ddefine
   NB. x=='open' - open selected t-table
   NB. x=='append' - append selected t-table
-  NB. Reassigns visible TPATH_TTABLES to path of last t-table
-  NB. A LOCAL copy: TPATH_TTABLES_tabby_ is created by: start
+  NB. Side effect: reassigns TPATH_TTABLES to path of last t-table
+  NB. BUT a LOCAL copy: TPATH_TTABLES_tabby_ is created by: start
 if. hasChanged'' do. return. end.
 inst=. 4{.x
 invalplot''

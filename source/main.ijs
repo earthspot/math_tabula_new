@@ -1,7 +1,7 @@
 	NB. tabby - main.ijs
 '==================== [tabby] main ===================='
 0 :0
-Friday 31 August 2018  21:14:03
+Wednesday 19 September 2018  00:05:29
 )
 
 coclass 'tabby'
@@ -69,6 +69,7 @@ wd 'set unico items *',CONTENT_UNICO
 wd 'set panel font fixfont'
 wd 'set panel items *',UNSET
 confirm 'Click a line and perform some operation on it...'
+wd 'pmoves 1384 23 536 450'  NB. activate remembering window position
 wd 'pshow'
 fill_tools ''
 )
@@ -79,9 +80,8 @@ wd :: EMPTY 'psel tab; pclose;'
 
 fill_tools=: 0 ddefine
   NB. redraws toolbar, hilites tool id= y
-  NB. (bool) x controls hilite color
+  NB. (bool) x makes choice between 2 circle colors
 glsel 'g'
-NB. glclear''
 a=. readimg_jqtide_ PNG
 glpixels 0 0 , (|.$a), ,a
 if. {. y e. i.32 do.
@@ -126,19 +126,15 @@ restoreFocusToInputField''
 )
 
 fillconsts=: 3 : 0
-  NB. Expand to interrogate CAL for (filtered) list
-set_ucase casec-: ,'0'
-NB. wd 'psel tab; set cons items *',x2f uurowsc searchc
-NB. wd 'psel tab; set cons items *',CONTENT_CONSTANTS,date''
-wd 'psel tab; set cons items *',LF,~TEXT=:tabengine 'VUUC ',searchc
+  NB. get filtered UUC via CAL
+inst=. (".casec) pick ;:'WUUC VUUC'
+wd 'psel tab; set cons items *',TEXT=: LF,~ tabengine inst ; searchc
 )
 
 fillfuncts=: 3 : 0
-  NB. Expand to interrogate CAL for (filtered) list
-set_ucase casef-: ,'0'
-NB. wd 'psel tab; set func items *',x2f uurowsf searchf
-NB. wd 'psel tab; set func items *',CONTENT_FUNCTIONS,date''
-wd 'psel tab; set func items *',LF,~TEXT=:tabengine'VUUF ',searchf
+  NB. get filtered UUF via CAL
+inst=. (".casef) pick ;:'WUUF VUUF'
+wd 'psel tab; set func items *',TEXT=: LF,~ tabengine inst ; searchf
 )
 
 confirm=: 0 ddefine
