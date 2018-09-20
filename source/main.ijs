@@ -1,7 +1,7 @@
 	NB. tabby - main.ijs
 '==================== [tabby] main ===================='
 0 :0
-Wednesday 19 September 2018  00:05:29
+Thursday 20 September 2018  08:46:58
 )
 
 coclass 'tabby'
@@ -81,6 +81,8 @@ wd :: EMPTY 'psel tab; pclose;'
 fill_tools=: 0 ddefine
   NB. redraws toolbar, hilites tool id= y
   NB. (bool) x makes choice between 2 circle colors
+try. wd 'psel tab'
+catch. i.0 0 return. end.
 glsel 'g'
 a=. readimg_jqtide_ PNG
 glpixels 0 0 , (|.$a), ,a

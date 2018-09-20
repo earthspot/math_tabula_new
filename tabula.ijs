@@ -1,7 +1,8 @@
 0 :0
-Thursday 6 September 2018  18:09:10
+Thursday 20 September 2018  08:43:41
 -
-TABULA: scientific units calculator - simplified architecture
+TABULA: scientific units calculator
+-simplified architecture
 )
 
 clear 'tabby'
@@ -10,56 +11,9 @@ clear LOC
 BLOC=: <,LOC
 coinsert 'jgl2'
 
-AABUILT=: '2018-09-12  03:19:38'
-AABUILT=: '2018-09-12  05:18:15'
-AABUILT=: '2018-09-12  05:21:35'
-AABUILT=: '2018-09-12  05:29:12'
-AABUILT=: '2018-09-12  05:32:41'
-AABUILT=: '2018-09-12  05:41:10'
-AABUILT=: '2018-09-12  05:49:03'
-AABUILT=: '2018-09-12  05:50:10'
-AABUILT=: '2018-09-12  06:11:58'
-AABUILT=: '2018-09-12  16:39:23'
-AABUILT=: '2018-09-12  17:52:46'
-AABUILT=: '2018-09-15  11:57:14'
-AABUILT=: '2018-09-16  23:23:25'
-AABUILT=: '2018-09-16  23:53:51'
-AABUILT=: '2018-09-17  00:01:36'
-AABUILT=: '2018-09-17  00:04:37'
-AABUILT=: '2018-09-17  00:24:49'
-AABUILT=: '2018-09-17  01:57:42'
-AABUILT=: '2018-09-17  03:27:38'
-AABUILT=: '2018-09-17  13:05:28'
-AABUILT=: '2018-09-17  13:13:20'
-AABUILT=: '2018-09-17  15:19:57'
-AABUILT=: '2018-09-17  15:22:45'
-AABUILT=: '2018-09-17  15:23:14'
-AABUILT=: '2018-09-17  15:23:36'
-AABUILT=: '2018-09-17  15:23:54'
-AABUILT=: '2018-09-17  15:24:05'
-AABUILT=: '2018-09-17  15:24:32'
-AABUILT=: '2018-09-17  15:25:05'
-AABUILT=: '2018-09-17  15:25:12'
-AABUILT=: '2018-09-17  15:25:48'
-AABUILT=: '2018-09-17  15:26:20'
-AABUILT=: '2018-09-17  15:27:12'
-AABUILT=: '2018-09-17  15:28:00'
-AABUILT=: '2018-09-17  15:28:44'
-AABUILT=: '2018-09-17  15:28:59'
-AABUILT=: '2018-09-17  15:30:57'
-AABUILT=: '2018-09-18  09:22:33'
-AABUILT=: '2018-09-18  11:30:49'
-AABUILT=: '2018-09-18  12:29:20'
-AABUILT=: '2018-09-18  12:36:53'
-AABUILT=: '2018-09-18  12:50:31'
-AABUILT=: '2018-09-18  13:07:42'
-AABUILT=: '2018-09-18  22:38:51'
-AABUILT=: '2018-09-18  22:49:09'
-AABUILT=: '2018-09-18  22:50:38'
-AABUILT=: '2018-09-18  22:52:18'
-AABUILT=: '2018-09-18  23:30:20'
-AABUILT=: '2018-09-18  23:34:47'
-AABUILT=: '2018-09-18  23:41:46'
+AABUILT=: '2018-09-20  09:03:21'
+AABUILT=: '2018-09-20  09:18:40'
+AABUILT=: '2018-09-20  09:22:54'
 
 '==================== [tabby] constants ===================='
 
@@ -459,9 +413,16 @@ TOOLHINT=: >cutopen 0 : 0
 
 '==================== [tabby] handlers.ijs ===================='
 0 :0
-Wednesday 12 September 2018  17:22:44
+Wednesday 19 September 2018  00:05:15
 -
-Templates for handlers:
+===Latest Built Files:
+open '~Gituu/uu.ijs'
+open '~Gitcal/cal.ijs'
+open '~Gitcal/source/CAL_interface.ijs'
+open '~Gittab/tabula.ijs'
+open 'math/tabula'
+-
+===Templates for handlers:
 additems_like	>0 selected lines, ignores shift
 set1u_like	1 selected line, restores selection
 add1u_like	set1u_like but puts v=1 in CAL instruction
@@ -1058,7 +1019,7 @@ smoutput first2nums '_55.12 xx 66 77'
 
 '==================== [tabby] main ===================='
 0 :0
-Friday 31 August 2018  21:14:03
+Thursday 20 September 2018  08:46:58
 )
 
 coclass 'tabby'
@@ -1128,6 +1089,8 @@ wd :: EMPTY 'psel tab; pclose;'
 fill_tools=: 0 ddefine
 
 
+try. wd 'psel tab'
+catch. i.0 0 return. end.
 glsel 'g'
 a=. readimg_jqtide_ PNG
 glpixels 0 0 , (|.$a), ,a
@@ -1171,14 +1134,14 @@ restoreFocusToInputField''
 
 fillconsts=: 3 : 0
 
-inst=. (".casec) pick ;:'VUUC WUUC'
-wd 'psel tab; set cons items *',LF,~TEXT=:tabengine inst ; searchc
+inst=. (".casec) pick ;:'WUUC VUUC'
+wd 'psel tab; set cons items *',TEXT=: LF,~ tabengine inst ; searchc
 )
 
 fillfuncts=: 3 : 0
 
-inst=. (".casef) pick ;:'VUUF WUUF'
-wd 'psel tab; set func items *',LF,~TEXT=:tabengine inst ; searchf
+inst=. (".casef) pick ;:'WUUF VUUF'
+wd 'psel tab; set func items *',TEXT=: LF,~ tabengine inst ; searchf
 )
 
 confirm=: 0 ddefine
