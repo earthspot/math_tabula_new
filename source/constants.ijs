@@ -7,14 +7,7 @@ sysmodifiers=: ,'0'
 	NB. >>> ought we init ALL (wd) 'sys' caches?
 
   NB. SI conformance level combobox
-CONTENT_UNICO=: 0 : 0
- m^3/kg/s^2
- m³/(kg s²)
- m³ kg⁻¹ s⁻²
- m³·kg⁻¹·s⁻²
-)
-
-CONTENT_UNICO=: 0 : 0
+CONTENT_UNICO=: }: 0 : 0
  m/kg/s^2
  m/(kg s²)
  m kg⁻¹ s⁻²
