@@ -184,7 +184,7 @@ tab_tabs_select=:            clicktab
 tab_xunit_button=: empty
 
 tab_xunit_select=: 3 : 0
-confirm tabengine 'unit '; L0 ; xunit
+confirm tabengine 'unit '; (line 0) ; xunit
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -243,6 +243,16 @@ tab_close=: window_close
 
 tab_newtt_button=: newtt
 
+line=: 3 : 0 "0
+  NB. return the y'th selection
+z=. ".panel_select
+if. _1={.z do. return. end.
+if. y=0 do. {.z
+elseif. y>1+#z do. {.}.z
+elseif. do. {:z
+end.
+)
+
 tab_panel_select=: 3 : 0
   NB. handles click on row of t-table, or arrow-selection
 if. 0<#y do.  NB. accept (y) as simulating a panel-click
@@ -250,21 +260,17 @@ if. 0<#y do.  NB. accept (y) as simulating a panel-click
   panel_select=: SP ,~ ":curb y
 end.
 sllog 'tab_panel_select panel_select y'
-L0=: 0{ ".panel_select
-try. L1=: 1{ ".panel_select
-catch. L1=: L0
-end.
-if. L0>0 do.
+if. 0~:line 0 do.
   setunits''
-  setcalco scino tabengine 'VALU' ; L0
+  setcalco scino tabengine 'VALU' ; line 0
 elseif. panel_select-:'_1' do.
   setcalco ''
-elseif. L0=0 do.
+elseif. 0=line 0 do.
   setcalco panel -. LF
 elseif. do.
   smoutput '>>> tab_panel_select: no action defined'
 end.
-confirm details L0
+confirm details line 0
 )
 
 tab_panel_button=: tab_panel_select  NB. IS IT EVER TRIGGERED?
@@ -333,8 +339,8 @@ mulitems=: 'mult'&additems_like  NB. Multiply all selected items
 
 subitems=: subitems_like=: 'minu' ddefine
   NB. item 1 - 2 / item 2 - 1
-if. heldshift'' do. confirm tabengine x ; L1 ; L0
-else.               confirm tabengine x ; L0 ; L1
+if. heldshift'' do. confirm tabengine x ; (line 1) ; (line 0)
+else.               confirm tabengine x ; (line 0) ; (line 1)
 end.
 showTtable''
 setSelection _
@@ -347,11 +353,11 @@ powitems=: 'powe'&subitems_like  NB. item 1^2 / item 2^1
 movud=: 3 : 0
   NB. Move line up / Move line down
 if. heldshift'' do.
-  confirm tabengine 'movd' ; L0
+  confirm tabengine 'movd' ; line 0
   showTtable''
   incSelection 1
 else.
-  confirm tabengine 'movu' ; L0
+  confirm tabengine 'movu' ; line 0
   showTtable''
   incSelection _1
 end.
@@ -361,11 +367,11 @@ restoreFocusToInputField''
 movtb=: 3 : 0
   NB. Move line to top / Move line to bottom
 if. heldshift'' do.
-  confirm tabengine 'movb' ; L0
+  confirm tabengine 'movb' ; line 0
   showTtable''
   setSelection _
 else.
-  confirm tabengine 'movt' ; L0
+  confirm tabengine 'movt' ; line 0
   showTtable''
   setSelection 1
 end.
@@ -399,7 +405,7 @@ if. heldshift'' do. formu'' else. label'' end.
 
 setv0=: setv0_like=: 'zero' ddefine
   NB. Set value to 0
-confirm tabengine x ; L0
+confirm tabengine x ; line 0
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -410,7 +416,7 @@ siunt=: 'cvsi'&setv0_like
 set1u=: set1u_like=: 'onep onen' ddefine
   NB. Set value to 1 / Set value to -1
 inst=. pickshift 2$ ;:x
-confirm tabengine inst ; L0
+confirm tabengine inst ; line 0
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -419,7 +425,7 @@ restoreFocusToInputField''
 add1u=: add1u_like=: 'addv subv' ddefine
   NB. Add 1 to / Subtract 1 from single item
 inst=. pickshift 2$ ;:x
-confirm tabengine inst ; L0 ; 1
+confirm tabengine inst ; (line 0) ; 1
 showTtable''
 restoreSelection''
 restoreFocusToInputField''

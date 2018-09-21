@@ -26,6 +26,7 @@ openss=: 3 : 0
   NB. open SAMPLE
 tabengine'open $$'
 showTtable''
+setFormTitle''
 tab_panel_select 1
 )
 
@@ -35,6 +36,12 @@ launder=: 3 : 0
 )
 
 pathof=: ] {.~ [: >: SL i:~ ]
+
+setFormTitle=: 3 : 0
+  NB. set the title of the window to identify the t-table
+wd 'psel tab; pn ',tabengine 'TFIT'
+  NB. other instrs to look at: TNAM TNMS
+)
 
 opentt=: 'open' ddefine
   NB. x=='open' - open selected t-table
@@ -51,6 +58,7 @@ if. 0=#path do. confirm sw '>>> (x)...cancelled' return. end.
 TPATH_TTABLES=: pathof path  NB. change ONLY the local copy
 confirm tabengine inst,SP,path
 showTtable''
+setFormTitle''
 tab_panel_select 1
 )
 

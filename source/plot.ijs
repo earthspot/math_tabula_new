@@ -17,7 +17,7 @@ plots=: 3 : 'replot PLOTF=:''surface'''
 plotx=: 3 : 0
 smoutput sw 'plotx: y=(y)'
 NB. if. -.setL 0 do. return. end.
-PLOTX=: L0
+PLOTX=: line 0
 PLOT=: tabengine 'PLOT' ; PLOTX ; y
 undo''
 Y=. {: i.#PLOT
@@ -45,8 +45,8 @@ sellines PLOTY
 
 stept=: 3 : 0
 NB. if. -.setL 0 do. return. end.
-selline L0
-val=. | tabengine 'VALU' ; L0
+selline line 0
+val=. | tabengine 'VALU' ; line 0
 if. val=0 do.
   confirm '>>> cannot plot zero-to-zero'
   return.

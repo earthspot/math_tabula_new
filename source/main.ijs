@@ -38,7 +38,7 @@ wd 'psel tab; set panel select ',":curb y
 )
 
 incSelection=: 3 : 0
-wd 'psel tab; set panel select ',":curb L0=:L0+y
+wd 'psel tab; set panel select ',":curb y+line 0
 )
 
 tab_open=: 3 : 0
@@ -195,9 +195,9 @@ restoreFocusToInputField''
 )
 
 setunits=: 3 : 0
-z=. tabengine 'UCOM' ; L0
-z=. ~. z ,~ tabengine 'UNIS' ; L0  NB. include equiv SI units in the list
-z=. ~. z ,~ tabengine 'UNIT' ; L0  NB. include existing units in the list
+z=. tabengine 'UCOM' ; line 0
+z=. ~. z ,~ tabengine 'UNIS' ; line 0  NB. include equiv SI units in the list
+z=. ~. z ,~ tabengine 'UNIT' ; line 0  NB. include existing units in the list
 wd 'psel tab; set xunit items *',utf8 f4b z
 wd 'psel tab; set xunit select 0'
 )

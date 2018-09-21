@@ -1,5 +1,5 @@
 0 :0
-Thursday 20 September 2018  08:43:41
+Friday 21 September 2018  21:35:47
 -
 TABULA: scientific units calculator
 -simplified architecture
@@ -11,10 +11,11 @@ clear LOC
 BLOC=: <,LOC
 coinsert 'jgl2'
 
-AABUILT=: '2018-09-20  09:03:21'
-AABUILT=: '2018-09-20  09:18:40'
-AABUILT=: '2018-09-20  09:22:54'
-AABUILT=: '2018-09-21  01:15:14'
+AABUILT=: '2018-09-21  22:20:58'
+AABUILT=: '2018-09-21  23:03:37'
+AABUILT=: '2018-09-21  23:04:44'
+AABUILT=: '2018-09-21  23:46:38'
+AABUILT=: '2018-09-21  23:55:49'
 
 '==================== [tabby] constants ===================='
 
@@ -94,8 +95,6 @@ COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
 DIAMETER=: 30
 ITEMS=: i.0
-L0=: 0
-L1=: 1
 PEN_WIDTH=: 3
 PNG=: temp 'tabula-toolbar.png'
 SL=: '/'
@@ -588,7 +587,7 @@ tab_tabs_select=:            clicktab
 tab_xunit_button=: empty
 
 tab_xunit_select=: 3 : 0
-confirm tabengine 'unit '; L0 ; xunit
+confirm tabengine 'unit '; (line 0) ; xunit
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -646,6 +645,16 @@ tab_close=: window_close
 
 tab_newtt_button=: newtt
 
+line=: 3 : 0 "0
+
+z=. ".panel_select
+if. _1={.z do. return. end.
+if. y=0 do. {.z
+elseif. y>1+#z do. {.}.z
+elseif. do. {:z
+end.
+)
+
 tab_panel_select=: 3 : 0
 
 if. 0<#y do.
@@ -653,21 +662,17 @@ if. 0<#y do.
   panel_select=: SP ,~ ":curb y
 end.
 sllog 'tab_panel_select panel_select y'
-L0=: 0{ ".panel_select
-try. L1=: 1{ ".panel_select
-catch. L1=: L0
-end.
-if. L0>0 do.
+if. 0~:line 0 do.
   setunits''
-  setcalco scino tabengine 'VALU' ; L0
+  setcalco scino tabengine 'VALU' ; line 0
 elseif. panel_select-:'_1' do.
   setcalco ''
-elseif. L0=0 do.
+elseif. 0=line 0 do.
   setcalco panel -. LF
 elseif. do.
   smoutput '>>> tab_panel_select: no action defined'
 end.
-confirm details L0
+confirm details line 0
 )
 
 tab_panel_button=: tab_panel_select
@@ -730,8 +735,8 @@ mulitems=: 'mult'&additems_like
 
 subitems=: subitems_like=: 'minu' ddefine
 
-if. heldshift'' do. confirm tabengine x ; L1 ; L0
-else.               confirm tabengine x ; L0 ; L1
+if. heldshift'' do. confirm tabengine x ; (line 1) ; (line 0)
+else.               confirm tabengine x ; (line 0) ; (line 1)
 end.
 showTtable''
 setSelection _
@@ -744,11 +749,11 @@ powitems=: 'powe'&subitems_like
 movud=: 3 : 0
 
 if. heldshift'' do.
-  confirm tabengine 'movd' ; L0
+  confirm tabengine 'movd' ; line 0
   showTtable''
   incSelection 1
 else.
-  confirm tabengine 'movu' ; L0
+  confirm tabengine 'movu' ; line 0
   showTtable''
   incSelection _1
 end.
@@ -758,11 +763,11 @@ restoreFocusToInputField''
 movtb=: 3 : 0
 
 if. heldshift'' do.
-  confirm tabengine 'movb' ; L0
+  confirm tabengine 'movb' ; line 0
   showTtable''
   setSelection _
 else.
-  confirm tabengine 'movt' ; L0
+  confirm tabengine 'movt' ; line 0
   showTtable''
   setSelection 1
 end.
@@ -796,7 +801,7 @@ if. heldshift'' do. formu'' else. label'' end.
 
 setv0=: setv0_like=: 'zero' ddefine
 
-confirm tabengine x ; L0
+confirm tabengine x ; line 0
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -807,7 +812,7 @@ siunt=: 'cvsi'&setv0_like
 set1u=: set1u_like=: 'onep onen' ddefine
 
 inst=. pickshift 2$ ;:x
-confirm tabengine inst ; L0
+confirm tabengine inst ; line 0
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -816,7 +821,7 @@ restoreFocusToInputField''
 add1u=: add1u_like=: 'addv subv' ddefine
 
 inst=. pickshift 2$ ;:x
-confirm tabengine inst ; L0 ; 1
+confirm tabengine inst ; (line 0) ; 1
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -886,6 +891,7 @@ openss=: 3 : 0
 
 tabengine'open $$'
 showTtable''
+setFormTitle''
 tab_panel_select 1
 )
 
@@ -895,6 +901,12 @@ launder=: 3 : 0
 )
 
 pathof=: ] {.~ [: >: SL i:~ ]
+
+setFormTitle=: 3 : 0
+
+wd 'psel tab; pn ',tabengine 'TFIT'
+
+)
 
 opentt=: 'open' ddefine
 
@@ -911,6 +923,7 @@ if. 0=#path do. confirm sw '>>> (x)...cancelled' return. end.
 TPATH_TTABLES=: pathof path
 confirm tabengine inst,SP,path
 showTtable''
+setFormTitle''
 tab_panel_select 1
 )
 opent=: 3 : 0
@@ -934,7 +947,7 @@ plots=: 3 : 'replot PLOTF=:''surface'''
 
 plotx=: 3 : 0
 smoutput sw 'plotx: y=(y)'
-PLOTX=: L0
+PLOTX=: line 0
 PLOT=: tabengine 'PLOT' ; PLOTX ; y
 undo''
 Y=. {: i.#PLOT
@@ -961,8 +974,8 @@ sellines PLOTY
 )
 
 stept=: 3 : 0
-selline L0
-val=. | tabengine 'VALU' ; L0
+selline line 0
+val=. | tabengine 'VALU' ; line 0
 if. val=0 do.
   confirm '>>> cannot plot zero-to-zero'
   return.
@@ -1050,7 +1063,7 @@ wd 'psel tab; set panel select ',":curb y
 )
 
 incSelection=: 3 : 0
-wd 'psel tab; set panel select ',":curb L0=:L0+y
+wd 'psel tab; set panel select ',":curb y+line 0
 )
 
 tab_open=: 3 : 0
@@ -1194,9 +1207,9 @@ restoreFocusToInputField''
 )
 
 setunits=: 3 : 0
-z=. tabengine 'UCOM' ; L0
-z=. ~. z ,~ tabengine 'UNIS' ; L0
-z=. ~. z ,~ tabengine 'UNIT' ; L0
+z=. tabengine 'UCOM' ; line 0
+z=. ~. z ,~ tabengine 'UNIS' ; line 0
+z=. ~. z ,~ tabengine 'UNIT' ; line 0
 wd 'psel tab; set xunit items *',utf8 f4b z
 wd 'psel tab; set xunit select 0'
 )
@@ -1216,7 +1229,7 @@ end.
 
 '==================== [tabby] calcmd.ijs ===================='
 0 :0
-Sunday 16 September 2018  23:09:34
+Friday 21 September 2018  21:47:22
 -
 TABULA input line interpreter
 Withdraw the single-char command set
@@ -1225,6 +1238,7 @@ Withdraw the single-char command set
 )
 
 tabenginex=: 3 : 0
+
 
 confirm tabengine y
 showTtable''
@@ -1250,38 +1264,38 @@ case. '$' do. sess 'calcmd: load numbered sample: (yy)'
 end.
 if. '_1'-: panel_select do. confirm '>>> Select a line to work with' return. end.
 
-if. (0<#y) *. (0-:L0) do.
+if. (0<#y) *. (0-:line 0) do.
   tabenginex 'titl' ; y
   return.
 end.
 VALUE=: UNDEFINED [ UNITS=: '??' [ RIDER=: ''
 if. ']['-: 2{._1|.y do. sess 'calcmd: units (forced)'
   if. isunits z=. y -. '][' do.
-    tabenginex 'unit' ; L0 ; z
+    tabenginex 'unit' ; (line 0) ; z
   else. confirm '>>> bad units:' ; z
   end.
 elseif. c0='=' do. sess 'calcmd: Formula (yy)'
-  tabenginex 'fmla' ; L0 ; yy
+  tabenginex 'fmla' ; (line 0) ; yy
 elseif. c0=QT do. sess 'calcmd: label (forced)'
-  tabenginex 'name' ; L0 ; yy
+  tabenginex 'name' ; (line 0) ; yy
 elseif. c0 e. '+-*/^' do. sess 'calcmd: increment (yy)'
   increment yy
 elseif. isnumeric y do. sess 'calcmd: numeric'
-  tabenginex 'valu' ; L0 ; y
+  tabenginex 'valu' ; (line 0) ; y
 elseif. isunits y do. sess 'calcmd: units'
-  tabenginex 'unit' ; L0 ; UNITS
+  tabenginex 'unit' ; (line 0) ; UNITS
   setunits''
 elseif. isvalunits y do. sess 'calcmd: value+units[+rider]'
   if. 0<#RIDER do.
-    tabengine 'name' ; L0 ; RIDER
+    tabengine 'name' ; (line 0) ; RIDER
   end.
-  setunits'' [ tabengine 'unit' ; L0 ; UNITS
-  tabenginex 'valu' ; L0 ; VALUE
+  setunits'' [ tabengine 'unit' ; (line 0) ; UNITS
+  tabenginex 'valu' ; (line 0) ; VALUE
 elseif. isnumvec y do. sess 'calcmd: plot instruction'
   invalplot''
   plotx y rplc '-' ; '_'
 elseif. do. sess 'calcmd: label (default)'
-  tabenginex 'name' ; L0 ; y
+  tabenginex 'name' ; (line 0) ; y
 end.
 )
 

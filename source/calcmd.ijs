@@ -1,7 +1,7 @@
 	NB. tabby - calcmd.ijs
 '==================== [tabby] calcmd.ijs ===================='
 0 :0
-Sunday 16 September 2018  23:09:34
+Friday 21 September 2018  21:47:22
 -
 TABULA input line interpreter
 Withdraw the single-char command set
@@ -11,6 +11,7 @@ Withdraw the single-char command set
 
 tabenginex=: 3 : 0
   NB. serves verb: calcmd below
+  NB. BE SHY of using it elsewhere in handlers
 confirm tabengine y
 showTtable''
 NB. restoreSelection''
@@ -35,40 +36,39 @@ case. '$' do. sess 'calcmd: load numbered sample: (yy)'
   tabenginex 'open ',yy return.
 end.
 if. '_1'-: panel_select do. confirm '>>> Select a line to work with' return. end.
-NB. L0=. {. ".panel_select --------assume done by prior panel-click
   NB. If title line selected then accept y as new title
-if. (0<#y) *. (0-:L0) do.
+if. (0<#y) *. (0-:line 0) do.
   tabenginex 'titl' ; y
   return.
 end.
 VALUE=: UNDEFINED [ UNITS=: '??' [ RIDER=: ''
 if. ']['-: 2{._1|.y do. sess 'calcmd: units (forced)'
   if. isunits z=. y -. '][' do.
-    tabenginex 'unit' ; L0 ; z  NB. >>>> BUT isunits changes UNITS
+    tabenginex 'unit' ; (line 0) ; z  NB. >>>> BUT isunits changes UNITS
   else. confirm '>>> bad units:' ; z
   end.
 elseif. c0='=' do. sess 'calcmd: Formula (yy)'
-  tabenginex 'fmla' ; L0 ; yy
+  tabenginex 'fmla' ; (line 0) ; yy
 elseif. c0=QT do. sess 'calcmd: label (forced)'
-  tabenginex 'name' ; L0 ; yy
+  tabenginex 'name' ; (line 0) ; yy
 elseif. c0 e. '+-*/^' do. sess 'calcmd: increment (yy)'
   increment yy
 elseif. isnumeric y do. sess 'calcmd: numeric'
-  tabenginex 'valu' ; L0 ; y
+  tabenginex 'valu' ; (line 0) ; y
 elseif. isunits y do. sess 'calcmd: units'
-  tabenginex 'unit' ; L0 ; UNITS
+  tabenginex 'unit' ; (line 0) ; UNITS
   setunits''
 elseif. isvalunits y do. sess 'calcmd: value+units[+rider]'
   if. 0<#RIDER do.
-    tabengine 'name' ; L0 ; RIDER
+    tabengine 'name' ; (line 0) ; RIDER
   end.
-  setunits'' [ tabengine 'unit' ; L0 ; UNITS
-  tabenginex 'valu' ; L0 ; VALUE
+  setunits'' [ tabengine 'unit' ; (line 0) ; UNITS
+  tabenginex 'valu' ; (line 0) ; VALUE
 elseif. isnumvec y do. sess 'calcmd: plot instruction'
   invalplot''
   plotx y rplc '-' ; '_'
 elseif. do. sess 'calcmd: label (default)'
-  tabenginex 'name' ; L0 ; y
+  tabenginex 'name' ; (line 0) ; y
 end.
 )
 
