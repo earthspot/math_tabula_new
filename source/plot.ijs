@@ -17,7 +17,7 @@ plots=: 3 : 'replot PLOTF=:''surface'''
 plotx=: 3 : 0
 smoutput sw 'plotx: y=(y)'
 NB. if. -.setL 0 do. return. end.
-PLOTX=: line 0
+PLOTX=: firstItem''
 PLOT=: tabengine 'PLOT' ; PLOTX ; y
 undo''
 Y=. {: i.#PLOT
@@ -45,8 +45,9 @@ sellines PLOTY
 
 stept=: 3 : 0
 NB. if. -.setL 0 do. return. end.
-selline line 0
-val=. | tabengine 'VALU' ; line 0
+theItem=. line 0
+setSelection theItem
+val=. | tabengine 'VALU' ; theItem
 if. val=0 do.
   confirm '>>> cannot plot zero-to-zero'
   return.
@@ -56,7 +57,7 @@ if. heldshift'' do.
 else.
   if. val<0 do. z=. val,0,100 else. z=. 0,val,100 end.
 end.
-calcmd 'steps ',":z
+smoutput '??? what to do with: steps ',":z
 )
 
 

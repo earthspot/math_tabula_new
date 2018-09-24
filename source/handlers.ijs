@@ -184,7 +184,8 @@ tab_tabs_select=:            clicktab
 tab_xunit_button=: empty
 
 tab_xunit_select=: 3 : 0
-confirm tabengine 'unit '; (line 0) ; xunit
+theItem=. line 0
+confirm tabengine 'unit'; theItem ; xunit
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -220,6 +221,14 @@ else.
 end.
 )
 
+insertIDs=: 3 : 0
+  NB. substitute actual IDs for {A} {B} etc in (string) y
+z=. y
+z=. z rplc '{ABC}' ; brace allItems''
+z=. z rplc '{A}' ; brace firstItem''
+z=. z rplc '{B}' ; brace secondItem''
+)
+
 tab_g_mmove=: 3 : 0
 n=. 16  NB. (count) number of icons in a row
 h=. w=. 32 NB. (px) height and width of an icon
@@ -227,8 +236,7 @@ h=. w=. 32 NB. (px) height and width of an icon
 z=. n* Y>h
 TOOLID=: z + <. X%w
 fill_tools TOOLID  NB. hilite hovered tool
-NB. confirm 13 }. TOOLID { TOOLHINT
-confirm 3 }. TOOLID { TOOLHINT  NB. drop just the tool id
+confirm insertIDs 3 }. TOOLID { TOOLHINT  NB. drop just the tool id
   NB. Don't let hilite stay on forever…
 sys_timer_z_=: hover_off_tabby_
 wd'timer ',":TIMER_HOVER
@@ -253,24 +261,29 @@ elseif. do. {:z
 end.
 )
 
+firstItem=: line bind 0
+secondItem=: line bind 1
+allItems=: 3 : 'sort ".panel_select'
+
 tab_panel_select=: 3 : 0
   NB. handles click on row of t-table, or arrow-selection
 if. 0<#y do.  NB. accept (y) as simulating a panel-click
   setSelection curb y
   panel_select=: SP ,~ ":curb y
 end.
+theItem=. line 0
 sllog 'tab_panel_select panel_select y'
-if. 0~:line 0 do.
+if. 0~:theItem do.
   setunits''
-  setcalco scino tabengine 'VALU' ; line 0
+  setcalco scino tabengine 'VALU' ; theItem
 elseif. panel_select-:'_1' do.
   setcalco ''
-elseif. 0=line 0 do.
+elseif. 0=theItem do.
   setcalco panel -. LF
 elseif. do.
   smoutput '>>> tab_panel_select: no action defined'
 end.
-confirm details line 0
+confirm details theItem
 )
 
 tab_panel_button=: tab_panel_select  NB. IS IT EVER TRIGGERED?
@@ -300,7 +313,6 @@ tab_default=: 3 : 0
 sllog 'tab_default sysevent syschild'
 )
 
-NB. instr4event=: 3 : 'UL taketo UL takeafter y' ...use: syschild
 tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
 
 NB. toolbar pseudo-handlers...
@@ -339,8 +351,8 @@ mulitems=: 'mult'&additems_like  NB. Multiply all selected items
 
 subitems=: subitems_like=: 'minu' ddefine
   NB. item 1 - 2 / item 2 - 1
-if. heldshift'' do. confirm tabengine x ; (line 1) ; (line 0)
-else.               confirm tabengine x ; (line 0) ; (line 1)
+if. heldshift'' do. confirm tabengine x ; line 1 0
+else.               confirm tabengine x ; line 0 1
 end.
 showTtable''
 setSelection _
@@ -352,12 +364,13 @@ powitems=: 'powe'&subitems_like  NB. item 1^2 / item 2^1
 
 movud=: 3 : 0
   NB. Move line up / Move line down
+theItem=. line 0
 if. heldshift'' do.
-  confirm tabengine 'movd' ; line 0
+  confirm tabengine 'movd' ; theItem
   showTtable''
   incSelection 1
 else.
-  confirm tabengine 'movu' ; line 0
+  confirm tabengine 'movu' ; theItem
   showTtable''
   incSelection _1
 end.
@@ -366,12 +379,13 @@ restoreFocusToInputField''
 
 movtb=: 3 : 0
   NB. Move line to top / Move line to bottom
+theItem=. line 0
 if. heldshift'' do.
-  confirm tabengine 'movb' ; line 0
+  confirm tabengine 'movb' ; theItem
   showTtable''
   setSelection _
 else.
-  confirm tabengine 'movt' ; line 0
+  confirm tabengine 'movt' ; theItem
   showTtable''
   setSelection 1
 end.
@@ -405,7 +419,8 @@ if. heldshift'' do. formu'' else. label'' end.
 
 setv0=: setv0_like=: 'zero' ddefine
   NB. Set value to 0
-confirm tabengine x ; line 0
+theItem=. line 0
+confirm tabengine x ; theItem
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -415,8 +430,9 @@ siunt=: 'cvsi'&setv0_like
 
 set1u=: set1u_like=: 'onep onen' ddefine
   NB. Set value to 1 / Set value to -1
+theItem=. line 0
 inst=. pickshift 2$ ;:x
-confirm tabengine inst ; line 0
+confirm tabengine inst ; theItem
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -424,8 +440,9 @@ restoreFocusToInputField''
 
 add1u=: add1u_like=: 'addv subv' ddefine
   NB. Add 1 to / Subtract 1 from single item
+theItem=. line 0
 inst=. pickshift 2$ ;:x
-confirm tabengine inst ; (line 0) ; 1
+confirm tabengine inst ; theItem ; 1
 showTtable''
 restoreSelection''
 restoreFocusToInputField''

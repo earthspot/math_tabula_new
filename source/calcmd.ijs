@@ -27,6 +27,7 @@ sess=. ssw  NB. while under development
   NB. If y is empty then ASSUME I'm being called as a wd-handler
   NB. In that case interpret contents of TABU wd-cache: calco
 if. 0=#y do. y=. dltb calco end.
+theItem=. line 0
 c0=. {.y
 yy=. dlb }.y
 select. c0
@@ -37,38 +38,38 @@ case. '$' do. sess 'calcmd: load numbered sample: (yy)'
 end.
 if. '_1'-: panel_select do. confirm '>>> Select a line to work with' return. end.
   NB. If title line selected then accept y as new title
-if. (0<#y) *. (0-:line 0) do.
+if. (0<#y) *. (0-:theItem) do.
   tabenginex 'titl' ; y
   return.
 end.
 VALUE=: UNDEFINED [ UNITS=: '??' [ RIDER=: ''
 if. ']['-: 2{._1|.y do. sess 'calcmd: units (forced)'
   if. isunits z=. y -. '][' do.
-    tabenginex 'unit' ; (line 0) ; z  NB. >>>> BUT isunits changes UNITS
+    tabenginex 'unit' ; theItem ; z  NB. >>>> BUT isunits changes UNITS
   else. confirm '>>> bad units:' ; z
   end.
 elseif. c0='=' do. sess 'calcmd: Formula (yy)'
-  tabenginex 'fmla' ; (line 0) ; yy
+  tabenginex 'fmla' ; theItem ; yy
 elseif. c0=QT do. sess 'calcmd: label (forced)'
-  tabenginex 'name' ; (line 0) ; yy
+  tabenginex 'name' ; theItem ; yy
 elseif. c0 e. '+-*/^' do. sess 'calcmd: increment (yy)'
   increment yy
 elseif. isnumeric y do. sess 'calcmd: numeric'
-  tabenginex 'valu' ; (line 0) ; y
+  tabenginex 'valu' ; theItem ; y
 elseif. isunits y do. sess 'calcmd: units'
-  tabenginex 'unit' ; (line 0) ; UNITS
+  tabenginex 'unit' ; theItem ; UNITS
   setunits''
 elseif. isvalunits y do. sess 'calcmd: value+units[+rider]'
   if. 0<#RIDER do.
-    tabengine 'name' ; (line 0) ; RIDER
+    tabengine 'name' ; theItem ; RIDER
   end.
-  setunits'' [ tabengine 'unit' ; (line 0) ; UNITS
-  tabenginex 'valu' ; (line 0) ; VALUE
+  setunits'' [ tabengine 'unit' ; theItem ; UNITS
+  tabenginex 'valu' ; theItem ; VALUE
 elseif. isnumvec y do. sess 'calcmd: plot instruction'
   invalplot''
   plotx y rplc '-' ; '_'
 elseif. do. sess 'calcmd: label (default)'
-  tabenginex 'name' ; (line 0) ; y
+  tabenginex 'name' ; theItem ; y
 end.
 )
 

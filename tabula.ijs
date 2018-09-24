@@ -16,6 +16,10 @@ AABUILT=: '2018-09-21  23:03:37'
 AABUILT=: '2018-09-21  23:04:44'
 AABUILT=: '2018-09-21  23:46:38'
 AABUILT=: '2018-09-21  23:55:49'
+AABUILT=: '2018-09-23  13:18:17'
+AABUILT=: '2018-09-24  00:59:55'
+AABUILT=: '2018-09-24  02:08:18'
+AABUILT=: '2018-09-24  02:09:33'
 
 '==================== [tabby] constants ===================='
 
@@ -30,32 +34,6 @@ CONTENT_UNICO=: }: 0 : 0
  m/(kg s²)
  m kg⁻¹ s⁻²
  m·kg⁻¹·s⁻²
-)
-
-CONTENT_TTABLE=: 0 : 0
-Pseudogravity by rotation
-  ┌    {1}        0.017 Hz      Frequency; hertz=
-┌ │ ┌  {2}        0.338 km      r:radius of circuit
-│ ├ └> {3}        2.126 km      circumference
-├ └>   {4}        0.035 km/s    v:rotational speed
-└>┌    {5}        3.710 m/(s²)  c:centripetal acceleration
-  │ ┌  {6}            0 /       i:selector (1 or 2)
-  │ ├  {7}        9.810 m/(s²)  g:earth gravity unit=
-  │ ├  {8}        3.710 m/(s²)  a:mars gravity unit=
-  ├ └> {9}        9.810 *       target pseudogravity
-  └>   {10}       0.378 *       Set "U" to force equal
-)
-
-CONTENT_CONSTANTS=: 0 : 0
-dummy content for Constants tab
-Second line
-line 3 --
-)
-
-CONTENT_FUNCTIONS=: 0 : 0
-dummy content for Functions tab
-Second line
-line 3 --
 )
 
 HELP=: 0 : 0
@@ -73,18 +51,6 @@ Help for TABULA (when getting started)…
 4. Reselect the lines you prefer to plot,
    then click the "replot" icon in the toolbar,
    or pick menu: File > Line Chart [Bar Chart ...]
-)
-
-TABENGINE_RESPONSE_Init=: 0 : 0
-dummy tabengine Init confirmation
-)
-
-TABENGINE_RESPONSE_INFO=: 0 : 0
-dummy tabengine INFO content
-)
-
-TABENGINE_RESPONSE_NOT_IMPLEMENTED=: 0 : 0
-dummy tabengine NOT IMPLEMENTED--
 )
 
 BS=: '\'
@@ -360,48 +326,39 @@ set sbar addlabelp sinf2;
 
 cocurrent 'tabby'
 
-0 :0
-	EXTRACTED FROM TOOLHINT
-	-trash if not needed
-15 ttcont    Edit code of ttable as saved                         
-16 restart   Show Term window / Restart TABULA    
-28 eduu      Edit consts / Edit functs
-29 hlpca     Commands for CAL-engine / About CAL-engine                        
-)
-
 TOOLHINT=: >cutopen 0 : 0
 0  newtt     New empty ttable
 1  opent     Open ttable... / Open SAMPLE
 2  savts     Save ttable as Title / Save ttable as SAMPLE
 3  copal     Copy entire ttable
 4  undoredo  Undo / Redo
-5  additems  Add all selected items
-6  subitems  Item 1 minus item 2 / Item 2 minus item 1
-7  mulitems  Multiply all selected items
-8  divitems  Divide item 1 by item 2 / Divide item 2 by item 1
-9  powitems  Item 1 ^ item 2 / Item 2 ^ item 1
-10 stept     Plot 0 to (value) / Plot (-value) to (+value)
-11 replot    Replot selected items only / Replot all items
-12 movud     Move line up / Move line down
-13 movtb     Move line to top / Move line to bottom
+5  additems  Add {ABC}
+6  subitems  {A} minus {B} / {B} minus {A}
+7  mulitems  Multiply {ABC}
+8  divitems  Divide {A} by {B} / Divide {B} by {A}
+9  powitems  {A} ^ {B} / {B} ^ {A}
+10 stept     Plot 0 to {A} / Plot -{A} to {A}
+11 replot    Replot {ABC} only / Replot all items
+12 movud     Move {A} up / Move {A} down
+13 movtb     Move {A} to top / Move {A} to bottom
 14 newsl     New line
-15 equal     New line = selected line
+15 equal     New line = {A}
 16 hlpt      Help for TABULA
 17 showttinf Show ttable info / edit ttable info
-18 hold      Toggle Hold / Toggle Transient Hold
-19 siunt     Convert to SI Units
-20 iedit     Edit item name / Edit item formula
-21 setv0     Set value to 0
-22 set1u     Set value to 1 / Set value to -1
-23 add1u     Add 1 / Subtract 1
-24 addpc     Add 1% / Subtract 1%
-25 by2pi     Times PI / Times 2*PI
+18 hold      Toggle Hold on {A} / Toggle Transient Hold on {A}
+19 siunt     Convert {A} to SI Units
+20 iedit     Edit name of {A} / Edit formula of {A}
+21 setv0     Set {A} to 0
+22 set1u     Set {A} to 1 / Set {A} to -1
+23 add1u     Add 1 to {A} / Subtract 1 from {A}
+24 addpc     Add 1% to {A} / Subtract 1% from {A}
+25 by2pi     {A} times PI / {A} times 2*PI
 26 black     User function
 27 red       User function
 28 green     User function
 29 blue      User function
-30 delit     Delete line
-31 merge     Merge selected lines
+30 delit     Delete {A}
+31 merge     Merge {ABC}
 )
 
 '==================== [tabby] handlers.ijs ===================='
@@ -587,7 +544,8 @@ tab_tabs_select=:            clicktab
 tab_xunit_button=: empty
 
 tab_xunit_select=: 3 : 0
-confirm tabengine 'unit '; (line 0) ; xunit
+theItem=. line 0
+confirm tabengine 'unit'; theItem ; xunit
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -623,6 +581,14 @@ else.
 end.
 )
 
+insertIDs=: 3 : 0
+
+z=. y
+z=. z rplc '{ABC}' ; brace allItems''
+z=. z rplc '{A}' ; brace firstItem''
+z=. z rplc '{B}' ; brace secondItem''
+)
+
 tab_g_mmove=: 3 : 0
 n=. 16
 h=. w=. 32
@@ -630,7 +596,7 @@ h=. w=. 32
 z=. n* Y>h
 TOOLID=: z + <. X%w
 fill_tools TOOLID
-confirm 3 }. TOOLID { TOOLHINT
+confirm insertIDs 3 }. TOOLID { TOOLHINT
 
 sys_timer_z_=: hover_off_tabby_
 wd'timer ',":TIMER_HOVER
@@ -655,24 +621,29 @@ elseif. do. {:z
 end.
 )
 
+firstItem=: line bind 0
+secondItem=: line bind 1
+allItems=: 3 : 'sort ".panel_select'
+
 tab_panel_select=: 3 : 0
 
 if. 0<#y do.
   setSelection curb y
   panel_select=: SP ,~ ":curb y
 end.
+theItem=. line 0
 sllog 'tab_panel_select panel_select y'
-if. 0~:line 0 do.
+if. 0~:theItem do.
   setunits''
-  setcalco scino tabengine 'VALU' ; line 0
+  setcalco scino tabengine 'VALU' ; theItem
 elseif. panel_select-:'_1' do.
   setcalco ''
-elseif. 0=line 0 do.
+elseif. 0=theItem do.
   setcalco panel -. LF
 elseif. do.
   smoutput '>>> tab_panel_select: no action defined'
 end.
-confirm details line 0
+confirm details theItem
 )
 
 tab_panel_button=: tab_panel_select
@@ -700,6 +671,7 @@ restoreFocusToInputField''
 tab_default=: 3 : 0
 sllog 'tab_default sysevent syschild'
 )
+
 tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
 0 :0
 STRATEGY
@@ -735,8 +707,8 @@ mulitems=: 'mult'&additems_like
 
 subitems=: subitems_like=: 'minu' ddefine
 
-if. heldshift'' do. confirm tabengine x ; (line 1) ; (line 0)
-else.               confirm tabengine x ; (line 0) ; (line 1)
+if. heldshift'' do. confirm tabengine x ; line 1 0
+else.               confirm tabengine x ; line 0 1
 end.
 showTtable''
 setSelection _
@@ -748,12 +720,13 @@ powitems=: 'powe'&subitems_like
 
 movud=: 3 : 0
 
+theItem=. line 0
 if. heldshift'' do.
-  confirm tabengine 'movd' ; line 0
+  confirm tabengine 'movd' ; theItem
   showTtable''
   incSelection 1
 else.
-  confirm tabengine 'movu' ; line 0
+  confirm tabengine 'movu' ; theItem
   showTtable''
   incSelection _1
 end.
@@ -762,12 +735,13 @@ restoreFocusToInputField''
 
 movtb=: 3 : 0
 
+theItem=. line 0
 if. heldshift'' do.
-  confirm tabengine 'movb' ; line 0
+  confirm tabengine 'movb' ; theItem
   showTtable''
   setSelection _
 else.
-  confirm tabengine 'movt' ; line 0
+  confirm tabengine 'movt' ; theItem
   showTtable''
   setSelection 1
 end.
@@ -801,7 +775,8 @@ if. heldshift'' do. formu'' else. label'' end.
 
 setv0=: setv0_like=: 'zero' ddefine
 
-confirm tabengine x ; line 0
+theItem=. line 0
+confirm tabengine x ; theItem
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -811,8 +786,9 @@ siunt=: 'cvsi'&setv0_like
 
 set1u=: set1u_like=: 'onep onen' ddefine
 
+theItem=. line 0
 inst=. pickshift 2$ ;:x
-confirm tabengine inst ; line 0
+confirm tabengine inst ; theItem
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -820,8 +796,9 @@ restoreFocusToInputField''
 
 add1u=: add1u_like=: 'addv subv' ddefine
 
+theItem=. line 0
 inst=. pickshift 2$ ;:x
-confirm tabengine inst ; (line 0) ; 1
+confirm tabengine inst ; theItem ; 1
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -947,7 +924,7 @@ plots=: 3 : 'replot PLOTF=:''surface'''
 
 plotx=: 3 : 0
 smoutput sw 'plotx: y=(y)'
-PLOTX=: line 0
+PLOTX=: firstItem''
 PLOT=: tabengine 'PLOT' ; PLOTX ; y
 undo''
 Y=. {: i.#PLOT
@@ -974,8 +951,9 @@ sellines PLOTY
 )
 
 stept=: 3 : 0
-selline line 0
-val=. | tabengine 'VALU' ; line 0
+theItem=. line 0
+setSelection theItem
+val=. | tabengine 'VALU' ; theItem
 if. val=0 do.
   confirm '>>> cannot plot zero-to-zero'
   return.
@@ -985,7 +963,7 @@ if. heldshift'' do.
 else.
   if. val<0 do. z=. val,0,100 else. z=. 0,val,100 end.
 end.
-calcmd 'steps ',":z
+smoutput '??? what to do with: steps ',":z
 )
 
 
@@ -1063,7 +1041,7 @@ wd 'psel tab; set panel select ',":curb y
 )
 
 incSelection=: 3 : 0
-wd 'psel tab; set panel select ',":curb y+line 0
+wd 'psel tab; set panel select ',":curb y+firstItem''
 )
 
 tab_open=: 3 : 0
@@ -1207,9 +1185,10 @@ restoreFocusToInputField''
 )
 
 setunits=: 3 : 0
-z=. tabengine 'UCOM' ; line 0
-z=. ~. z ,~ tabengine 'UNIS' ; line 0
-z=. ~. z ,~ tabengine 'UNIT' ; line 0
+theItem=. line 0
+z=. tabengine 'UCOM' ; theItem
+z=. ~. z ,~ tabengine 'UNIS' ; theItem
+z=. ~. z ,~ tabengine 'UNIT' ; theItem
 wd 'psel tab; set xunit items *',utf8 f4b z
 wd 'psel tab; set xunit select 0'
 )
@@ -1254,6 +1233,7 @@ sess=. ssw
 
 
 if. 0=#y do. y=. dltb calco end.
+theItem=. line 0
 c0=. {.y
 yy=. dlb }.y
 select. c0
@@ -1264,38 +1244,38 @@ case. '$' do. sess 'calcmd: load numbered sample: (yy)'
 end.
 if. '_1'-: panel_select do. confirm '>>> Select a line to work with' return. end.
 
-if. (0<#y) *. (0-:line 0) do.
+if. (0<#y) *. (0-:theItem) do.
   tabenginex 'titl' ; y
   return.
 end.
 VALUE=: UNDEFINED [ UNITS=: '??' [ RIDER=: ''
 if. ']['-: 2{._1|.y do. sess 'calcmd: units (forced)'
   if. isunits z=. y -. '][' do.
-    tabenginex 'unit' ; (line 0) ; z
+    tabenginex 'unit' ; theItem ; z
   else. confirm '>>> bad units:' ; z
   end.
 elseif. c0='=' do. sess 'calcmd: Formula (yy)'
-  tabenginex 'fmla' ; (line 0) ; yy
+  tabenginex 'fmla' ; theItem ; yy
 elseif. c0=QT do. sess 'calcmd: label (forced)'
-  tabenginex 'name' ; (line 0) ; yy
+  tabenginex 'name' ; theItem ; yy
 elseif. c0 e. '+-*/^' do. sess 'calcmd: increment (yy)'
   increment yy
 elseif. isnumeric y do. sess 'calcmd: numeric'
-  tabenginex 'valu' ; (line 0) ; y
+  tabenginex 'valu' ; theItem ; y
 elseif. isunits y do. sess 'calcmd: units'
-  tabenginex 'unit' ; (line 0) ; UNITS
+  tabenginex 'unit' ; theItem ; UNITS
   setunits''
 elseif. isvalunits y do. sess 'calcmd: value+units[+rider]'
   if. 0<#RIDER do.
-    tabengine 'name' ; (line 0) ; RIDER
+    tabengine 'name' ; theItem ; RIDER
   end.
-  setunits'' [ tabengine 'unit' ; (line 0) ; UNITS
-  tabenginex 'valu' ; (line 0) ; VALUE
+  setunits'' [ tabengine 'unit' ; theItem ; UNITS
+  tabenginex 'valu' ; theItem ; VALUE
 elseif. isnumvec y do. sess 'calcmd: plot instruction'
   invalplot''
   plotx y rplc '-' ; '_'
 elseif. do. sess 'calcmd: label (default)'
-  tabenginex 'name' ; (line 0) ; y
+  tabenginex 'name' ; theItem ; y
 end.
 )
 
