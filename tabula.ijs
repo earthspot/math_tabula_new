@@ -20,6 +20,15 @@ AABUILT=: '2018-09-23  13:18:17'
 AABUILT=: '2018-09-24  00:59:55'
 AABUILT=: '2018-09-24  02:08:18'
 AABUILT=: '2018-09-24  02:09:33'
+AABUILT=: '2018-09-24  04:29:00'
+AABUILT=: '2018-09-24  04:33:59'
+AABUILT=: '2018-09-24  04:46:00'
+AABUILT=: '2018-09-24  23:18:58'
+AABUILT=: '2018-09-25  01:00:17'
+AABUILT=: '2018-09-26  01:38:31'
+AABUILT=: '2018-09-26  03:24:37'
+AABUILT=: '2018-09-26  03:33:33'
+AABUILT=: '2018-09-26  03:41:36'
 
 '==================== [tabby] constants ===================='
 
@@ -117,7 +126,7 @@ xunit_select                       =: '_1'
 
 '==================== [tabby] forms ===================='
 0 :0
-Friday 31 August 2018  21:52:55
+Monday 24 September 2018  03:56:40
 )
 
 coclass 'tabby'
@@ -157,8 +166,10 @@ menu formu "Edit Formula" "Ctrl+Shift+F" "Edit formula" "formula";
 menu erasf "Erase Formula" "" "Erase formula..." "no formula";
 menu siunt "Convert to SI Units" "Ctrl+Shift+S" "Convert line to SI units..." "SI units";
 menusep;
-menu movit "Move Line Down" "Ctrl+K" "Move this line down" "movedown";
-menu mvitu "Move Line Up" "Ctrl+J" "Move this line up" "moveup";
+menu movet "Move Line to Top" "Ctrl+Shift+J" "Move line to top" "movetop";
+menu moveu "Move Line Up" "Ctrl+J" "Move line up" "moveup";
+menu moved "Move Line Down" "Ctrl+K" "Move line down" "movedown";
+menu moveb "Move Line to Bottom" "Ctrl+Shift+K" "Move line to bottom" "movebottom";
 menusep;
 menu newsl "New Line" "Ctrl+L" "Make a new line" "newline";
 menu merge "Merge lines" "Ctrl+M" "Merge lines..." "merge";
@@ -183,10 +194,6 @@ menu ttabl "Show Ttable" "Ctrl+T" "Show ttable display" "ttable";
 menu conss "Show Constants List" "" "Show consts tab" "consts";
 menu funcs "Show Functions List" "" "Show functs tab" "functs";
 menu infor "Show Ttable Info" "Ctrl+I" "Show info tab" "info";
-menusep;
-menu trace "Toggle TRACE" "Ctrl+Shift+T" "Toggle trace" "trace";
-menu trach "Toggle TRACH" "" "Toggle Handler1 trace" "handler";
-menu traci "Toggle cal echo" "" "Toggle echo" "traci";
 menupopz;
 menupop "Value";
 menu Vzero "Zero" "Ctrl+0" "Zero the value" "zero";
@@ -283,7 +290,6 @@ menu Lt3dl "By-1000 Line" "" "Append line divided by 1000" "/1000";
 menupopz;
 menupop "Help";
 menu hlpt "Help for TABULA" "" "TABULA help" "help";
-menu hlpc "Help for 1-char comands" "" "cmds help" "cmds";
 menu hinf "Info for this ttable" "" "ttable info" "info";
 menupopz;
 cc g isidraw;
@@ -385,60 +391,36 @@ coclass 'tabby'
 
 childlike=: setv0_like
 
-tab_newtt_button=: notimp
+tab_newtt_button=: newtt
 tab_opens_button=: openss
-tab_opent_button=: opent
-tab_appet_button=: notimp
-tab_savex_button=: notimp
-tab_saves_button=: 'savs'&childlike
-tab_savet_button=: notimp
-tab_savea_button=: notimp
-tab_stept_button=: notimp
-tab_plotl_button=: notimp
-tab_plotb_button=: notimp
-tab_plotp_button=: notimp
-tab_plots_button=: notimp
-tab_close_button=: notimp
+tab_opent_button=: 'open'&opentt
+tab_appet_button=: 'appe'&opentt
+tab_savex_button=: 'save'&undoredo_like
+tab_saves_button=: 'savs'&undoredo_like
+tab_savet_button=: 'savt'&undoredo_like
+tab_close_button=: tab_close
 tab_print_button=: notimp
 tab_quit_button=:  window_close
 tab_undo_button=:  'Undo'&undoredo_like
 tab_redo_button=:  'Redo'&undoredo_like
-tab_copal_button=: notimp
-tab_label_button=: notimp
-tab_formu_button=: notimp
-tab_erasf_button=: notimp
-tab_siunt_button=: notimp
-tab_movit_button=: notimp
-tab_mvitu_button=: notimp
-tab_newsl_button=: notimp
-tab_merge_button=: notimp
-tab_delit_button=: notimp
-tab_dupit_button=: notimp
-tab_updex_button=: notimp
-tab_updin_button=: notimp
-tab_menu_button=: notimp
-tab_repet_button=: notimp
-tab_tthld_button=: notimp
-tab_thold_button=: notimp
+tab_erasf_button=: 'orph'&childlike
+tab_siunt_button=: siunt
+tab_movet_button=: 'movt'&movtb
+tab_moveu_button=: 'movu'&movud
+tab_moved_button=: 'movd'&movud
+tab_moveb_button=: 'movb'&movtb
+tab_dupit_button=: equal
+tab_updex_button=: 'exch'&undoredo_like
+tab_repet_button=: 'Repe'&undoredo_like
+tab_tthld_button=: 'hold'&hold
+tab_thold_button=: 'holm'&hold
 tab_hidel_button=: notimp
 tab_unhid_button=: notimp
-tab_ttabl_button=: notimp
-tab_conss_button=: notimp
-tab_funcs_button=: notimp
-tab_infor_button=: notimp
-tab_trace_button=: notimp
-tab_trach_button=: notimp
-tab_traci_button=: notimp
-
-tab_additems_button=: notimp
-tab_subitems_button=: notimp
-tab_mulitems_button=: notimp
-tab_divitems_button=: notimp
-tab_powitems_button=: notimp
-
-tab_hlpt_button=: notimp
-tab_hlpc_button=: notimp
-tab_hinf_button=: notimp
+tab_ttabl_button=: clicktab bind 0
+tab_conss_button=: clicktab bind 1
+tab_funcs_button=: clicktab bind 2
+tab_infor_button=: clicktab bind 3
+tab_hinf_button=: ttinf
 
 tab_Vzero_button=: 'zero'&childlike
 tab_Vonep_button=: 'onep'&childlike
@@ -609,8 +591,6 @@ fill_tools''
 
 tab_close=: window_close
 
-tab_newtt_button=: newtt
-
 line=: 3 : 0 "0
 
 z=. ".panel_select
@@ -627,23 +607,9 @@ allItems=: 3 : 'sort ".panel_select'
 
 tab_panel_select=: 3 : 0
 
-if. 0<#y do.
-  setSelection curb y
-  panel_select=: SP ,~ ":curb y
-end.
-theItem=. line 0
-sllog 'tab_panel_select panel_select y'
-if. 0~:theItem do.
-  setunits''
-  setcalco scino tabengine 'VALU' ; theItem
-elseif. panel_select-:'_1' do.
-  setcalco ''
-elseif. 0=theItem do.
-  setcalco panel -. LF
-elseif. do.
-  smoutput '>>> tab_panel_select: no action defined'
-end.
-confirm details theItem
+selectValidItem''
+sllog 'tab_panel_select y panel_select'
+updatevaluebar''
 )
 
 tab_panel_button=: tab_panel_select
@@ -665,20 +631,17 @@ end.
 TOOL=: dtb 3 }. 13 {. TOOLID{TOOLHINT
 sllog 'tab_g_mblup TOOLID TOOL'
 (TOOL~)''
-restoreFocusToInputField''
+updatevaluebar''
 )
 
 tab_default=: 3 : 0
-sllog 'tab_default sysevent syschild'
+sllog 'tab_default syschild sysevent'
+try. do syschild,''''''
+catch. ssw '>>> tab_default: handler needed: (syschild) for: (sysevent)'
+end.
 )
 
 tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
-0 :0
-STRATEGY
-Develop a working scheme for one or two *standard* handlers.
-Once debugged, propagate to other handlers labelled: LIKE add1u
-)
-
 newtt=: 'newt'&undoredo_like
 
 copal=: 3 : 0
@@ -697,7 +660,7 @@ savts=: 'savt savs'&undoredo_like
 
 additems=: additems_like=: 'plus' ddefine
 
-confirm tabengine x,SP,panel_select
+confirm tabengine x ; panel_select
 showTtable''
 setSelection _
 restoreFocusToInputField''
@@ -718,10 +681,10 @@ restoreFocusToInputField''
 divitems=: 'divi'&subitems_like
 powitems=: 'powe'&subitems_like
 
-movud=: 3 : 0
+movud=: 'movu' ddefine
 
 theItem=. line 0
-if. heldshift'' do.
+if. (heldshift'') or x-:'movd' do.
   confirm tabengine 'movd' ; theItem
   showTtable''
   incSelection 1
@@ -733,10 +696,10 @@ end.
 restoreFocusToInputField''
 )
 
-movtb=: 3 : 0
+movtb=: 'movt' ddefine
 
 theItem=. line 0
-if. heldshift'' do.
+if. (heldshift'') or x-:'movb' do.
   confirm tabengine 'movb' ; theItem
   showTtable''
   setSelection _
@@ -759,9 +722,11 @@ restoreFocusToInputField''
 equal=: 'equl'&additems_like
 delit=: 'dele'&additems_like
 
-hold=: 3 : 0
+hold=: '' ddefine
 
-inst=. pickshift ;:'holm hold'
+if. 0=#x do. inst=. pickshift ;:'holm hold'
+else. inst=. 4{.x
+end.
 confirm tabengine inst,SP,panel_select
 showTtable''
 restoreSelection''
@@ -803,6 +768,7 @@ showTtable''
 restoreSelection''
 restoreFocusToInputField''
 )
+
 addpc=: 'addp subp'&add1u_like
 by2pi=: 'pimv ptmv'&set1u_like
 merge=: 'merg'&subitems_like
@@ -840,6 +806,8 @@ showttinf=: 3 : 0
 ttinf''
 activateTabWithId 3
 )
+
+updin=: ttinf bind 2
 
 '==================== [tabby] open.ijs ===================='
 0 :0
@@ -903,8 +871,23 @@ showTtable''
 setFormTitle''
 tab_panel_select 1
 )
+
+
 opent=: 3 : 0
+
 if. heldshift'' do. openss'' else. opentt'' end.
+)
+
+savea=: 3 : 0
+
+title=. 'Save ttable as…'
+nom=. wd sw 'mb save "(title)" *',TPATH_TTABLES
+if. 0=#nom do.
+  confirm '>>> Save As... cancelled'
+else.
+  smoutput '+++ savea: nom=',nom
+  tabenginex 'sava' ; ijs nom
+end.
 )
 
 '==================== [tabby] plot.ijs ===================='
@@ -1107,7 +1090,9 @@ wd 'psel tab; set sbar setlabel status ',dquote ":,y
 )
 
 clicktab=: 3 : 0
-n=. ".tabs_select
+if. 0=#y do. n=. ".tabs_select
+else. n=. y
+end.
 select. n
 case. 1 do. fillconsts''
 case. 2 do. fillfuncts''
@@ -1153,7 +1138,7 @@ ttinf=: 1 ddefine
 if. x-:1 do.
   z=. tabengine 'INFO'
   wd 'psel tab; set info text *',z
-  confirm 'ttable info retrieved'
+  confirm 't-table info retrieved'
 elseif. x-:0 do.
   wd 'psel tab; set info text ""'
 elseif. do.
@@ -1185,7 +1170,9 @@ restoreFocusToInputField''
 )
 
 setunits=: 3 : 0
+
 theItem=. line 0
+if. 1>theItem do. wd 'psel tab; set xunit items *' return. end.
 z=. tabengine 'UCOM' ; theItem
 z=. ~. z ,~ tabengine 'UNIS' ; theItem
 z=. ~. z ,~ tabengine 'UNIT' ; theItem
@@ -1199,11 +1186,44 @@ setcalco=: 3 : 0
 wd 'psel tab; set calco text *',calco=:,":y
 )
 
+setcalcovalue=: 3 : 0
+
+if. 0<theItem=. line 0 do.
+  setcalco scino tabengine 'VALU' ; theItem
+else.
+  setcalco panel -. LF
+end.
+)
+
 details=: 3 : 0
 
-if. y=0 do. 'To update title: overtype it and press Enter'
-else. (brace y),SP,tabengine 'FMLA ',":y
+selectValidItem''
+if. _1=theItem=.line 0 do. ''
+elseif. 0=theItem do. 'To update title: overtype it in value-bar and press Enter'
+elseif. do.
+  if. 0=#formula=. tabengine 'FMLA' ; theItem do.
+    value=. tabengine 'VALU' ; theItem
+    sw'(brace theItem) value = (value)'
+  else.
+    sw'(brace theItem) formula: (formula)'
+  end.
 end.
+)
+
+selectValidItem=: 3 : 0
+
+if. ITEMS e.~ {.y do.
+  setSelection y
+  panel_select=: SP ,~ ":y
+end.
+)
+
+updatevaluebar=: 3 : 0
+
+setunits''
+setcalcovalue''
+confirm details theItem
+restoreFocusToInputField''
 )
 
 '==================== [tabby] calcmd.ijs ===================='

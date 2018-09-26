@@ -63,7 +63,21 @@ tab_panel_select 1
 )
 
 NB. opent=: opentt shift openss  NB. doesn't work here!
+	NB. >>>>>>>>>> WHY NOT??
 
 opent=: 3 : 0
+  NB. toolbar sub-handler
 if. heldshift'' do. openss'' else. opentt'' end.
+)
+
+savea=: 3 : 0
+  NB. Save As...
+title=. 'Save ttable as…'
+nom=. wd sw 'mb save "(title)" *',TPATH_TTABLES
+if. 0=#nom do.
+  confirm '>>> Save As... cancelled'
+else.
+  smoutput '+++ savea: nom=',nom
+  tabenginex 'sava' ; ijs nom
+end.
 )

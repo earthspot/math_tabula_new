@@ -34,11 +34,15 @@ curb=: 3 : 0
 )
 
 setSelection=: 3 : 0
-wd 'psel tab; set panel select ',":curb y
+theItem=. curb y
+panel_select=: SP ,~ ":theItem
+wd 'psel tab; set panel select ',":theItem
 )
 
 incSelection=: 3 : 0
-wd 'psel tab; set panel select ',":curb y+firstItem''
+theItem=. curb y+firstItem''
+panel_select=: SP ,~ ":theItem
+wd 'psel tab; set panel select ',":theItem
 )
 
 tab_open=: 3 : 0
@@ -117,8 +121,11 @@ wd 'psel tab; set sbar setlabel status ',dquote ":,y
 )
 
 clicktab=: 3 : 0
-n=. ".tabs_select
+if. 0=#y do. n=. ".tabs_select
+else. n=. y
+end.
 select. n
+NB. case. 0 just drops thru
 case. 1 do. fillconsts''
 case. 2 do. fillfuncts''
 case. 3 do. ttinf''
@@ -163,7 +170,7 @@ ttinf=: 1 ddefine  NB. modified from: ~Gittab/tabula.ijs
 if. x-:1 do.
   z=. tabengine 'INFO'
   wd 'psel tab; set info text *',z
-  confirm 'ttable info retrieved'
+  confirm 't-table info retrieved'
 elseif. x-:0 do.
   wd 'psel tab; set info text ""'
 elseif. do.
@@ -195,7 +202,9 @@ restoreFocusToInputField''
 )
 
 setunits=: 3 : 0
+  NB. set change-units combo (xunit) to reflect panel selection
 theItem=. line 0
+if. 1>theItem do. wd 'psel tab; set xunit items *' return. end.
 z=. tabengine 'UCOM' ; theItem
 z=. ~. z ,~ tabengine 'UNIS' ; theItem  NB. include equiv SI units in the list
 z=. ~. z ,~ tabengine 'UNIT' ; theItem  NB. include existing units in the list
@@ -209,9 +218,40 @@ setcalco=: 3 : 0
 wd 'psel tab; set calco text *',calco=:,":y
 )
 
-details=: 3 : 0
-  NB. lit details of (line) y
-if. y=0 do. 'To update title: overtype it and press Enter'
-else. (brace y),SP,tabengine 'FMLA ',":y
+setcalcovalue=: 3 : 0
+  NB. update calco field to reflect (panel_select)
+if. 0<theItem=. line 0 do.
+  setcalco scino tabengine 'VALU' ; theItem
+else.
+  setcalco panel -. LF
 end.
+)
+
+details=: 3 : 0
+  NB. (string) details of selected line
+selectValidItem''
+if. _1=theItem=.line 0 do. ''
+elseif. 0=theItem do. 'To update title: overtype it in value-bar and press Enter'
+elseif. do.
+  if. 0=#formula=. tabengine 'FMLA' ; theItem do.
+    value=. tabengine 'VALU' ; theItem
+    sw'(brace theItem) value = (value)'
+  else.
+    sw'(brace theItem) formula: (formula)'
+  end.
+end.
+)
+
+selectValidItem=: 3 : 0
+  NB. accept (y)<>'' as a click on that item
+if. ITEMS e.~ {.y do.  NB. provided {y} is valid item...
+  setSelection y
+end.
+)
+
+updatevaluebar=: 3 : 0
+  NB. update the value bar to reflect (panel_select)
+setunits''  NB. handles all cases itself
+setcalcovalue''  NB. handles all cases itself
+confirm details''
 )

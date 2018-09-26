@@ -1,7 +1,7 @@
  	NB. tabby - forms.ijs
 '==================== [tabby] forms ===================='
 0 :0
-Friday 31 August 2018  21:52:55
+Monday 24 September 2018  03:56:40
 )
 
 coclass 'tabby'
@@ -41,8 +41,10 @@ menu formu "Edit Formula" "Ctrl+Shift+F" "Edit formula" "formula";
 menu erasf "Erase Formula" "" "Erase formula..." "no formula";
 menu siunt "Convert to SI Units" "Ctrl+Shift+S" "Convert line to SI units..." "SI units";
 menusep;
-menu movit "Move Line Down" "Ctrl+K" "Move this line down" "movedown";
-menu mvitu "Move Line Up" "Ctrl+J" "Move this line up" "moveup";
+menu movet "Move Line to Top" "Ctrl+Shift+J" "Move line to top" "movetop";
+menu moveu "Move Line Up" "Ctrl+J" "Move line up" "moveup";
+menu moved "Move Line Down" "Ctrl+K" "Move line down" "movedown";
+menu moveb "Move Line to Bottom" "Ctrl+Shift+K" "Move line to bottom" "movebottom";
 menusep;
 menu newsl "New Line" "Ctrl+L" "Make a new line" "newline";
 menu merge "Merge lines" "Ctrl+M" "Merge lines..." "merge";
@@ -67,10 +69,6 @@ menu ttabl "Show Ttable" "Ctrl+T" "Show ttable display" "ttable";
 menu conss "Show Constants List" "" "Show consts tab" "consts";
 menu funcs "Show Functions List" "" "Show functs tab" "functs";
 menu infor "Show Ttable Info" "Ctrl+I" "Show info tab" "info";
-menusep;
-menu trace "Toggle TRACE" "Ctrl+Shift+T" "Toggle trace" "trace";
-menu trach "Toggle TRACH" "" "Toggle Handler1 trace" "handler";
-menu traci "Toggle cal echo" "" "Toggle echo" "traci";
 menupopz;
 menupop "Value";
 menu Vzero "Zero" "Ctrl+0" "Zero the value" "zero";
@@ -167,7 +165,6 @@ menu Lt3dl "By-1000 Line" "" "Append line divided by 1000" "/1000";
 menupopz;
 menupop "Help";
 menu hlpt "Help for TABULA" "" "TABULA help" "help";
-menu hlpc "Help for 1-char comands" "" "cmds help" "cmds";
 menu hinf "Info for this ttable" "" "ttable info" "info";
 menupopz;
 cc g isidraw;

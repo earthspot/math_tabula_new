@@ -23,60 +23,57 @@ coclass 'tabby'
 
 childlike=: setv0_like
 
-tab_newtt_button=: notimp
+tab_newtt_button=: newtt
 tab_opens_button=: openss
-tab_opent_button=: opent
-tab_appet_button=: notimp
-tab_savex_button=: notimp
-tab_saves_button=: 'savs'&childlike
-tab_savet_button=: notimp
-tab_savea_button=: notimp
-tab_stept_button=: notimp
-tab_plotl_button=: notimp
-tab_plotb_button=: notimp
-tab_plotp_button=: notimp
-tab_plots_button=: notimp
-tab_close_button=: notimp
+tab_opent_button=: 'open'&opentt
+tab_appet_button=: 'appe'&opentt
+tab_savex_button=: 'save'&undoredo_like
+tab_saves_button=: 'savs'&undoredo_like
+tab_savet_button=: 'savt'&undoredo_like
+NB. tab_savea_button=: savea
+NB. tab_stept_button=: stept
+NB. tab_plotl_button=: notimp
+NB. tab_plotb_button=: notimp
+NB. tab_plotp_button=: notimp
+NB. tab_plots_button=: notimp
+tab_close_button=: tab_close
 tab_print_button=: notimp
 tab_quit_button=:  window_close
 tab_undo_button=:  'Undo'&undoredo_like
 tab_redo_button=:  'Redo'&undoredo_like
-tab_copal_button=: notimp
-tab_label_button=: notimp
-tab_formu_button=: notimp
-tab_erasf_button=: notimp
-tab_siunt_button=: notimp
-tab_movit_button=: notimp
-tab_mvitu_button=: notimp
-tab_newsl_button=: notimp
-tab_merge_button=: notimp
-tab_delit_button=: notimp
-tab_dupit_button=: notimp
-tab_updex_button=: notimp
-tab_updin_button=: notimp
-tab_menu_button=: notimp
-tab_repet_button=: notimp
-tab_tthld_button=: notimp
-tab_thold_button=: notimp
+NB. tab_copal_button=: copal
+NB. tab_label_button=: label
+NB. tab_formu_button=: formu
+tab_erasf_button=: 'orph'&childlike
+tab_siunt_button=: siunt
+tab_movet_button=: 'movt'&movtb
+tab_moveu_button=: 'movu'&movud
+tab_moved_button=: 'movd'&movud
+tab_moveb_button=: 'movb'&movtb
+NB. tab_newsl_button=: newsl
+NB. tab_merge_button=: merge
+NB. tab_delit_button=: delit
+tab_dupit_button=: equal
+tab_updex_button=: 'exch'&undoredo_like
+NB. tab_updin_button=: updin
+tab_repet_button=: 'Repe'&undoredo_like
+tab_tthld_button=: 'hold'&hold  NB. transient hold
+tab_thold_button=: 'holm'&hold  NB. mandatory hold
 tab_hidel_button=: notimp
 tab_unhid_button=: notimp
-tab_ttabl_button=: notimp
-tab_conss_button=: notimp
-tab_funcs_button=: notimp
-tab_infor_button=: notimp
-tab_trace_button=: notimp
-tab_trach_button=: notimp
-tab_traci_button=: notimp
+tab_ttabl_button=: clicktab bind 0
+tab_conss_button=: clicktab bind 1
+tab_funcs_button=: clicktab bind 2
+tab_infor_button=: clicktab bind 3
 
-tab_additems_button=: notimp
-tab_subitems_button=: notimp
-tab_mulitems_button=: notimp
-tab_divitems_button=: notimp
-tab_powitems_button=: notimp
+NB. tab_additems_button=: notimp
+NB. tab_subitems_button=: notimp
+NB. tab_mulitems_button=: notimp
+NB. tab_divitems_button=: notimp
+NB. tab_powitems_button=: notimp
 
-tab_hlpt_button=: notimp
-tab_hlpc_button=: notimp
-tab_hinf_button=: notimp
+NB. tab_hlpt_button=: hlpt
+tab_hinf_button=: ttinf
 
 tab_Vzero_button=: 'zero'&childlike
 tab_Vonep_button=: 'onep'&childlike
@@ -188,6 +185,7 @@ theItem=. line 0
 confirm tabengine 'unit'; theItem ; xunit
 showTtable''
 restoreSelection''
+setcalcovalue''
 restoreFocusToInputField''
 )
 
@@ -249,8 +247,6 @@ fill_tools''  NB. redraw toolbar with no hilite
 
 tab_close=: window_close
 
-tab_newtt_button=: newtt
-
 line=: 3 : 0 "0
   NB. return the y'th selection
 z=. ".panel_select
@@ -267,23 +263,9 @@ allItems=: 3 : 'sort ".panel_select'
 
 tab_panel_select=: 3 : 0
   NB. handles click on row of t-table, or arrow-selection
-if. 0<#y do.  NB. accept (y) as simulating a panel-click
-  setSelection curb y
-  panel_select=: SP ,~ ":curb y
-end.
-theItem=. line 0
-sllog 'tab_panel_select panel_select y'
-if. 0~:theItem do.
-  setunits''
-  setcalco scino tabengine 'VALU' ; theItem
-elseif. panel_select-:'_1' do.
-  setcalco ''
-elseif. 0=theItem do.
-  setcalco panel -. LF
-elseif. do.
-  smoutput '>>> tab_panel_select: no action defined'
-end.
-confirm details theItem
+selectValidItem''
+sllog 'tab_panel_select y panel_select'
+updatevaluebar''
 )
 
 tab_panel_button=: tab_panel_select  NB. IS IT EVER TRIGGERED?
@@ -306,22 +288,18 @@ TOOL=: dtb 3 }. 13 {. TOOLID{TOOLHINT
 NB. There should exist a "tool" for every tool name in TOOLHINT
 sllog 'tab_g_mblup TOOLID TOOL'
 (TOOL~)''
-restoreFocusToInputField''
 )
 
 tab_default=: 3 : 0
-sllog 'tab_default sysevent syschild'
+sllog 'tab_default syschild sysevent'
+try. do syschild,''''''  NB. take an informed guess
+catch. ssw '>>> tab_default: handler needed: (syschild) for: (sysevent)'
+end.
 )
 
 tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
 
 NB. toolbar pseudo-handlers...
-
-0 :0
-STRATEGY
-Develop a working scheme for one or two *standard* handlers.
-Once debugged, propagate to other handlers labelled: LIKE add1u
-)
 
 newtt=: 'newt'&undoredo_like
 
@@ -334,6 +312,7 @@ undoredo=: undoredo_like=: 'Undo Redo' ddefine
   NB. Undo / Redo -last action
 confirm tabengine pickshift 2$ ;:x
 showTtable''
+updatevaluebar''
 restoreFocusToInputField''
 )
 
@@ -341,9 +320,10 @@ savts=: 'savt savs'&undoredo_like
 
 additems=: additems_like=: 'plus' ddefine
   NB. Add all selected items
-confirm tabengine x,SP,panel_select
+confirm tabengine x ; panel_select
 showTtable''
 setSelection _
+updatevaluebar''
 restoreFocusToInputField''
 )
 
@@ -362,10 +342,10 @@ restoreFocusToInputField''
 divitems=: 'divi'&subitems_like  NB. item 1÷2 / item 2÷1
 powitems=: 'powe'&subitems_like  NB. item 1^2 / item 2^1
 
-movud=: 3 : 0
+movud=: 'movu' ddefine
   NB. Move line up / Move line down
 theItem=. line 0
-if. heldshift'' do.
+if. (heldshift'') or x-:'movd' do.
   confirm tabengine 'movd' ; theItem
   showTtable''
   incSelection 1
@@ -377,10 +357,10 @@ end.
 restoreFocusToInputField''
 )
 
-movtb=: 3 : 0
+movtb=: 'movt' ddefine
   NB. Move line to top / Move line to bottom
 theItem=. line 0
-if. heldshift'' do.
+if. (heldshift'') or x-:'movb' do.
   confirm tabengine 'movb' ; theItem
   showTtable''
   setSelection _
@@ -403,9 +383,11 @@ restoreFocusToInputField''
 equal=: 'equl'&additems_like  NB. New line = selected line
 delit=: 'dele'&additems_like  NB. Delete selected lines
 
-hold=: 3 : 0
+hold=: '' ddefine
   NB. Toggle Hold / Toggle Transient Hold
-inst=. pickshift ;:'holm hold'
+if. 0=#x do. inst=. pickshift ;:'holm hold'
+else. inst=. 4{.x
+end.
 confirm tabengine inst,SP,panel_select
 showTtable''
 restoreSelection''
@@ -423,6 +405,7 @@ theItem=. line 0
 confirm tabengine x ; theItem
 showTtable''
 restoreSelection''
+updatevaluebar''
 restoreFocusToInputField''
 )
 
@@ -435,6 +418,7 @@ inst=. pickshift 2$ ;:x
 confirm tabengine inst ; theItem
 showTtable''
 restoreSelection''
+updatevaluebar''
 restoreFocusToInputField''
 )
 
@@ -445,10 +429,10 @@ inst=. pickshift 2$ ;:x
 confirm tabengine inst ; theItem ; 1
 showTtable''
 restoreSelection''
+updatevaluebar''
 restoreFocusToInputField''
 )
 
-NB. add1u=: 'add1 sub1'&set1u_like
 addpc=: 'addp subp'&add1u_like  NB. Add 1% / Subtract 1%
 by2pi=: 'pimv ptmv'&set1u_like  NB. times PI / times 2*PI
 merge=: 'merg'&subitems_like  NB. Merge selected lines
@@ -485,7 +469,9 @@ textview HELP
 )
 
 showttinf=: 3 : 0
-  NB. Show ttable info / edit ttable info
+  NB. Show t-table info / edit t-table info
 ttinf''
 activateTabWithId 3
 )
+
+updin=: ttinf bind 2  NB. Update t-table info
