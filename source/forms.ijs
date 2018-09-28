@@ -197,8 +197,9 @@ bin h;
 cc updin button;cn "Update";
 bin s1z;
 tabend;
-cc sbar statusbar;
-set sbar addlabel status;
-set sbar addlabelp sinf1;
-set sbar addlabelp sinf2;
+cc sbar static; cn "(status unset)";
 )
+
+NB. set sbar addlabel status;
+NB. set sbar addlabelp sinf1;
+NB. set sbar addlabelp sinf2;

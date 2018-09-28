@@ -33,6 +33,20 @@ AABUILT=: '2018-09-28  02:14:04'
 AABUILT=: '2018-09-28  02:19:51'
 AABUILT=: '2018-09-28  02:25:03'
 AABUILT=: '2018-09-28  02:25:14'
+AABUILT=: '2018-09-28  09:02:08'
+AABUILT=: '2018-09-28  13:18:09'
+AABUILT=: '2018-09-28  20:46:09'
+AABUILT=: '2018-09-28  20:48:48'
+AABUILT=: '2018-09-28  20:57:25'
+AABUILT=: '2018-09-28  21:03:18'
+AABUILT=: '2018-09-28  21:07:07'
+AABUILT=: '2018-09-28  21:18:17'
+AABUILT=: '2018-09-28  21:20:30'
+AABUILT=: '2018-09-28  21:57:12'
+AABUILT=: '2018-09-28  22:48:47'
+AABUILT=: '2018-09-28  22:49:11'
+AABUILT=: '2018-09-28  22:53:42'
+AABUILT=: '2018-09-28  23:05:10'
 
 '==================== [tabby] constants ===================='
 
@@ -326,10 +340,7 @@ bin h;
 cc updin button;cn "Update";
 bin s1z;
 tabend;
-cc sbar statusbar;
-set sbar addlabel status;
-set sbar addlabelp sinf1;
-set sbar addlabelp sinf2;
+cc sbar static; cn "(status unset)";
 )
 
 '==================== [tabby] tools ===================='
@@ -502,7 +513,7 @@ tab_Lt2dl_button=: 't2dl'&childlike
 tab_Lt3dl_button=: 't3dl'&childlike
 tab_g_mbldbl=: empty
 
-tab_calco_button=:           calcmd
+tab_calco_button=:           interpretCalco
 tab_calco_changed=: empty
 tab_calco_char=: empty
 tab_cappend_button=:         newc
@@ -613,7 +624,6 @@ allItems=: 3 : 'sort ".panel_select'
 
 tab_panel_select=: 3 : 0
 
-selectValidItem''
 sllog 'tab_panel_select y panel_select'
 updatevaluebar''
 )
@@ -653,20 +663,17 @@ copal=: 3 : 0
 
 wd 'psel tab; clipcopy *',tabengine 'CTBU'
 )
-
 undoredo=: undoredo_like=: 'Undo Redo' ddefine
 
-confirm tabengine pickshift 2$ ;:x
-showTtable''
-updatevaluebar''
-restoreFocusToInputField''
+tabenginex pickshift 2$ ;:x
 )
 
 savts=: 'savt savs'&undoredo_like
 
 additems=: additems_like=: 'plus' ddefine
 
-confirm tabengine x ; panel_select
+tabengine x ; panel_select
+confirm tabengine'MSSG'
 showTtable''
 setSelection _
 updatevaluebar''
@@ -677,11 +684,13 @@ mulitems=: 'mult'&additems_like
 
 subitems=: subitems_like=: 'minu' ddefine
 
-if. heldshift'' do. confirm tabengine x ; line 1 0
-else.               confirm tabengine x ; line 0 1
+if. heldshift'' do. tabengine x ; line 1 0
+else.               tabengine x ; line 0 1
 end.
+confirm tabengine'MSSG'
 showTtable''
 setSelection _
+updatevaluebar''
 restoreFocusToInputField''
 )
 
@@ -692,11 +701,11 @@ movud=: 'movu' ddefine
 
 theItem=. line 0
 if. (heldshift'') or x-:'movd' do.
-  confirm tabengine 'movd' ; theItem
+  tabengine 'movd' ; theItem
   showTtable''
   incSelection 1
 else.
-  confirm tabengine 'movu' ; theItem
+  tabengine 'movu' ; theItem
   showTtable''
   incSelection _1
 end.
@@ -707,11 +716,11 @@ movtb=: 'movt' ddefine
 
 theItem=. line 0
 if. (heldshift'') or x-:'movb' do.
-  confirm tabengine 'movb' ; theItem
+  tabengine 'movb' ; theItem
   showTtable''
   setSelection _
 else.
-  confirm tabengine 'movt' ; theItem
+  tabengine 'movt' ; theItem
   showTtable''
   setSelection 1
 end.
@@ -720,9 +729,10 @@ restoreFocusToInputField''
 
 newsl=: 3 : 0
 
-confirm tabengine 'newu /'
+tabengine 'newu /'
 showTtable''
 setSelection _
+updatevaluebar''
 restoreFocusToInputField''
 )
 
@@ -734,7 +744,8 @@ hold=: '' ddefine
 if. 0=#x do. inst=. pickshift ;:'holm hold'
 else. inst=. 4{.x
 end.
-confirm tabengine inst,SP,panel_select
+tabengine inst,SP,panel_select
+confirm tabengine'MSSG'
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
@@ -747,8 +758,8 @@ if. heldshift'' do. formu'' else. label'' end.
 
 setv0=: setv0_like=: 'zero' ddefine
 
-theItem=. line 0
-confirm tabengine x ; theItem
+tabengine x ; theItem=. line 0
+confirm tabengine'MSSG'
 showTtable''
 restoreSelection''
 updatevaluebar''
@@ -759,27 +770,16 @@ siunt=: 'cvsi'&setv0_like
 
 set1u=: set1u_like=: 'onep onen' ddefine
 
-theItem=. line 0
 inst=. pickshift 2$ ;:x
-confirm tabengine inst ; theItem
+tabengine inst ; theItem=. line 0
+confirm tabengine'MSSG'
 showTtable''
 restoreSelection''
 updatevaluebar''
 restoreFocusToInputField''
 )
-
-add1u=: add1u_like=: 'addv subv' ddefine
-
-theItem=. line 0
-inst=. pickshift 2$ ;:x
-confirm tabengine inst ; theItem ; 1
-showTtable''
-restoreSelection''
-updatevaluebar''
-restoreFocusToInputField''
-)
-
-addpc=: 'addp subp'&add1u_like
+add1u=: 'add1 sub1'&set1u_like
+addpc=: 'ad1p sb1p'&set1u_like
 by2pi=: 'pimv ptmv'&set1u_like
 merge=: 'merg'&subitems_like
 
@@ -1019,7 +1019,12 @@ ITEMS=: tabengine'ITMS'
 )
 
 restoreSelection=: 3 : 0
-wd 'psel tab; set panel select ',panel_select
+
+
+theItem=. line 0
+if. -.isValidItem theItem do. setSelection 1
+else. wd 'psel tab; set panel select ',panel_select
+end.
 )
 
 curb=: 3 : 0
@@ -1056,7 +1061,6 @@ wd 'set preci items *', o2f ": i.16
 wd 'set unico items *',CONTENT_UNICO
 wd 'set panel font fixfont'
 wd 'set panel items *',UNSET
-confirm 'Click a line and perform some operation on it...'
 wd 'pmoves 1384 23 536 450'
 wd 'pshow'
 fill_tools ''
@@ -1098,7 +1102,8 @@ ssw '>>> set_ucase: dummy placeholder, y=(y)'
 )
 
 putsb=: 3 : 0
-wd 'psel tab; set sbar setlabel status ',dquote ":,y
+
+wd 'psel tab; set sbar text *',":,y
 )
 
 clicktab=: 3 : 0
@@ -1211,7 +1216,7 @@ end.
 
 details=: 3 : 0
 
-selectValidItem''
+
 if. _1=theItem=.line 0 do. ''
 elseif. 0=theItem do. 'To update title: overtype it in value-bar and press Enter'
 elseif. do.
@@ -1224,39 +1229,60 @@ elseif. do.
 end.
 )
 
+isValidItem=: 3 : 0
+
+ITEMS e.~ {.y
+)
+
 selectValidItem=: 3 : 0
 
-if. ITEMS e.~ {.y do.
-  setSelection y
-end.
+if. isValidItem y do. setSelection y end.
 )
 
 updatevaluebar=: 3 : 0
+
 
 setunits''
 setcalcovalue''
 confirm details''
 )
 
-'==================== [tabby] calcmd.ijs ===================='
-0 :0
-Friday 21 September 2018  21:47:22
--
-TABULA input line interpreter
-Withdraw the single-char command set
--
->>> REALLY NEEDS A DAISYCHAIN !!
-)
-
 tabenginex=: 3 : 0
 
-
-confirm tabengine y
+tabengine y
+confirm tabengine'MSSG'
 showTtable''
-tab_panel_select 1
+restoreSelection''
+updatevaluebar''
 restoreFocusToInputField''
 )
 
+'==================== [tabby] calcmd.ijs ===================='
+0 :0
+Friday 28 September 2018  20:40:53
+-
+TABULA input line interpreter
+-
+tabenginex 'ad1p 1'
+tabenginex 'sb1p 1'
+)
+
+interpretCalco=: 3 : 0
+
+
+
+if. 0=#y do. y=. dltb calco end.
+theItem=. line 0
+select. {.y
+case. '/' do. tabenginex }.y
+case. '$' do. tabenginex 'open' ; }.y
+case.  QT do. tabenginex 'name' ; theItem ; }.y
+case.     do.
+  if. SP e. y do. tabenginex 'quan' ; theItem ; y
+  else.           tabenginex 'valu' ; theItem ; y
+  end.
+end.
+)
 calcmd=: 3 : 0
 
 sess=. empty
@@ -1343,7 +1369,10 @@ load '~Gitcal/cal.ijs'
 tabengine=: tabengine_cal_
  sesi_z_=: smoutput
 tt_z_=: tabengine_z_=: tabengine
-tabengine'Init'
+
+if. y-:0 do. tabengine 'Inic'
+else.        tabengine 'Init'
+end.
 TPATH_TTABLES=: tabengine'TPTT'
 tab_open''
 setpreci 3

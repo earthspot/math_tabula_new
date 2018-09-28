@@ -153,7 +153,7 @@ tab_Lt3dl_button=: 't3dl'&childlike
 NB. >>> WE NOW HAVE A doubleclick event for the toolbar...
 tab_g_mbldbl=: empty
 
-tab_calco_button=:           calcmd
+tab_calco_button=:           interpretCalco
 tab_calco_changed=: empty
 tab_calco_char=: empty
 tab_cappend_button=:         newc
@@ -264,9 +264,9 @@ allItems=: 3 : 'sort ".panel_select'
 
 tab_panel_select=: 3 : 0
   NB. handles click on row of t-table, or arrow-selection
-selectValidItem''
 sllog 'tab_panel_select y panel_select'
 updatevaluebar''
+confirm details''
 )
 
 tab_panel_button=: tab_panel_select  NB. IS IT EVER TRIGGERED?
@@ -309,21 +309,27 @@ copal=: 3 : 0
 wd 'psel tab; clipcopy *',tabengine 'CTBU'
 )
 
+NB. undoredo=: undoredo_like=: 'Undo Redo' ddefine
+NB.   NB. Undo / Redo -last action
+NB. confirm tabengine pickshift 2$ ;:x
+NB. showTtable''
+NB. updatevaluebar''
+NB. restoreFocusToInputField''
+NB. )
+
 undoredo=: undoredo_like=: 'Undo Redo' ddefine
   NB. Undo / Redo -last action
-confirm tabengine pickshift 2$ ;:x
-showTtable''
-updatevaluebar''
-restoreFocusToInputField''
+tabenginex pickshift 2$ ;:x
 )
 
 savts=: 'savt savs'&undoredo_like
 
 additems=: additems_like=: 'plus' ddefine
   NB. Add all selected items
-confirm tabengine x ; panel_select
+tabengine x ; panel_select
+confirm tabengine'MSSG'
 showTtable''
-setSelection _
+setSelection _  NB. select the last line
 updatevaluebar''
 restoreFocusToInputField''
 )
@@ -332,11 +338,13 @@ mulitems=: 'mult'&additems_like  NB. Multiply all selected items
 
 subitems=: subitems_like=: 'minu' ddefine
   NB. item 1 - 2 / item 2 - 1
-if. heldshift'' do. confirm tabengine x ; line 1 0
-else.               confirm tabengine x ; line 0 1
+if. heldshift'' do. tabengine x ; line 1 0
+else.               tabengine x ; line 0 1
 end.
+confirm tabengine'MSSG'
 showTtable''
 setSelection _
+updatevaluebar''
 restoreFocusToInputField''
 )
 
@@ -347,14 +355,15 @@ movud=: 'movu' ddefine
   NB. Move line up / Move line down
 theItem=. line 0
 if. (heldshift'') or x-:'movd' do.
-  confirm tabengine 'movd' ; theItem
+  tabengine 'movd' ; theItem
   showTtable''
   incSelection 1
 else.
-  confirm tabengine 'movu' ; theItem
+  tabengine 'movu' ; theItem
   showTtable''
   incSelection _1
 end.
+NB. updatevaluebar'' ---doesn't change
 restoreFocusToInputField''
 )
 
@@ -362,22 +371,24 @@ movtb=: 'movt' ddefine
   NB. Move line to top / Move line to bottom
 theItem=. line 0
 if. (heldshift'') or x-:'movb' do.
-  confirm tabengine 'movb' ; theItem
+  tabengine 'movb' ; theItem
   showTtable''
   setSelection _
 else.
-  confirm tabengine 'movt' ; theItem
+  tabengine 'movt' ; theItem
   showTtable''
   setSelection 1
 end.
+NB. updatevaluebar'' ---doesn't change
 restoreFocusToInputField''
 )
 
 newsl=: 3 : 0
   NB. New line
-confirm tabengine 'newu /'  NB. CAL needs to be told '/' explicitly
+tabengine 'newu /'  NB. CAL needs to be told '/' explicitly
 showTtable''
 setSelection _
+updatevaluebar''
 restoreFocusToInputField''
 )
 
@@ -389,9 +400,11 @@ hold=: '' ddefine
 if. 0=#x do. inst=. pickshift ;:'holm hold'
 else. inst=. 4{.x
 end.
-confirm tabengine inst,SP,panel_select
+tabengine inst,SP,panel_select
+confirm tabengine'MSSG'
 showTtable''
 restoreSelection''
+NB. updatevaluebar'' ---doesn't change
 restoreFocusToInputField''
 )
 
@@ -402,8 +415,8 @@ if. heldshift'' do. formu'' else. label'' end.
 
 setv0=: setv0_like=: 'zero' ddefine
   NB. Set value to 0
-theItem=. line 0
-confirm tabengine x ; theItem
+tabengine x ; theItem=. line 0
+confirm tabengine'MSSG'
 showTtable''
 restoreSelection''
 updatevaluebar''
@@ -414,27 +427,27 @@ siunt=: 'cvsi'&setv0_like
 
 set1u=: set1u_like=: 'onep onen' ddefine
   NB. Set value to 1 / Set value to -1
-theItem=. line 0
 inst=. pickshift 2$ ;:x
-confirm tabengine inst ; theItem
+tabengine inst ; theItem=. line 0
+confirm tabengine'MSSG'
 showTtable''
 restoreSelection''
 updatevaluebar''
 restoreFocusToInputField''
 )
 
-add1u=: add1u_like=: 'addv subv' ddefine
-  NB. Add 1 to / Subtract 1 from single item
-theItem=. line 0
-inst=. pickshift 2$ ;:x
-confirm tabengine inst ; theItem ; 1
-showTtable''
-restoreSelection''
-updatevaluebar''
-restoreFocusToInputField''
-)
+NB. add1u=: add1u_like=: 'add1 sub1' ddefine
+NB.   NB. Add 1 to / Subtract 1 from single item
+NB. inst=. pickshift 2$ ;:x
+NB. tabengine inst ; theItem=. line 0
+NB. showTtable''
+NB. restoreSelection''
+NB. updatevaluebar''
+NB. restoreFocusToInputField''
+NB. )
 
-addpc=: 'addp subp'&add1u_like  NB. Add 1% / Subtract 1%
+add1u=: 'add1 sub1'&set1u_like  NB. Add 1 / Subtract 1
+addpc=: 'ad1p sb1p'&set1u_like  NB. Add 1% / Subtract 1%
 by2pi=: 'pimv ptmv'&set1u_like  NB. times PI / times 2*PI
 merge=: 'merg'&subitems_like  NB. Merge selected lines
 

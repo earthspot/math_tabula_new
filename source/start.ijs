@@ -12,12 +12,14 @@ load '~Gitcal/cal.ijs'   NB. makes UU available too
 tabengine=: tabengine_cal_  NB. replace dummy local CAL link
  sesi_z_=: smoutput NB. FUDGE to make sesi visible
 tt_z_=: tabengine_z_=: tabengine  NB. make visible everywhere
-tabengine'Init' NB. initialize and load a t-table to show in: panel
+  NB. initialize and load a t-table to show in: panel
+if. y-:0 do. tabengine 'Inic'  NB. start with vacant t-table
+else.        tabengine 'Init'  NB. start with SAMPLE t-table
+end.
 TPATH_TTABLES=: tabengine'TPTT'  NB. make a local copy
 tab_open''
 setpreci 3  NB. set numeric precision for value column
 setunico 1  NB. set SI conformance level for units column
-NB. wd 'psel tab; set panel items *',tabengine'CTBU' ---redundant
 setSelection 1
 updatevaluebar''
 restoreFocusToInputField''

@@ -25,7 +25,12 @@ ITEMS=: tabengine'ITMS'
 )
 
 restoreSelection=: 3 : 0
-wd 'psel tab; set panel select ',panel_select
+  NB. make panel show (panel_select) again
+  NB. but if no valid item selected, select line {1} 
+theItem=. line 0  NB. …from panel_select
+if. -.isValidItem theItem do. setSelection 1
+else. wd 'psel tab; set panel select ',panel_select
+end.
 )
 
 curb=: 3 : 0
@@ -72,7 +77,7 @@ wd 'set preci items *', o2f ": i.16
 wd 'set unico items *',CONTENT_UNICO
 wd 'set panel font fixfont'
 wd 'set panel items *',UNSET
-confirm 'Click a line and perform some operation on it...'
+NB. confirm 'Click a line and perform some operation on it...'
 wd 'pmoves 1384 23 536 450'  NB. activate remembering window position
 wd 'pshow'
 fill_tools ''
@@ -117,7 +122,8 @@ ssw '>>> set_ucase: dummy placeholder, y=(y)'
 )
 
 putsb=: 3 : 0
-wd 'psel tab; set sbar setlabel status ',dquote ":,y
+  NB. show (string/num) y in statusbar
+wd 'psel tab; set sbar text *',":,y
 )
 
 clicktab=: 3 : 0
@@ -230,8 +236,8 @@ end.
 )
 
 details=: 3 : 0
-  NB. (string) details of selected line
-selectValidItem''
+  NB. return (string) details of selected line
+  NB. assume (panel_select) is up-to-date
 if. _1=theItem=.line 0 do. ''
 elseif. 0=theItem do. 'To update title: overtype it in value-bar and press Enter'
 elseif. do.
@@ -244,16 +250,30 @@ elseif. do.
 end.
 )
 
+isValidItem=: 3 : 0
+  NB. ==1 if {.y is a valid line # (=item)
+ITEMS e.~ {.y
+)
+
 selectValidItem=: 3 : 0
   NB. accept (y)<>'' as a click on that item
-if. ITEMS e.~ {.y do.  NB. provided {y} is valid item...
-  setSelection y
-end.
+if. isValidItem y do. setSelection y end.
 )
 
 updatevaluebar=: 3 : 0
   NB. update the value bar to reflect (panel_select)
-setunits''  NB. handles all cases itself
-setcalcovalue''  NB. handles all cases itself
-confirm details''
+  NB. these verbs handle all cases of (panel_select) themselves
+setunits''
+setcalcovalue''
+NB. confirm details'' ---NO! overwrites: confirm tabengine'MSSG'
+)
+
+tabenginex=: 3 : 0
+  NB. serves: interpretCalco also various toolbar tools
+tabengine y
+confirm tabengine'MSSG'
+showTtable''
+restoreSelection''  NB. selects {1} by default
+updatevaluebar''
+restoreFocusToInputField''
 )
