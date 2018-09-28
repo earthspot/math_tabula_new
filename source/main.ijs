@@ -52,7 +52,7 @@ wd TABU
 wd 'psel tab'
 wd 'pmove ' , ":XYWH
 wd 'set g wh _1 64'
-wd 'set info text *' , tabengine 'INFO'
+refreshInfo''
 NB. try.
 NB.   t=. uurowsc searchc
 NB.   assert. 2=#$t	NB. therefore must use x2f with wd 'set…'
@@ -128,7 +128,7 @@ select. n
 NB. case. 0 just drops thru
 case. 1 do. fillconsts''
 case. 2 do. fillfuncts''
-case. 3 do. ttinf''
+case. 3 do. refreshInfo''
 end.
 activateTabWithId n
 restoreFocusToInputField''
@@ -166,19 +166,21 @@ end.
 i.0 0
 )
 
-ttinf=: 1 ddefine  NB. modified from: ~Gittab/tabula.ijs
-if. x-:1 do.
-  z=. tabengine 'INFO'
-  wd 'psel tab; set info text *',z
-  confirm 't-table info retrieved'
-elseif. x-:0 do.
-  wd 'psel tab; set info text ""'
-elseif. do.
-  if. 0=#y do. y=. info end.  NB. ==cached content of info field
-  tabengine 'info ',y
-  nom=. '_ 'charsub tabengine'TNAM'
-  confirm sw 'Info: $=($y) updated in t-table: (nom)'
-end.
+refreshInfo=: 3 : 0
+  NB. return CAL text for the Info panel
+wd 'set info text *' , tabengine 'INFO'
+)
+
+supplyInfo=: 3 : 0
+  NB.  supply text y to CAL as the new Info
+tabengine 'info ',y
+confirm sw '+++ supplyInfo: ($y) bytes registered'
+)
+
+updin=: updateInfo=: 3 : 0
+  NB.  notify CAL of the current contents of "info" cache
+tabengine 'info ',info
+confirm sw '+++ updateInfo: ($y) bytes registered from "info" tab'
 )
 
 setpreci=: 3 : 0

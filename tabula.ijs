@@ -29,6 +29,10 @@ AABUILT=: '2018-09-26  01:38:31'
 AABUILT=: '2018-09-26  03:24:37'
 AABUILT=: '2018-09-26  03:33:33'
 AABUILT=: '2018-09-26  03:41:36'
+AABUILT=: '2018-09-28  02:14:04'
+AABUILT=: '2018-09-28  02:19:51'
+AABUILT=: '2018-09-28  02:25:03'
+AABUILT=: '2018-09-28  02:25:14'
 
 '==================== [tabby] constants ===================='
 
@@ -420,7 +424,7 @@ tab_ttabl_button=: clicktab bind 0
 tab_conss_button=: clicktab bind 1
 tab_funcs_button=: clicktab bind 2
 tab_infor_button=: clicktab bind 3
-tab_hinf_button=: ttinf
+tab_hinf_button=: updateInfo
 
 tab_Vzero_button=: 'zero'&childlike
 tab_Vonep_button=: 'onep'&childlike
@@ -526,10 +530,12 @@ tab_tabs_select=:            clicktab
 tab_xunit_button=: empty
 
 tab_xunit_select=: 3 : 0
+
 theItem=. line 0
 confirm tabengine 'unit'; theItem ; xunit
 showTtable''
 restoreSelection''
+setcalcovalue''
 restoreFocusToInputField''
 )
 
@@ -631,7 +637,6 @@ end.
 TOOL=: dtb 3 }. 13 {. TOOLID{TOOLHINT
 sllog 'tab_g_mblup TOOLID TOOL'
 (TOOL~)''
-updatevaluebar''
 )
 
 tab_default=: 3 : 0
@@ -653,6 +658,7 @@ undoredo=: undoredo_like=: 'Undo Redo' ddefine
 
 confirm tabengine pickshift 2$ ;:x
 showTtable''
+updatevaluebar''
 restoreFocusToInputField''
 )
 
@@ -663,6 +669,7 @@ additems=: additems_like=: 'plus' ddefine
 confirm tabengine x ; panel_select
 showTtable''
 setSelection _
+updatevaluebar''
 restoreFocusToInputField''
 )
 
@@ -744,6 +751,7 @@ theItem=. line 0
 confirm tabengine x ; theItem
 showTtable''
 restoreSelection''
+updatevaluebar''
 restoreFocusToInputField''
 )
 
@@ -756,6 +764,7 @@ inst=. pickshift 2$ ;:x
 confirm tabengine inst ; theItem
 showTtable''
 restoreSelection''
+updatevaluebar''
 restoreFocusToInputField''
 )
 
@@ -766,6 +775,7 @@ inst=. pickshift 2$ ;:x
 confirm tabengine inst ; theItem ; 1
 showTtable''
 restoreSelection''
+updatevaluebar''
 restoreFocusToInputField''
 )
 
@@ -803,11 +813,9 @@ textview HELP
 
 showttinf=: 3 : 0
 
-ttinf''
 activateTabWithId 3
+(refreshInfo shift updateInfo)''
 )
-
-updin=: ttinf bind 2
 
 '==================== [tabby] open.ijs ===================='
 0 :0
@@ -1020,11 +1028,15 @@ curb=: 3 : 0
 )
 
 setSelection=: 3 : 0
-wd 'psel tab; set panel select ',":curb y
+theItem=. curb y
+panel_select=: SP ,~ ":theItem
+wd 'psel tab; set panel select ',":theItem
 )
 
 incSelection=: 3 : 0
-wd 'psel tab; set panel select ',":curb y+firstItem''
+theItem=. curb y+firstItem''
+panel_select=: SP ,~ ":theItem
+wd 'psel tab; set panel select ',":theItem
 )
 
 tab_open=: 3 : 0
@@ -1034,7 +1046,7 @@ wd TABU
 wd 'psel tab'
 wd 'pmove ' , ":XYWH
 wd 'set g wh _1 64'
-wd 'set info text *' , tabengine 'INFO'
+refreshInfo''
   t=. ,:UNSET
 wd 'set cons font fixfont'
 wd 'set cons items *',x2f t
@@ -1096,7 +1108,7 @@ end.
 select. n
 case. 1 do. fillconsts''
 case. 2 do. fillfuncts''
-case. 3 do. ttinf''
+case. 3 do. refreshInfo''
 end.
 activateTabWithId n
 restoreFocusToInputField''
@@ -1134,19 +1146,21 @@ end.
 i.0 0
 )
 
-ttinf=: 1 ddefine
-if. x-:1 do.
-  z=. tabengine 'INFO'
-  wd 'psel tab; set info text *',z
-  confirm 't-table info retrieved'
-elseif. x-:0 do.
-  wd 'psel tab; set info text ""'
-elseif. do.
-  if. 0=#y do. y=. info end.
-  tabengine 'info ',y
-  nom=. '_ 'charsub tabengine'TNAM'
-  confirm sw 'Info: $=($y) updated in t-table: (nom)'
-end.
+refreshInfo=: 3 : 0
+
+wd 'set info text *' , tabengine 'INFO'
+)
+
+supplyInfo=: 3 : 0
+
+tabengine 'info ',y
+confirm sw '+++ supplyInfo: ($y) bytes registered'
+)
+
+updin=: updateInfo=: 3 : 0
+
+tabengine 'info ',info
+confirm sw '+++ updateInfo: ($y) bytes registered from "info" tab'
 )
 
 setpreci=: 3 : 0
@@ -1214,7 +1228,6 @@ selectValidItem=: 3 : 0
 
 if. ITEMS e.~ {.y do.
   setSelection y
-  panel_select=: SP ,~ ":y
 end.
 )
 
@@ -1222,8 +1235,7 @@ updatevaluebar=: 3 : 0
 
 setunits''
 setcalcovalue''
-confirm details theItem
-restoreFocusToInputField''
+confirm details''
 )
 
 '==================== [tabby] calcmd.ijs ===================='
@@ -1336,7 +1348,9 @@ TPATH_TTABLES=: tabengine'TPTT'
 tab_open''
 setpreci 3
 setunico 1
-tab_panel_select 1
+setSelection 1
+updatevaluebar''
+restoreFocusToInputField''
 )
 
 start''

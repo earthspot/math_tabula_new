@@ -73,7 +73,7 @@ NB. tab_divitems_button=: notimp
 NB. tab_powitems_button=: notimp
 
 NB. tab_hlpt_button=: hlpt
-tab_hinf_button=: ttinf
+tab_hinf_button=: updateInfo
 
 tab_Vzero_button=: 'zero'&childlike
 tab_Vonep_button=: 'onep'&childlike
@@ -181,6 +181,7 @@ tab_tabs_select=:            clicktab
 tab_xunit_button=: empty
 
 tab_xunit_select=: 3 : 0
+  NB. change units using the combo box: xunit
 theItem=. line 0
 confirm tabengine 'unit'; theItem ; xunit
 showTtable''
@@ -470,8 +471,6 @@ textview HELP
 
 showttinf=: 3 : 0
   NB. Show t-table info / edit t-table info
-ttinf''
 activateTabWithId 3
+(refreshInfo shift updateInfo)''
 )
-
-updin=: ttinf bind 2  NB. Update t-table info

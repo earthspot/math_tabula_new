@@ -18,7 +18,9 @@ tab_open''
 setpreci 3  NB. set numeric precision for value column
 setunico 1  NB. set SI conformance level for units column
 NB. wd 'psel tab; set panel items *',tabengine'CTBU' ---redundant
-tab_panel_select 1
+setSelection 1
+updatevaluebar''
+restoreFocusToInputField''
 )
 
 start''
