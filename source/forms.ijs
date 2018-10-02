@@ -17,6 +17,7 @@ menu savex "&Save" "Ctrl+S" "Save current ttable under existing name" "savex";
 menu saves "Save As Sample" "" "Save current ttable as default sample" "saves";
 menu savet "Save As Title" "" "Save current ttable under title shown" "savet";
 menu savea "Save As..." "" "Save current ttable under new name" "save as...";
+menu delsa "Delete Saved Sample" "" "Delete saved default sample" "delete sample";
 menusep;
 menu stept "Plot 0 to (value)" "" "plot values" "plot";
 menu plotl "Line Chart" "" "Specify plot: line" "line";

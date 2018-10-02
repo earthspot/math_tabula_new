@@ -58,19 +58,9 @@ wd 'psel tab'
 wd 'pmove ' , ":XYWH
 wd 'set g wh _1 64'
 refreshInfo''
-NB. try.
-NB.   t=. uurowsc searchc
-NB.   assert. 2=#$t	NB. therefore must use x2f with wd 'set…'
-NB. catch.
-  t=. ,:UNSET
-NB. end.
+t=. ,:UNSET
 wd 'set cons font fixfont'
 wd 'set cons items *',x2f t
-NB. try.
-NB.   t=. uurowsf searchf
-NB. catch.
-NB.   t=. ,:UNSET
-NB. end.
 wd 'set func font fixfont'
 wd 'set func items *',x2f t
 wd 'set preci items *', o2f ": i.16
@@ -143,14 +133,23 @@ restoreFocusToInputField''
 fillconsts=: 3 : 0
   NB. get filtered UUC via CAL
 inst=. (".casec) pick ;:'WUUC VUUC'
-wd 'psel tab; set cons items *',TEXT=: LF,~ tabengine inst ; searchc
+TEXT=: tabengine inst ; searchc
+wd 'psel tab; set cons items *',listboxSafe TEXT
 )
 
 fillfuncts=: 3 : 0
   NB. get filtered UUF via CAL
 inst=. (".casef) pick ;:'WUUF VUUF'
-wd 'psel tab; set func items *',TEXT=: LF,~ tabengine inst ; searchf
+TEXT=: tabengine inst ; searchf
+wd 'psel tab; set func items *',listboxSafe TEXT
 )
+
+listboxSafe=: 3 : 0
+  NB. LF-sep text: (y) in a form Qt listbox won't munge
+DQ,~ DQ, y rplc LF ; DQ,SP,DQ
+)
+
+finalLF=: ] , LF #~ LF ~: {:  NB. ensure {:y is LF
 
 confirm=: 0 ddefine
 putsb CONTENT_CONFIRM=: y
@@ -269,11 +268,33 @@ NB. confirm details'' ---NO! overwrites: confirm tabengine'MSSG'
 )
 
 tabenginex=: 3 : 0
-  NB. serves: interpretCalco also various toolbar tools
+  NB. serves: interpretCalco also toolbar tools
 tabengine y
 confirm tabengine'MSSG'
 showTtable''
 restoreSelection''  NB. selects {1} by default
 updatevaluebar''
 restoreFocusToInputField''
+)
+
+interpretCalco=: 3 : 0
+  NB. interpret the user-input command string: y
+  NB. If y is empty then ASSUME called as a wd-handler
+  NB. In which case interpret contents of TABU wd-cache: calco
+if. 0=#y do. y=. dltb calco end.
+theItem=. line 0
+select. {.y
+case. '/' do. tabenginex }.y           NB. general CAL-instruction
+case. '$' do. tabenginex 'open' ; }.y  NB. load SAMPLE*
+case.  QT do. tabenginex 'name' ; theItem ; }.y
+case. '+' do. tabenginex 'addv' ; theItem ; }.y
+case. '-' do. tabenginex 'subv' ; theItem ; }.y
+case. '*' do. tabenginex 'mulv' ; theItem ; }.y
+case. '/' do. tabenginex 'divv' ; theItem ; }.y
+case. '^' do. tabenginex 'rtov' ; theItem ; }.y
+case.     do.
+  if. SP e. y do. tabenginex 'quan' ; theItem ; y
+  else.           tabenginex 'valu' ; theItem ; y
+  end.
+end.
 )

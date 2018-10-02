@@ -38,6 +38,7 @@ COLOR_WHITE=: 255 255 255
 COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
 DIAMETER=: 30
+DQ=: '"'
 ITEMS=: i.0  NB. cache of valid item ids after last tabengine call
 PEN_WIDTH=: 3
 PNG=: temp 'tabula-toolbar.png'

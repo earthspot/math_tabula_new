@@ -395,6 +395,12 @@ restoreFocusToInputField''
 equal=: 'equl'&additems_like  NB. New line = selected line
 delit=: 'dele'&additems_like  NB. Delete selected lines
 
+delsa=: 3 : 0
+  NB. delete saved SAMPLE
+tabengine 'delf SAMPLE'       
+confirm tabengine'MSSG'
+)
+
 hold=: '' ddefine
   NB. Toggle Hold / Toggle Transient Hold
 if. 0=#x do. inst=. pickshift ;:'holm hold'

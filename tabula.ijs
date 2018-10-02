@@ -47,6 +47,14 @@ AABUILT=: '2018-09-28  22:48:47'
 AABUILT=: '2018-09-28  22:49:11'
 AABUILT=: '2018-09-28  22:53:42'
 AABUILT=: '2018-09-28  23:05:10'
+AABUILT=: '2018-09-29  02:12:51'
+AABUILT=: '2018-10-02  00:54:20'
+AABUILT=: '2018-10-02  01:31:39'
+AABUILT=: '2018-10-02  01:54:56'
+AABUILT=: '2018-10-02  02:20:30'
+AABUILT=: '2018-10-02  02:23:01'
+AABUILT=: '2018-10-02  02:34:20'
+AABUILT=: '2018-10-02  02:38:58'
 
 '==================== [tabby] constants ===================='
 
@@ -87,6 +95,7 @@ COLOR_WHITE=: 255 255 255
 COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
 DIAMETER=: 30
+DQ=: '"'
 ITEMS=: i.0
 PEN_WIDTH=: 3
 PNG=: temp 'tabula-toolbar.png'
@@ -160,6 +169,7 @@ menu savex "&Save" "Ctrl+S" "Save current ttable under existing name" "savex";
 menu saves "Save As Sample" "" "Save current ttable as default sample" "saves";
 menu savet "Save As Title" "" "Save current ttable under title shown" "savet";
 menu savea "Save As..." "" "Save current ttable under new name" "save as...";
+menu delsa "Delete Saved Sample" "" "Delete saved default sample" "delete sample";
 menusep;
 menu stept "Plot 0 to (value)" "" "plot values" "plot";
 menu plotl "Line Chart" "" "Specify plot: line" "line";
@@ -626,6 +636,7 @@ tab_panel_select=: 3 : 0
 
 sllog 'tab_panel_select y panel_select'
 updatevaluebar''
+confirm details''
 )
 
 tab_panel_button=: tab_panel_select
@@ -738,6 +749,12 @@ restoreFocusToInputField''
 
 equal=: 'equl'&additems_like
 delit=: 'dele'&additems_like
+
+delsa=: 3 : 0
+
+tabengine 'delf SAMPLE'       
+confirm tabengine'MSSG'
+)
 
 hold=: '' ddefine
 
@@ -1052,7 +1069,7 @@ wd 'psel tab'
 wd 'pmove ' , ":XYWH
 wd 'set g wh _1 64'
 refreshInfo''
-  t=. ,:UNSET
+t=. ,:UNSET
 wd 'set cons font fixfont'
 wd 'set cons items *',x2f t
 wd 'set func font fixfont'
@@ -1122,14 +1139,23 @@ restoreFocusToInputField''
 fillconsts=: 3 : 0
 
 inst=. (".casec) pick ;:'WUUC VUUC'
-wd 'psel tab; set cons items *',TEXT=: LF,~ tabengine inst ; searchc
+TEXT=: tabengine inst ; searchc
+wd 'psel tab; set cons items *',listboxSafe TEXT
 )
 
 fillfuncts=: 3 : 0
 
 inst=. (".casef) pick ;:'WUUF VUUF'
-wd 'psel tab; set func items *',TEXT=: LF,~ tabengine inst ; searchf
+TEXT=: tabengine inst ; searchf
+wd 'psel tab; set func items *',listboxSafe TEXT
 )
+
+listboxSafe=: 3 : 0
+
+DQ,~ DQ, y rplc LF ; DQ,SP,DQ
+)
+
+finalLF=: ] , LF #~ LF ~: {:
 
 confirm=: 0 ddefine
 putsb CONTENT_CONFIRM=: y
@@ -1244,7 +1270,6 @@ updatevaluebar=: 3 : 0
 
 setunits''
 setcalcovalue''
-confirm details''
 )
 
 tabenginex=: 3 : 0
@@ -1257,16 +1282,6 @@ updatevaluebar''
 restoreFocusToInputField''
 )
 
-'==================== [tabby] calcmd.ijs ===================='
-0 :0
-Friday 28 September 2018  20:40:53
--
-TABULA input line interpreter
--
-tabenginex 'ad1p 1'
-tabenginex 'sb1p 1'
-)
-
 interpretCalco=: 3 : 0
 
 
@@ -1277,85 +1292,17 @@ select. {.y
 case. '/' do. tabenginex }.y
 case. '$' do. tabenginex 'open' ; }.y
 case.  QT do. tabenginex 'name' ; theItem ; }.y
+case. '+' do. tabenginex 'addv' ; theItem ; }.y
+case. '-' do. tabenginex 'subv' ; theItem ; }.y
+case. '*' do. tabenginex 'mulv' ; theItem ; }.y
+case. '/' do. tabenginex 'divv' ; theItem ; }.y
+case. '^' do. tabenginex 'rtov' ; theItem ; }.y
 case.     do.
   if. SP e. y do. tabenginex 'quan' ; theItem ; y
   else.           tabenginex 'valu' ; theItem ; y
   end.
 end.
 )
-calcmd=: 3 : 0
-
-sess=. empty
-sess=. ssw
-
-
-
-if. 0=#y do. y=. dltb calco end.
-theItem=. line 0
-c0=. {.y
-yy=. dlb }.y
-select. c0
-case. '/' do. sess 'calcmd: Engine cmd'
-  tabenginex yy return.
-case. '$' do. sess 'calcmd: load numbered sample: (yy)'
-  tabenginex 'open ',yy return.
-end.
-if. '_1'-: panel_select do. confirm '>>> Select a line to work with' return. end.
-
-if. (0<#y) *. (0-:theItem) do.
-  tabenginex 'titl' ; y
-  return.
-end.
-VALUE=: UNDEFINED [ UNITS=: '??' [ RIDER=: ''
-if. ']['-: 2{._1|.y do. sess 'calcmd: units (forced)'
-  if. isunits z=. y -. '][' do.
-    tabenginex 'unit' ; theItem ; z
-  else. confirm '>>> bad units:' ; z
-  end.
-elseif. c0='=' do. sess 'calcmd: Formula (yy)'
-  tabenginex 'fmla' ; theItem ; yy
-elseif. c0=QT do. sess 'calcmd: label (forced)'
-  tabenginex 'name' ; theItem ; yy
-elseif. c0 e. '+-*/^' do. sess 'calcmd: increment (yy)'
-  increment yy
-elseif. isnumeric y do. sess 'calcmd: numeric'
-  tabenginex 'valu' ; theItem ; y
-elseif. isunits y do. sess 'calcmd: units'
-  tabenginex 'unit' ; theItem ; UNITS
-  setunits''
-elseif. isvalunits y do. sess 'calcmd: value+units[+rider]'
-  if. 0<#RIDER do.
-    tabengine 'name' ; theItem ; RIDER
-  end.
-  setunits'' [ tabengine 'unit' ; theItem ; UNITS
-  tabenginex 'valu' ; theItem ; VALUE
-elseif. isnumvec y do. sess 'calcmd: plot instruction'
-  invalplot''
-  plotx y rplc '-' ; '_'
-elseif. do. sess 'calcmd: label (default)'
-  tabenginex 'name' ; theItem ; y
-end.
-)
-
-isnumeric=: 3 : 0
--. any (128!:5) _.". y
-)
-
-isunits=: 3 : 0
--. '0 *' -: tabengine 'uuuu 1 ',UNITS=: deb y
-)
-
-isvalunits=: 3 : 0
-if. 1<#z=. _". y do.
-  if. (_=VALUE=: {.z) +. (_~:1{z) do. 0 return. end.
-else. 0 return.
-end.
-'y r'=. 2{. QT cut y
-RIDER=: dlb r
-if. 0=#UNITS=: deb SP dropto y do. UNITS=: '/' end.
-isunits UNITS
-)
-
 
 '==================== [tabby] start ===================='
 
