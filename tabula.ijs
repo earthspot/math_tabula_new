@@ -55,6 +55,7 @@ AABUILT=: '2018-10-02  02:20:30'
 AABUILT=: '2018-10-02  02:23:01'
 AABUILT=: '2018-10-02  02:34:20'
 AABUILT=: '2018-10-02  02:38:58'
+AABUILT=: '2018-10-03  09:11:43'
 
 '==================== [tabby] constants ===================='
 
@@ -1198,7 +1199,7 @@ setpreci=: 3 : 0
 
 if. 0=#y do. i=. preci_select else. i=. ":y end.
 wd 'psel tab; set preci select ',i
-tabengine 'prec ',i
+tabengine 'ssig ',i
 showTtable''
 restoreSelection''
 restoreFocusToInputField''

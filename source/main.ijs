@@ -192,7 +192,7 @@ setpreci=: 3 : 0
   NB. i is combobox index to select -as string, not int.
 if. 0=#y do. i=. preci_select else. i=. ":y end.
 wd 'psel tab; set preci select ',i
-tabengine 'prec ',i
+tabengine 'ssig ',i
 showTtable''
 restoreSelection''
 restoreFocusToInputField''
