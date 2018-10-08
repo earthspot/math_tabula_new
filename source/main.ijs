@@ -151,9 +151,18 @@ DQ,~ DQ, y rplc LF ; DQ,SP,DQ
 
 finalLF=: ] , LF #~ LF ~: {:  NB. ensure {:y is LF
 
-confirm=: 0 ddefine
-putsb CONTENT_CONFIRM=: y
-i.0 0 return.
+decrementToZero=: 0 >. [: <: default
+  NB. …decrement (integer name) y~ to 0 but not negative
+  NB. Creates pronoun (y) if absent
+
+isErrorMessage=: [: +./ '>>>' E. ,
+
+confirm=: 3 : 0
+NOCONFIRM=: decrementToZero'NOCONFIRM'
+if. isErrorMessage y do. putsb y [NOCONFIRM=: NOCONFIRM_MAX
+elseif. NOCONFIRM=0 do. putsb y
+end.
+i.0 0
 )
 
 activateTabWithId=: 3 : 0
@@ -281,8 +290,9 @@ interpretCalco=: 3 : 0
   NB. interpret the user-input command string: y
   NB. If y is empty then ASSUME called as a wd-handler
   NB. In which case interpret contents of TABU wd-cache: calco
-if. 0=#y do. y=. dltb calco end.
-theItem=. line 0
+if. 0=#y do. y=. dltb calco else. y=. dltb y end.
+if. '$$'-:y do. tabenginex 'samp' return. end.
+if. 0=theItem=.line 0 do. tabenginex 'titl' ; calco return. end.
 select. {.y
 case. '/' do. tabenginex }.y           NB. general CAL-instruction
 case. '$' do. tabenginex 'open' ; }.y  NB. load SAMPLE*
@@ -292,9 +302,9 @@ case. '-' do. tabenginex 'subv' ; theItem ; }.y
 case. '*' do. tabenginex 'mulv' ; theItem ; }.y
 case. '/' do. tabenginex 'divv' ; theItem ; }.y
 case. '^' do. tabenginex 'rtov' ; theItem ; }.y
-case.     do.
-  if. SP e. y do. tabenginex 'quan' ; theItem ; y
-  else.           tabenginex 'valu' ; theItem ; y
-  end.
+case.     do.  NB. assume theItem is valid...
+    if. SP e. y do. tabenginex 'quan' ; theItem ; y
+    else.           tabenginex 'valu' ; theItem ; y
+    end.
 end.
 )

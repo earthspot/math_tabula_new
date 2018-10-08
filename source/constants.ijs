@@ -40,6 +40,7 @@ DESELECT=: 1
 DIAMETER=: 30
 DQ=: '"'
 ITEMS=: i.0  NB. cache of valid item ids after last tabengine call
+NOCONFIRM_MAX=: 10  NB. suppress: confirm for this number of calls
 PEN_WIDTH=: 3
 PNG=: temp 'tabula-toolbar.png'
 SL=: '/'

@@ -485,7 +485,9 @@ smoutput '>>> blue: not implemented'
 
 hlpt=: 3 : 0
   NB. Help for TABULA
-textview HELP
+if. heldshift'' do. textview HELP_cal_ , CAL_cal_
+else. textview HELP
+end.
 )
 
 showttinf=: 3 : 0

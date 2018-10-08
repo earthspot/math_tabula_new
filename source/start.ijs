@@ -5,7 +5,7 @@ cocurrent 'tabby'
 
 start=: 3 : 0
 sllog=: smoutput@llog
-NB.  sllog=: empty	NB. <<<<<<<<<<<<<<<<<<<<< DISABLE NEW TRACING
+NB.  sllog=: empty	NB. <<<<<<<<<<<<<<<<<<<<< DISABLE TRACING
 wd 'timer 0'
 load '~Gitcal/cal.ijs'   NB. makes UU available too
   NB. ...but all access to UU should be done via CAL instructions

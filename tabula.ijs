@@ -56,6 +56,8 @@ AABUILT=: '2018-10-02  02:23:01'
 AABUILT=: '2018-10-02  02:34:20'
 AABUILT=: '2018-10-02  02:38:58'
 AABUILT=: '2018-10-03  09:11:43'
+AABUILT=: '2018-10-08  12:36:58'
+AABUILT=: '2018-10-08  14:49:33'
 
 '==================== [tabby] constants ===================='
 
@@ -98,6 +100,7 @@ DESELECT=: 1
 DIAMETER=: 30
 DQ=: '"'
 ITEMS=: i.0
+NOCONFIRM_MAX=: 10
 PEN_WIDTH=: 3
 PNG=: temp 'tabula-toolbar.png'
 SL=: '/'
@@ -375,7 +378,7 @@ TOOLHINT=: >cutopen 0 : 0
 13 movtb     Move {A} to top / Move {A} to bottom
 14 newsl     New line
 15 equal     New line = {A}
-16 hlpt      Help for TABULA
+16 hlpt      Help for TABULA / Help for CAL
 17 showttinf Show ttable info / edit ttable info
 18 hold      Toggle Hold on {A} / Toggle Transient Hold on {A}
 19 siunt     Convert {A} to SI Units
@@ -826,7 +829,9 @@ smoutput '>>> blue: not implemented'
 
 hlpt=: 3 : 0
 
-textview HELP
+if. heldshift'' do. textview HELP_cal_ , CAL_cal_
+else. textview HELP
+end.
 )
 
 showttinf=: 3 : 0
@@ -1158,9 +1163,18 @@ DQ,~ DQ, y rplc LF ; DQ,SP,DQ
 
 finalLF=: ] , LF #~ LF ~: {:
 
-confirm=: 0 ddefine
-putsb CONTENT_CONFIRM=: y
-i.0 0 return.
+decrementToZero=: 0 >. [: <: default
+
+
+
+isErrorMessage=: [: +./ '>>>' E. ,
+
+confirm=: 3 : 0
+NOCONFIRM=: decrementToZero'NOCONFIRM'
+if. isErrorMessage y do. putsb y [NOCONFIRM=: NOCONFIRM_MAX
+elseif. NOCONFIRM=0 do. putsb y
+end.
+i.0 0
 )
 
 activateTabWithId=: 3 : 0
@@ -1287,8 +1301,9 @@ interpretCalco=: 3 : 0
 
 
 
-if. 0=#y do. y=. dltb calco end.
-theItem=. line 0
+if. 0=#y do. y=. dltb calco else. y=. dltb y end.
+if. '$$'-:y do. tabenginex 'samp' return. end.
+if. 0=theItem=.line 0 do. tabenginex 'titl' ; calco return. end.
 select. {.y
 case. '/' do. tabenginex }.y
 case. '$' do. tabenginex 'open' ; }.y
@@ -1299,9 +1314,9 @@ case. '*' do. tabenginex 'mulv' ; theItem ; }.y
 case. '/' do. tabenginex 'divv' ; theItem ; }.y
 case. '^' do. tabenginex 'rtov' ; theItem ; }.y
 case.     do.
-  if. SP e. y do. tabenginex 'quan' ; theItem ; y
-  else.           tabenginex 'valu' ; theItem ; y
-  end.
+    if. SP e. y do. tabenginex 'quan' ; theItem ; y
+    else.           tabenginex 'valu' ; theItem ; y
+    end.
 end.
 )
 

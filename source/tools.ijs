@@ -25,7 +25,7 @@ TOOLHINT=: >cutopen 0 : 0
 13 movtb     Move {A} to top / Move {A} to bottom
 14 newsl     New line
 15 equal     New line = {A}
-16 hlpt      Help for TABULA
+16 hlpt      Help for TABULA / Help for CAL
 17 showttinf Show ttable info / edit ttable info
 18 hold      Toggle Hold on {A} / Toggle Transient Hold on {A}
 19 siunt     Convert {A} to SI Units
