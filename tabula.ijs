@@ -1,5 +1,5 @@
 0 :0
-Friday 21 September 2018  21:35:47
+Saturday 13 October 2018  03:02:24
 -
 TABULA: scientific units calculator
 -simplified architecture
@@ -11,53 +11,7 @@ clear LOC
 BLOC=: <,LOC
 coinsert 'jgl2'
 
-AABUILT=: '2018-09-21  22:20:58'
-AABUILT=: '2018-09-21  23:03:37'
-AABUILT=: '2018-09-21  23:04:44'
-AABUILT=: '2018-09-21  23:46:38'
-AABUILT=: '2018-09-21  23:55:49'
-AABUILT=: '2018-09-23  13:18:17'
-AABUILT=: '2018-09-24  00:59:55'
-AABUILT=: '2018-09-24  02:08:18'
-AABUILT=: '2018-09-24  02:09:33'
-AABUILT=: '2018-09-24  04:29:00'
-AABUILT=: '2018-09-24  04:33:59'
-AABUILT=: '2018-09-24  04:46:00'
-AABUILT=: '2018-09-24  23:18:58'
-AABUILT=: '2018-09-25  01:00:17'
-AABUILT=: '2018-09-26  01:38:31'
-AABUILT=: '2018-09-26  03:24:37'
-AABUILT=: '2018-09-26  03:33:33'
-AABUILT=: '2018-09-26  03:41:36'
-AABUILT=: '2018-09-28  02:14:04'
-AABUILT=: '2018-09-28  02:19:51'
-AABUILT=: '2018-09-28  02:25:03'
-AABUILT=: '2018-09-28  02:25:14'
-AABUILT=: '2018-09-28  09:02:08'
-AABUILT=: '2018-09-28  13:18:09'
-AABUILT=: '2018-09-28  20:46:09'
-AABUILT=: '2018-09-28  20:48:48'
-AABUILT=: '2018-09-28  20:57:25'
-AABUILT=: '2018-09-28  21:03:18'
-AABUILT=: '2018-09-28  21:07:07'
-AABUILT=: '2018-09-28  21:18:17'
-AABUILT=: '2018-09-28  21:20:30'
-AABUILT=: '2018-09-28  21:57:12'
-AABUILT=: '2018-09-28  22:48:47'
-AABUILT=: '2018-09-28  22:49:11'
-AABUILT=: '2018-09-28  22:53:42'
-AABUILT=: '2018-09-28  23:05:10'
-AABUILT=: '2018-09-29  02:12:51'
-AABUILT=: '2018-10-02  00:54:20'
-AABUILT=: '2018-10-02  01:31:39'
-AABUILT=: '2018-10-02  01:54:56'
-AABUILT=: '2018-10-02  02:20:30'
-AABUILT=: '2018-10-02  02:23:01'
-AABUILT=: '2018-10-02  02:34:20'
-AABUILT=: '2018-10-02  02:38:58'
-AABUILT=: '2018-10-03  09:11:43'
-AABUILT=: '2018-10-08  12:36:58'
-AABUILT=: '2018-10-08  14:49:33'
+AABUILT=: '2018-10-13  03:05:45'
 
 '==================== [tabby] constants ===================='
 
@@ -640,7 +594,7 @@ tab_panel_select=: 3 : 0
 
 sllog 'tab_panel_select y panel_select'
 updatevaluebar''
-confirm details''
+confirm details'' [NOCONFIRM=:0
 )
 
 tab_panel_button=: tab_panel_select
@@ -1287,6 +1241,23 @@ setunits''
 setcalcovalue''
 )
 
+formu=: 3 : 0
+
+if. 1>theItem=. line 0 do. i.0 0 return. end.
+if. 0=#f=.tabengine 'FMLA' ; theItem do.
+  confirm '>>> item {(theItem)} has no formula'
+else.
+  setcalco '=',f
+end.
+)
+
+label=: 3 : 0
+
+if. 0<theItem=. line 0 do.
+  setcalco QT,(tabengine 'NAME' ; theItem)
+end.
+)
+
 tabenginex=: 3 : 0
 
 tabengine y
@@ -1302,22 +1273,31 @@ interpretCalco=: 3 : 0
 
 
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
-if. '$$'-:y do. tabenginex 'samp' return. end.
-if. 0=theItem=.line 0 do. tabenginex 'titl' ; calco return. end.
+
+if. '$$'-:y 		do. tabenginex 'samp' 		return. end.
+if. 0=theItem=.line 0 	do. tabenginex 'titl' ; calco 	return. end.
+if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.
+if. -.isNaN ny=. _.". y 	do. tabenginex 'valu' ; theItem ; y 	return. end.
+
 select. {.y
 case. '/' do. tabenginex }.y
 case. '$' do. tabenginex 'open' ; }.y
 case.  QT do. tabenginex 'name' ; theItem ; }.y
+case. '=' do. tabenginex 'fmla' ; theItem ; }.y
 case. '+' do. tabenginex 'addv' ; theItem ; }.y
 case. '-' do. tabenginex 'subv' ; theItem ; }.y
 case. '*' do. tabenginex 'mulv' ; theItem ; }.y
 case. '/' do. tabenginex 'divv' ; theItem ; }.y
 case. '^' do. tabenginex 'rtov' ; theItem ; }.y
-case.     do.
-    if. SP e. y do. tabenginex 'quan' ; theItem ; y
-    else.           tabenginex 'valu' ; theItem ; y
-    end.
+case.     do. theItem interpretQuantity y
 end.
+)
+
+interpretQuantity=: 4 : 0
+
+]qty=. tabengine 'UUUU' ; y
+sllog 'interpretQuantity y qty'
+tabenginex 'vunn' ; x ; qty
 )
 
 '==================== [tabby] start ===================='

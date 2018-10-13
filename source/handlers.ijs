@@ -266,7 +266,7 @@ tab_panel_select=: 3 : 0
   NB. handles click on row of t-table, or arrow-selection
 sllog 'tab_panel_select y panel_select'
 updatevaluebar''
-confirm details''
+confirm details'' [NOCONFIRM=:0
 )
 
 tab_panel_button=: tab_panel_select  NB. IS IT EVER TRIGGERED?

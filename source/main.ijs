@@ -276,6 +276,23 @@ setcalcovalue''
 NB. confirm details'' ---NO! overwrites: confirm tabengine'MSSG'
 )
 
+formu=: 3 : 0
+  NB. edit item formula within calco field
+if. 1>theItem=. line 0 do. i.0 0 return. end.
+if. 0=#f=.tabengine 'FMLA' ; theItem do.
+  confirm '>>> item {(theItem)} has no formula'
+else.
+  setcalco '=',f
+end.
+)
+
+label=: 3 : 0
+  NB. edit item label within calco field
+if. 0<theItem=. line 0 do.
+  setcalco QT,(tabengine 'NAME' ; theItem)
+end.
+)
+
 tabenginex=: 3 : 0
   NB. serves: interpretCalco also toolbar tools
 tabengine y
@@ -291,20 +308,29 @@ interpretCalco=: 3 : 0
   NB. If y is empty then ASSUME called as a wd-handler
   NB. In which case interpret contents of TABU wd-cache: calco
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
-if. '$$'-:y do. tabenginex 'samp' return. end.
-if. 0=theItem=.line 0 do. tabenginex 'titl' ; calco return. end.
+  NB. Miscellaneous forms of y...
+if. '$$'-:y 		do. tabenginex 'samp' 		return. end.
+if. 0=theItem=.line 0 	do. tabenginex 'titl' ; calco 	return. end.
+if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.
+if. -.any isNaN ny=. _.". y 	do. tabenginex 'valu' ; theItem ; y 	return. end.
+  NB. "command-char" prefixes...
 select. {.y
 case. '/' do. tabenginex }.y           NB. general CAL-instruction
 case. '$' do. tabenginex 'open' ; }.y  NB. load SAMPLE*
 case.  QT do. tabenginex 'name' ; theItem ; }.y
+case. '=' do. tabenginex 'fmla' ; theItem ; }.y
 case. '+' do. tabenginex 'addv' ; theItem ; }.y
 case. '-' do. tabenginex 'subv' ; theItem ; }.y
 case. '*' do. tabenginex 'mulv' ; theItem ; }.y
 case. '/' do. tabenginex 'divv' ; theItem ; }.y
 case. '^' do. tabenginex 'rtov' ; theItem ; }.y
-case.     do.  NB. assume theItem is valid...
-    if. SP e. y do. tabenginex 'quan' ; theItem ; y
-    else.           tabenginex 'valu' ; theItem ; y
-    end.
+case.     do. theItem interpretQuantity y
 end.
+)
+
+interpretQuantity=: 4 : 0
+  NB. treat y as a quantity to go into item {x}
+]qty=. tabengine 'UUUU' ; y
+sllog 'interpretQuantity y qty'
+tabenginex 'vunn' ; x ; qty
 )
