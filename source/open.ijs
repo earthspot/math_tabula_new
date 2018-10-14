@@ -62,12 +62,9 @@ setFormTitle''
 tab_panel_select 1
 )
 
-NB. opent=: opentt shift openss  NB. doesn't work here!
-	NB. >>>>>>>>>> WHY NOT??
-
 opent=: 3 : 0
   NB. toolbar sub-handler
-if. heldshift'' do. openss'' else. opentt'' end.
+if. heldshift'' do. opentt'' else. openss'' end.
 )
 
 savea=: 3 : 0

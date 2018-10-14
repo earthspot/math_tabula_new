@@ -12,6 +12,12 @@ BLOC=: <,LOC
 coinsert 'jgl2'
 
 AABUILT=: '2018-10-13  03:05:45'
+AABUILT=: '2018-10-14  02:58:57'
+AABUILT=: '2018-10-14  15:58:43'
+AABUILT=: '2018-10-14  16:18:11'
+AABUILT=: '2018-10-14  17:30:04'
+AABUILT=: '2018-10-14  19:10:24'
+AABUILT=: '2018-10-14  19:43:12'
 
 '==================== [tabby] constants ===================='
 
@@ -317,8 +323,8 @@ cocurrent 'tabby'
 
 TOOLHINT=: >cutopen 0 : 0
 0  newtt     New empty ttable
-1  opent     Open ttable... / Open SAMPLE
-2  savts     Save ttable as Title / Save ttable as SAMPLE
+1  opent     Open SAMPLE / Open ttable...
+2  savts     Save ttable as SAMPLE / Save ttable as Title
 3  copal     Copy entire ttable
 4  undoredo  Undo / Redo
 5  additems  Add {ABC}
@@ -373,19 +379,18 @@ undoredo_like	ignores line selection
 coclass 'tabby'
 
 childlike=: setv0_like
-
 tab_newtt_button=: newtt
 tab_opens_button=: openss
 tab_opent_button=: 'open'&opentt
 tab_appet_button=: 'appe'&opentt
-tab_savex_button=: 'save'&undoredo_like
-tab_saves_button=: 'savs'&undoredo_like
-tab_savet_button=: 'savt'&undoredo_like
+tab_savex_button=: tabenginex bind 'save'
+tab_saves_button=: tabenginex bind 'savs'
+tab_savet_button=: tabenginex bind 'savt'
 tab_close_button=: tab_close
 tab_print_button=: notimp
 tab_quit_button=:  window_close
-tab_undo_button=:  'Undo'&undoredo_like
-tab_redo_button=:  'Redo'&undoredo_like
+tab_undo_button=:  tabenginex bind 'Undo'
+tab_redo_button=:  tabenginex bind 'Redo'
 tab_erasf_button=: 'orph'&childlike
 tab_siunt_button=: siunt
 tab_movet_button=: 'movt'&movtb
@@ -403,8 +408,6 @@ tab_ttabl_button=: clicktab bind 0
 tab_conss_button=: clicktab bind 1
 tab_funcs_button=: clicktab bind 2
 tab_infor_button=: clicktab bind 3
-tab_hinf_button=: updateInfo
-
 tab_Vzero_button=: 'zero'&childlike
 tab_Vonep_button=: 'onep'&childlike
 tab_Vonen_button=: 'onen'&childlike
@@ -451,7 +454,6 @@ tab_Vpeta_button=: 'peta'&childlike
 tab_Vexaa_button=: 'exaa'&childlike
 tab_Vzett_button=: 'zett'&childlike
 tab_Vyott_button=: 'yott'&childlike
-
 tab_Lequl_button=: 'equl'&childlike
 tab_Labsl_button=: 'absl'&childlike
 tab_Ldbll_button=: 'dbll'&childlike
@@ -479,8 +481,7 @@ tab_Lt3ml_button=: 't3ml'&childlike
 tab_Lt1dl_button=: 't1dl'&childlike
 tab_Lt2dl_button=: 't2dl'&childlike
 tab_Lt3dl_button=: 't3dl'&childlike
-tab_g_mbldbl=: empty
-
+tab_hinf_button=: updateInfo
 tab_calco_button=:           interpretCalco
 tab_calco_changed=: empty
 tab_calco_char=: empty
@@ -494,6 +495,7 @@ tab_func_button=:            newf
 tab_func_select=: empty
 tab_g_focus=: empty
 tab_g_focuslost=: empty
+tab_g_mbldbl=: empty
 tab_g_resize=: empty
 tab_preci_select=:           setpreci
 tab_unico_select=:           setunico
@@ -626,7 +628,14 @@ end.
 )
 
 tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
-newtt=: 'newt'&undoredo_like
+newtt=: 3 : 0
+tabengine 'newt'
+confirm tabengine'MSSG'
+showTtable''
+setunitsEmpty''
+setcalco ''
+restoreFocusToInputField''
+)
 
 copal=: 3 : 0
 
@@ -637,7 +646,7 @@ undoredo=: undoredo_like=: 'Undo Redo' ddefine
 tabenginex pickshift 2$ ;:x
 )
 
-savts=: 'savt savs'&undoredo_like
+savts=: 'savs savt'&undoredo_like
 
 additems=: additems_like=: 'plus' ddefine
 
@@ -857,10 +866,9 @@ setFormTitle''
 tab_panel_select 1
 )
 
-
 opent=: 3 : 0
 
-if. heldshift'' do. openss'' else. opentt'' end.
+if. heldshift'' do. opentt'' else. openss'' end.
 )
 
 savea=: 3 : 0
@@ -940,35 +948,56 @@ smoutput '??? what to do with: steps ',":z
 
 cocurrent 'tabby'
 
+dtlf=: #~ ([: +./\. (10{a.)&~:)
 shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
 isEmpty=: 0 = [: */ $
 isNaN=: 128!:5
-numeral_i=: [ ([ { [: (([: -. isNaN) # ]) ]) 0 0 ,~ _. ". [: ": ]
+DN=. _
+numeral_i=: ([ ([ { [: (([: -. isNaN) # ]) ]) _. ". [: ": ]) :: DN
 
 n0=: firstnum=: 0&numeral_i
 secondnum=: 1&numeral_i
 first2nums=: 0 1&numeral_i
 
+test_numeral_i=: 3 : 0
 
-smoutput firstnum _55.12 66 77
-smoutput secondnum _55.12 66 77
-smoutput firstnum '_55.12 66 77'
-smoutput secondnum '_55.12 66 77'
-smoutput firstnum 'xx _55.12 66 77'
-smoutput secondnum 'xx _55.12 66 77'
-smoutput firstnum '_55.12 xx 66 77'
-smoutput secondnum '_55.12 xx 66 77'
-smoutput first2nums 'xx _55.12 xx 66 77'
-smoutput first2nums '_55.12 xx 66 77'
-smoutput firstnum ,'1'
-smoutput firstnum '1'
-smoutput -.firstnum 'x'
-smoutput -.firstnum 'xx'
-smoutput -.firstnum ''
-smoutput -.secondnum '1'
-smoutput -.secondnum '_55.12 xx'
-smoutput first2nums 'xx _55.12 xx 66 77'
-smoutput first2nums '_55.12 xx 66 77'
+DN=. y
+list0=: '_55.12 66 77'
+list1=: '_55.12 xx 66 77'
+list2=: 'xx _55.12 66 77'
+list3=: 'xx _55.12 xx 66 77'
+a0=: _55.12 [a1=: 66 [a2=: 77 [a3=: _55.12 66
+foo=. assert&(-:/)
+foo a0 ; 0 numeral_i list1
+foo 66 ; 1 numeral_i list1
+foo 77 ; 2 numeral_i list1
+foo DN ; 3 numeral_i list1
+foo DN ; 4 numeral_i list1
+foo DN ; 5 numeral_i list1
+foo DN ; 99 numeral_i list1
+foo a0 ; firstnum ".list0
+foo a1 ; secondnum ".list0
+foo a0 ; firstnum list0
+foo a1 ; secondnum list0
+foo a0 ; firstnum list2
+foo a1 ; secondnum list2
+foo a0 ; firstnum list1
+foo a1 ; secondnum list1
+foo a3 ; first2nums list3
+foo a3 ; first2nums list1
+foo 1  ; firstnum ,'1'
+foo 1  ; firstnum '1'
+foo DN ; firstnum 'x'
+foo DN ; firstnum 'xx'
+foo DN ; firstnum ''
+foo DN ; secondnum ''
+foo DN ; secondnum '1'
+foo DN ; secondnum '_55.12 xx'
+foo a3 ; first2nums list3
+foo a3 ; first2nums list1
+)
+
+test_numeral_i DN
 
 '==================== [tabby] main ===================='
 0 :0
@@ -991,7 +1020,10 @@ pickshift=: 3 : 0
 )
 
 showTtable=: 3 : 0
-wd 'psel tab; set panel items *',tabengine'CTBU'
+t=. tabengine'CTBU'
+if. LF e. t do. wd 'psel tab; set panel items *',t
+else.           wd 'psel tab; set panel items ',dquote t
+end.
 ITEMS=: tabengine'ITMS'
 )
 
@@ -1186,7 +1218,7 @@ restoreFocusToInputField''
 setunits=: 3 : 0
 
 theItem=. line 0
-if. 1>theItem do. wd 'psel tab; set xunit items *' return. end.
+if. 1>theItem do. setunitsEmpty'' return. end.
 z=. tabengine 'UCOM' ; theItem
 z=. ~. z ,~ tabengine 'UNIS' ; theItem
 z=. ~. z ,~ tabengine 'UNIT' ; theItem
@@ -1194,7 +1226,7 @@ wd 'psel tab; set xunit items *',utf8 f4b z
 wd 'psel tab; set xunit select 0'
 )
 
-scino=: ":
+setunitsEmpty=: wd bind 'psel tab; set xunit items *'
 
 setcalco=: 3 : 0
 wd 'psel tab; set calco text *',calco=:,":y
@@ -1203,7 +1235,7 @@ wd 'psel tab; set calco text *',calco=:,":y
 setcalcovalue=: 3 : 0
 
 if. 0<theItem=. line 0 do.
-  setcalco scino tabengine 'VALU' ; theItem
+  setcalco tabengine 'VALF' ; theItem
 else.
   setcalco panel -. LF
 end.
@@ -1275,9 +1307,9 @@ interpretCalco=: 3 : 0
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
 
 if. '$$'-:y 		do. tabenginex 'samp' 		return. end.
-if. 0=theItem=.line 0 	do. tabenginex 'titl' ; calco 	return. end.
+if. 0=theItem=.line 0 	do. tabenginex 'titl' ; dtlf calco 	return. end.
 if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.
-if. -.isNaN ny=. _.". y 	do. tabenginex 'valu' ; theItem ; y 	return. end.
+if. -.any isNaN ny=. _.". y 	do. tabenginex 'valu' ; theItem ; y 	return. end.
 
 select. {.y
 case. '/' do. tabenginex }.y
@@ -1306,6 +1338,7 @@ cocurrent 'tabby'
 
 start=: 3 : 0
 sllog=: smoutput@llog
+sllog=: empty
 wd 'timer 0'
 load '~Gitcal/cal.ijs'
 

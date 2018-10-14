@@ -21,15 +21,20 @@ undoredo_like	ignores line selection
 
 coclass 'tabby'
 
-childlike=: setv0_like
+childlike=: setv0_like  NB. template of choice for menu clicks
+
+NB. Handlers for menu: File
 
 tab_newtt_button=: newtt
 tab_opens_button=: openss
 tab_opent_button=: 'open'&opentt
 tab_appet_button=: 'appe'&opentt
-tab_savex_button=: 'save'&undoredo_like
-tab_saves_button=: 'savs'&undoredo_like
-tab_savet_button=: 'savt'&undoredo_like
+NB. tab_savex_button=: 'save'&undoredo_like
+NB. tab_saves_button=: 'savs'&undoredo_like
+NB. tab_savet_button=: 'savt'&undoredo_like
+tab_savex_button=: tabenginex bind 'save'
+tab_saves_button=: tabenginex bind 'savs'
+tab_savet_button=: tabenginex bind 'savt'
 NB. tab_savea_button=: savea
 NB. tab_stept_button=: stept
 NB. tab_plotl_button=: notimp
@@ -39,8 +44,11 @@ NB. tab_plots_button=: notimp
 tab_close_button=: tab_close
 tab_print_button=: notimp
 tab_quit_button=:  window_close
-tab_undo_button=:  'Undo'&undoredo_like
-tab_redo_button=:  'Redo'&undoredo_like
+
+NB. Handlers for menu: Edit
+
+tab_undo_button=:  tabenginex bind 'Undo'
+tab_redo_button=:  tabenginex bind 'Redo'
 NB. tab_copal_button=: copal
 NB. tab_label_button=: label
 NB. tab_formu_button=: formu
@@ -55,7 +63,9 @@ NB. tab_merge_button=: merge
 NB. tab_delit_button=: delit
 tab_dupit_button=: equal
 tab_updex_button=: 'exch'&undoredo_like
-NB. tab_updin_button=: updin
+
+NB. Handlers for menu: Command
+
 tab_repet_button=: 'Repe'&undoredo_like
 tab_tthld_button=: 'hold'&hold  NB. transient hold
 tab_thold_button=: 'holm'&hold  NB. mandatory hold
@@ -66,14 +76,7 @@ tab_conss_button=: clicktab bind 1
 tab_funcs_button=: clicktab bind 2
 tab_infor_button=: clicktab bind 3
 
-NB. tab_additems_button=: notimp
-NB. tab_subitems_button=: notimp
-NB. tab_mulitems_button=: notimp
-NB. tab_divitems_button=: notimp
-NB. tab_powitems_button=: notimp
-
-NB. tab_hlpt_button=: hlpt
-tab_hinf_button=: updateInfo
+NB. Handlers for menu: Value
 
 tab_Vzero_button=: 'zero'&childlike
 tab_Vonep_button=: 'onep'&childlike
@@ -98,6 +101,9 @@ tab_Vpimv_button=: 'pimv'&childlike
 tab_Vptmv_button=: 'ptmv'&childlike
 tab_Vpidv_button=: 'pidv'&childlike
 tab_Vptdv_button=: 'ptdv'&childlike
+
+NB. Handlers for menu: Scale
+
 tab_Vunsc_button=: 'unsc'&childlike
 tab_Vstpu_button=: 'stpu'&childlike
 tab_Vstpd_button=: 'stpd'&childlike
@@ -121,6 +127,8 @@ tab_Vpeta_button=: 'peta'&childlike
 tab_Vexaa_button=: 'exaa'&childlike
 tab_Vzett_button=: 'zett'&childlike
 tab_Vyott_button=: 'yott'&childlike
+
+NB. Handlers for menu: Function
 
 tab_Lequl_button=: 'equl'&childlike
 tab_Labsl_button=: 'absl'&childlike
@@ -150,8 +158,11 @@ tab_Lt1dl_button=: 't1dl'&childlike
 tab_Lt2dl_button=: 't2dl'&childlike
 tab_Lt3dl_button=: 't3dl'&childlike
 
-NB. >>> WE NOW HAVE A doubleclick event for the toolbar...
-tab_g_mbldbl=: empty
+NB. Handlers for menu: Help
+
+tab_hinf_button=: updateInfo
+
+NB. Handlers for misc controls
 
 tab_calco_button=:           interpretCalco
 tab_calco_changed=: empty
@@ -166,6 +177,7 @@ tab_func_button=:            newf
 tab_func_select=: empty
 tab_g_focus=: empty
 tab_g_focuslost=: empty
+tab_g_mbldbl=: empty	NB. DOUBLECLICK on toolbar
 tab_g_resize=: empty
 tab_preci_select=:           setpreci
 tab_unico_select=:           setunico
@@ -193,30 +205,29 @@ restoreFocusToInputField''
 holdcons=: '=' ,~ ]
 
 newc=: 3 : 0
+  NB. append new constant to t-table
+  NB. cannot use ddefine here -needs current value of: cons
 cons newc y
 :
+	x_tabby_=: x
 if. 0=#x-.SP do.
   confirm '>>> No action: select a single line'
 else.
-  tabengine 'cons ',holdcons x
-  showTtable''
   activateTabWithId 0
-  setSelection _
-  restoreFocusToInputField''
+  _ tabenginex 'cons ',holdcons x
 end.
 )
 
 newf=: 3 : 0
+  NB. append new function line(s) to t-table
+  NB. cannot use ddefine here -needs current value of: func
 func newf y
 :
 if. 0=#x-.SP do.
   confirm '>>> No action: select a single line'
 else.
-  tabengine 'func ',x
-  showTtable''
   activateTabWithId 0
-  setSelection _
-  restoreFocusToInputField''
+  _ tabenginex 'func ',x
 end.
 )
 
@@ -302,7 +313,14 @@ tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
 
 NB. toolbar pseudo-handlers...
 
-newtt=: 'newt'&undoredo_like
+newtt=: 3 : 0
+tabengine 'newt'
+confirm tabengine'MSSG'
+showTtable''
+setunitsEmpty''
+setcalco '' NB. tabengine 'TITU'
+restoreFocusToInputField''
+)
 
 copal=: 3 : 0
   NB. Copy entire ttable
@@ -322,7 +340,7 @@ undoredo=: undoredo_like=: 'Undo Redo' ddefine
 tabenginex pickshift 2$ ;:x
 )
 
-savts=: 'savt savs'&undoredo_like
+savts=: 'savs savt'&undoredo_like
 
 additems=: additems_like=: 'plus' ddefine
   NB. Add all selected items

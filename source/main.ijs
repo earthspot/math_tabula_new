@@ -20,7 +20,10 @@ pickshift=: 3 : 0
 )
 
 showTtable=: 3 : 0
-wd 'psel tab; set panel items *',tabengine'CTBU'
+t=. tabengine'CTBU'
+if. LF e. t do. wd 'psel tab; set panel items *',t
+else.           wd 'psel tab; set panel items ',dquote t
+end.
 ITEMS=: tabengine'ITMS'
 )
 
@@ -220,15 +223,16 @@ restoreFocusToInputField''
 setunits=: 3 : 0
   NB. set change-units combo (xunit) to reflect panel selection
 theItem=. line 0
-if. 1>theItem do. wd 'psel tab; set xunit items *' return. end.
+if. 1>theItem do. setunitsEmpty'' return. end.
 z=. tabengine 'UCOM' ; theItem
 z=. ~. z ,~ tabengine 'UNIS' ; theItem  NB. include equiv SI units in the list
 z=. ~. z ,~ tabengine 'UNIT' ; theItem  NB. include existing units in the list
+	z_tabby_=: z
 wd 'psel tab; set xunit items *',utf8 f4b z
 wd 'psel tab; set xunit select 0'
 )
 
-scino=: ":  NB. DUMMY ONLY <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+setunitsEmpty=: wd bind 'psel tab; set xunit items *'
 
 setcalco=: 3 : 0
 wd 'psel tab; set calco text *',calco=:,":y
@@ -237,7 +241,8 @@ wd 'psel tab; set calco text *',calco=:,":y
 setcalcovalue=: 3 : 0
   NB. update calco field to reflect (panel_select)
 if. 0<theItem=. line 0 do.
-  setcalco scino tabengine 'VALU' ; theItem
+NB.   setcalco ": tabengine 'VALU' ; theItem
+  setcalco tabengine 'VALF' ; theItem
 else.
   setcalco panel -. LF
 end.
@@ -293,12 +298,14 @@ if. 0<theItem=. line 0 do.
 end.
 )
 
-tabenginex=: 3 : 0
-  NB. serves: interpretCalco also toolbar tools
+tabenginex=: '' ddefine
+  NB. serves: interpretCalco, newc, newf, also toolbar tools
 tabengine y
 confirm tabengine'MSSG'
 showTtable''
-restoreSelection''  NB. selects {1} by default
+if. 0=#x do. restoreSelection''  NB. (selects {1} by default)
+else.        setSelection x      NB. select {x}, or last line if x=_
+end.
 updatevaluebar''
 restoreFocusToInputField''
 )
@@ -310,7 +317,7 @@ interpretCalco=: 3 : 0
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
   NB. Miscellaneous forms of y...
 if. '$$'-:y 		do. tabenginex 'samp' 		return. end.
-if. 0=theItem=.line 0 	do. tabenginex 'titl' ; calco 	return. end.
+if. 0=theItem=.line 0 	do. tabenginex 'titl' ; dtlf calco 	return. end.
 if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.
 if. -.any isNaN ny=. _.". y 	do. tabenginex 'valu' ; theItem ; y 	return. end.
   NB. "command-char" prefixes...
@@ -319,6 +326,7 @@ case. '/' do. tabenginex }.y           NB. general CAL-instruction
 case. '$' do. tabenginex 'open' ; }.y  NB. load SAMPLE*
 case.  QT do. tabenginex 'name' ; theItem ; }.y
 case. '=' do. tabenginex 'fmla' ; theItem ; }.y
+case. '[' do. tabenginex 'unit' ; theItem ; y-.'[]'
 case. '+' do. tabenginex 'addv' ; theItem ; }.y
 case. '-' do. tabenginex 'subv' ; theItem ; }.y
 case. '*' do. tabenginex 'mulv' ; theItem ; }.y

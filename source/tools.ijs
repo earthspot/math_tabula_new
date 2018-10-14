@@ -10,8 +10,8 @@ cocurrent 'tabby'
 
 TOOLHINT=: >cutopen 0 : 0
 0  newtt     New empty ttable
-1  opent     Open ttable... / Open SAMPLE
-2  savts     Save ttable as Title / Save ttable as SAMPLE
+1  opent     Open SAMPLE / Open ttable...
+2  savts     Save ttable as SAMPLE / Save ttable as Title
 3  copal     Copy entire ttable
 4  undoredo  Undo / Redo
 5  additems  Add {ABC}
