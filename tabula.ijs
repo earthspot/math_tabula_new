@@ -18,6 +18,9 @@ AABUILT=: '2018-10-14  16:18:11'
 AABUILT=: '2018-10-14  17:30:04'
 AABUILT=: '2018-10-14  19:10:24'
 AABUILT=: '2018-10-14  19:43:12'
+AABUILT=: '2018-10-15  00:43:53'
+AABUILT=: '2018-10-15  01:01:21'
+AABUILT=: '2018-10-15  05:08:20'
 
 '==================== [tabby] constants ===================='
 
@@ -523,30 +526,29 @@ restoreFocusToInputField''
 holdcons=: '=' ,~ ]
 
 newc=: 3 : 0
+
+
 cons newc y
 :
+	x_tabby_=: x
 if. 0=#x-.SP do.
   confirm '>>> No action: select a single line'
 else.
-  tabengine 'cons ',holdcons x
-  showTtable''
   activateTabWithId 0
-  setSelection _
-  restoreFocusToInputField''
+  _ tabenginex 'cons ',holdcons x
 end.
 )
 
 newf=: 3 : 0
+
+
 func newf y
 :
 if. 0=#x-.SP do.
   confirm '>>> No action: select a single line'
 else.
-  tabengine 'func ',x
-  showTtable''
   activateTabWithId 0
-  setSelection _
-  restoreFocusToInputField''
+  _ tabenginex 'func ',x
 end.
 )
 
@@ -1211,17 +1213,19 @@ if. 0=#y do. i=. unico_select else. i=. ":y end.
 wd 'psel tab; set unico select ',i
 tabengine 'ssic ',i
 showTtable''
+setunits''
 restoreSelection''
 restoreFocusToInputField''
 )
 
 setunits=: 3 : 0
 
-theItem=. line 0
+]theItem=. line 0
 if. 1>theItem do. setunitsEmpty'' return. end.
-z=. tabengine 'UCOM' ; theItem
-z=. ~. z ,~ tabengine 'UNIS' ; theItem
-z=. ~. z ,~ tabengine 'UNIT' ; theItem
+]z=. tabengine 'UCMU' ; theItem
+]z=. ~. z ,~ tabengine 'UNIS' ; theItem
+]z=. ~. z ,~ tabengine 'UNIT' ; theItem
+	z_tabby_=: z
 wd 'psel tab; set xunit items *',utf8 f4b z
 wd 'psel tab; set xunit select 0'
 )
@@ -1290,12 +1294,14 @@ if. 0<theItem=. line 0 do.
 end.
 )
 
-tabenginex=: 3 : 0
+tabenginex=: '' ddefine
 
 tabengine y
 confirm tabengine'MSSG'
 showTtable''
-restoreSelection''
+if. 0=#x do. restoreSelection''
+else.        setSelection x
+end.
 updatevaluebar''
 restoreFocusToInputField''
 )
@@ -1316,6 +1322,7 @@ case. '/' do. tabenginex }.y
 case. '$' do. tabenginex 'open' ; }.y
 case.  QT do. tabenginex 'name' ; theItem ; }.y
 case. '=' do. tabenginex 'fmla' ; theItem ; }.y
+case. '[' do. tabenginex 'unit' ; theItem ; y-.'[]'
 case. '+' do. tabenginex 'addv' ; theItem ; }.y
 case. '-' do. tabenginex 'subv' ; theItem ; }.y
 case. '*' do. tabenginex 'mulv' ; theItem ; }.y
@@ -1344,7 +1351,6 @@ load '~Gitcal/cal.ijs'
 
 tabengine=: tabengine_cal_
  sesi_z_=: smoutput
-tt_z_=: tabengine_z_=: tabengine
 
 if. y-:0 do. tabengine 'Inic'
 else.        tabengine 'Init'

@@ -216,17 +216,18 @@ if. 0=#y do. i=. unico_select else. i=. ":y end.
 wd 'psel tab; set unico select ',i
 tabengine 'ssic ',i
 showTtable''
+setunits''
 restoreSelection''
 restoreFocusToInputField''
 )
 
 setunits=: 3 : 0
   NB. set change-units combo (xunit) to reflect panel selection
-theItem=. line 0
+]theItem=. line 0
 if. 1>theItem do. setunitsEmpty'' return. end.
-z=. tabengine 'UCOM' ; theItem
-z=. ~. z ,~ tabengine 'UNIS' ; theItem  NB. include equiv SI units in the list
-z=. ~. z ,~ tabengine 'UNIT' ; theItem  NB. include existing units in the list
+]z=. tabengine 'UCMU' ; theItem	NB. UCOM vs UCMU
+]z=. ~. z ,~ tabengine 'UNIS' ; theItem  NB. include equiv SI units in the list
+]z=. ~. z ,~ tabengine 'UNIT' ; theItem  NB. include existing units in the list
 	z_tabby_=: z
 wd 'psel tab; set xunit items *',utf8 f4b z
 wd 'psel tab; set xunit select 0'

@@ -11,7 +11,6 @@ load '~Gitcal/cal.ijs'   NB. makes UU available too
   NB. ...but all access to UU should be done via CAL instructions
 tabengine=: tabengine_cal_  NB. replace dummy local CAL link
  sesi_z_=: smoutput NB. FUDGE to make sesi visible
-tt_z_=: tabengine_z_=: tabengine  NB. make visible everywhere
   NB. initialize and load a t-table to show in: panel
 if. y-:0 do. tabengine 'Inic'  NB. start with vacant t-table
 else.        tabengine 'Init'  NB. start with SAMPLE t-table
