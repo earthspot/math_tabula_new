@@ -21,6 +21,8 @@ AABUILT=: '2018-10-14  19:43:12'
 AABUILT=: '2018-10-15  00:43:53'
 AABUILT=: '2018-10-15  01:01:21'
 AABUILT=: '2018-10-15  05:08:20'
+AABUILT=: '2018-10-16  00:40:04'
+AABUILT=: '2018-10-16  01:07:29'
 
 '==================== [tabby] constants ===================='
 
@@ -1338,14 +1340,129 @@ interpretQuantity=: 4 : 0
 sllog 'interpretQuantity y qty'
 tabenginex 'vunn' ; x ; qty
 )
+'==================== [tabby] traceverbs ===================='
+
+cocurrent 'tabby'
+
+0 :0
+Tuesday 16 October 2018  01:04:55
+-
+Discretionary silencing of unwanted msg and sllog calls.
+Small footprint when facility switched off.
+-
+THIS SOURCE FILE IS COMMON TO ALL TABULA ADDONS.
+Check the dates for most recent version.
+-
+Traceable verbs must…
+ -use msg and/or sllog to output trace messages
+ -call pushme on entry
+ -call popme on exit (and before all return.s)
+Verb pushme pushes name of running verb onto the ME-list.
+Verb popme (called on exit) pops it.
+LATEST_ONLY silences all except the top of the ME-list
+Correct use of pushme/popme suppresses surplus msg calls.
+(See verb: uniform for example of correct usage.)
+)
+
+TRACEVERBS=: 0$a:
+LATEST_ONLY=: 1
+ME=: ''
+
+msg=: empty
+sesstrace=: empty
+sllog=: empty
+
+pushme=: 1 ddefine
+
+ME=: ~. ME ,~ ;:y
+if. x do. msg '+++ (y): ENTERED' end.
+i.0 0
+)
+
+popme=: 1 ddefine
+
+if. x do. msg '--- (y): EXITS' end.
+ME=: ME -. ;:y
+i.0 0
+)
+
+make_msg=: 1 ddefine
+
+
+
+
+ME=: ''
+talks=. x
+select. y
+case. 0 do.
+  sesstrace=: empty
+  msg=: empty
+  sllog=: empty
+  if. talks do. smoutput '--- make_msg: msg is OFF',LF end.
+case. 1 do.
+  sesstrace=: sesstrace1
+  msg=: sesstrace&sw
+  sllog=: sesstrace&llog
+  if. talks do. smoutput '+++ make_msg: msg is via TRACEVERBS',LF end.
+case. 2 do.
+  sesstrace=: smoutput
+  msg=: sesstrace&sw
+  sllog=: sesstrace&llog
+  if. talks do. smoutput '+++ make_msg: msg is ON',LF end.
+end.
+i.0 0
+)
+
+sesstrace1=: 3 : 'if. traced ME do. smoutput y else. i.0 0 end.'
+
+traced=: 3 : 0
+
+
+
+
+
+
+z=. boxopen y
+if. LATEST_ONLY do. z=. {. z end.
+any z e. a: default 'TRACEVERBS'
+)
+
+traceverbs=: 3 : 0
+  NB. sets/resets TRACEVERBS
+  NB. y== ''	-returns boxed list of traced verbs
+  NB. y== 0	-no verbs to be traced / disable tracing
+  NB. y e. 1 2 3…	-predefined lists of verbs to trace
+  NB. y== '+myverb1 myverb2' -trace these verbs also
+  NB. y== '-myverb1 myverb2' -stop tracing these verbs
+  NB. y== 'myverb1 myverb2'  -openlist of ALL the verbs to trace
+  NB. y== 'OFF' -no tracing
+  NB. y== 'ON'  -tracing controlled (by TRACEVERBS and LATEST_ONLY)
+  NB. y== 'ALL' -tracing on, but unconditional
+z=.''
+mm1=. make_msg bind 1  NB. must switch on, too.
+select. {.y
+case. 'O' do. make_msg (y-:'ON')
+case. 'A' do. make_msg 2
+case. ' ' do. z=. TRACEVERBS  
+case. 0   do. z=. TRACEVERBS=: 0$a:
+case. 1   do. mm1 z=. TRACEVERBS=: ;: 'xx'
+case. 2   do. mm1 z=. TRACEVERBS=: ;: 'xx xxx'
+case. 3   do. mm1 z=. TRACEVERBS=: ;: 'xx xxx xxxx'
+case. '+' do. mm1 z=. TRACEVERBS=: ~. TRACEVERBS ,~ ;: y-.'+'
+case. '-' do. mm1 z=. TRACEVERBS=: TRACEVERBS -. ;: y-.'-'
+case.     do. mm1 z=. TRACEVERBS=: ~. ;: y  NB. assume y is an openlist of verbs
+end.
+smoutput '+++ traceverbs: #traced=',":#z
+smoutput >TRACEVERBS
+)
+
 
 '==================== [tabby] start ===================='
 
 cocurrent 'tabby'
 
 start=: 3 : 0
-sllog=: smoutput@llog
-sllog=: empty
+traceverbs 'OFF'
 wd 'timer 0'
 load '~Gitcal/cal.ijs'
 
