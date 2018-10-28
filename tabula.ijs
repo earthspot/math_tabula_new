@@ -23,6 +23,8 @@ AABUILT=: '2018-10-15  01:01:21'
 AABUILT=: '2018-10-15  05:08:20'
 AABUILT=: '2018-10-16  00:40:04'
 AABUILT=: '2018-10-16  01:07:29'
+AABUILT=: '2018-10-28  01:34:18'
+AABUILT=: '2018-10-28  01:36:33'
 
 '==================== [tabby] constants ===================='
 
@@ -956,6 +958,7 @@ dtlf=: #~ ([: +./\. (10{a.)&~:)
 shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
 isEmpty=: 0 = [: */ $
 isNaN=: 128!:5
+isNumeric=: 3 : '-.any isNaN ". y'
 DN=. _
 numeral_i=: ([ ([ { [: (([: -. isNaN) # ]) ]) _. ". [: ": ]) :: DN
 
@@ -1317,7 +1320,8 @@ if. 0=#y do. y=. dltb calco else. y=. dltb y end.
 if. '$$'-:y 		do. tabenginex 'samp' 		return. end.
 if. 0=theItem=.line 0 	do. tabenginex 'titl' ; dtlf calco 	return. end.
 if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.
-if. -.any isNaN ny=. _.". y 	do. tabenginex 'valu' ; theItem ; y 	return. end.
+if. (SP e. y) or (QT e. y) 	do. tabenginex 'vunn' ; theItem ; y 	return. end.
+if. isNumeric y		do. tabenginex 'valu' ; theItem ; y 	return. end.
 
 select. {.y
 case. '/' do. tabenginex }.y
@@ -1428,18 +1432,18 @@ any z e. a: default 'TRACEVERBS'
 )
 
 traceverbs=: 3 : 0
-  NB. sets/resets TRACEVERBS
-  NB. y== ''	-returns boxed list of traced verbs
-  NB. y== 0	-no verbs to be traced / disable tracing
-  NB. y e. 1 2 3…	-predefined lists of verbs to trace
-  NB. y== '+myverb1 myverb2' -trace these verbs also
-  NB. y== '-myverb1 myverb2' -stop tracing these verbs
-  NB. y== 'myverb1 myverb2'  -openlist of ALL the verbs to trace
-  NB. y== 'OFF' -no tracing
-  NB. y== 'ON'  -tracing controlled (by TRACEVERBS and LATEST_ONLY)
-  NB. y== 'ALL' -tracing on, but unconditional
+
+
+
+
+
+
+
+
+
+
 z=.''
-mm1=. make_msg bind 1  NB. must switch on, too.
+mm1=. make_msg bind 1
 select. {.y
 case. 'O' do. make_msg (y-:'ON')
 case. 'A' do. make_msg 2
@@ -1450,12 +1454,11 @@ case. 2   do. mm1 z=. TRACEVERBS=: ;: 'xx xxx'
 case. 3   do. mm1 z=. TRACEVERBS=: ;: 'xx xxx xxxx'
 case. '+' do. mm1 z=. TRACEVERBS=: ~. TRACEVERBS ,~ ;: y-.'+'
 case. '-' do. mm1 z=. TRACEVERBS=: TRACEVERBS -. ;: y-.'-'
-case.     do. mm1 z=. TRACEVERBS=: ~. ;: y  NB. assume y is an openlist of verbs
+case.     do. mm1 z=. TRACEVERBS=: ~. ;: y
 end.
 smoutput '+++ traceverbs: #traced=',":#z
 smoutput >TRACEVERBS
 )
-
 
 '==================== [tabby] start ===================='
 

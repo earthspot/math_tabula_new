@@ -320,7 +320,8 @@ if. 0=#y do. y=. dltb calco else. y=. dltb y end.
 if. '$$'-:y 		do. tabenginex 'samp' 		return. end.
 if. 0=theItem=.line 0 	do. tabenginex 'titl' ; dtlf calco 	return. end.
 if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.
-if. -.any isNaN ny=. _.". y 	do. tabenginex 'valu' ; theItem ; y 	return. end.
+if. (SP e. y) or (QT e. y) 	do. tabenginex 'vunn' ; theItem ; y 	return. end.
+if. isNumeric y		do. tabenginex 'valu' ; theItem ; y 	return. end.
   NB. "command-char" prefixes...
 select. {.y
 case. '/' do. tabenginex }.y           NB. general CAL-instruction
