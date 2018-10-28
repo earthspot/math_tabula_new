@@ -403,7 +403,7 @@ restoreFocusToInputField''
 
 newsl=: 3 : 0
   NB. New line
-tabengine 'newu /'  NB. CAL needs to be told '/' explicitly
+tabengine 'newu *'  NB. CAL needs to be told '*' explicitly
 showTtable''
 setSelection _
 updatevaluebar''

@@ -713,7 +713,7 @@ restoreFocusToInputField''
 
 newsl=: 3 : 0
 
-tabengine 'newu /'
+tabengine 'newu *'
 showTtable''
 setSelection _
 updatevaluebar''
@@ -958,7 +958,7 @@ dtlf=: #~ ([: +./\. (10{a.)&~:)
 shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
 isEmpty=: 0 = [: */ $
 isNaN=: 128!:5
-isNumeric=: 3 : '-.any isNaN ". y'
+isNumeric=: 3 : '-.any isNaN _.". y'
 DN=. _
 numeral_i=: ([ ([ { [: (([: -. isNaN) # ]) ]) _. ". [: ": ]) :: DN
 
