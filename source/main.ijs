@@ -53,12 +53,17 @@ panel_select=: SP ,~ ":theItem
 wd 'psel tab; set panel select ',":theItem
 )
 
+clearSelection=: 3 : 0
+theItem=. _1
+panel_select=: SP ,~ ":theItem
+wd 'psel tab; set panel select ',":theItem
+)
+
 tab_open=: 3 : 0
   NB. serves: start
 window_close''
 wd TABU
 wd 'psel tab'
-wd 'pmove ' , ":XYWH
 wd 'set g wh _1 64'
 refreshInfo''
 t=. ,:UNSET
@@ -71,13 +76,17 @@ wd 'set unico items *',CONTENT_UNICO
 wd 'set panel font fixfont'
 wd 'set panel items *',UNSET
 NB. confirm 'Click a line and perform some operation on it...'
-wd 'pmoves 1384 23 536 450'  NB. activate remembering window position
+if. PMOVES do.
+  wd :: 0: 'pmoves ' , ":XYWH  NB. activate remembering window position
+else.
+  wd 'pmove ' , ":XYWH
+end.
 wd 'pshow'
 fill_tools ''
 )
 
 window_close=: 3 : 0
-wd :: EMPTY 'psel tab; pclose;'
+wd :: 0: 'psel tab; pclose;'
 )
 
 fill_tools=: 0 ddefine
@@ -241,11 +250,10 @@ wd 'psel tab; set calco text *',calco=:,":y
 
 setcalcovalue=: 3 : 0
   NB. update calco field to reflect (panel_select)
-if. 0<theItem=. line 0 do.
-NB.   setcalco ": tabengine 'VALU' ; theItem
-  setcalco tabengine 'VALF' ; theItem
-else.
-  setcalco panel -. LF
+select. theItem=. line 0
+case. _1 do. setcalco ''
+case.  0 do. setcalco panel -. LF
+case.    do. setcalco tabengine 'VALF' ; theItem
 end.
 )
 
@@ -301,11 +309,13 @@ end.
 
 tabenginex=: '' ddefine
   NB. serves: interpretCalco, newc, newf, also toolbar tools
+  NB. x== line number to select (if specified), _1 to clear
 tabengine y
 confirm tabengine'MSSG'
 showTtable''
-if. 0=#x do. restoreSelection''  NB. (selects {1} by default)
-else.        setSelection x      NB. select {x}, or last line if x=_
+if. 0=#x     do. restoreSelection''  NB. (selects {1} by default)
+elseif. x=_1 do. clearSelection''
+elseif.      do. setSelection x      NB. select {x}, or last line if x=_
 end.
 updatevaluebar''
 restoreFocusToInputField''
@@ -317,16 +327,16 @@ interpretCalco=: 3 : 0
   NB. In which case interpret contents of TABU wd-cache: calco
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
   NB. Miscellaneous forms of y...
-if. '$$'-:y 		do. tabenginex 'samp' 		return. end.
+if. '$$'-:y 		do. 1&tabenginex 'samp' 		return. end.
 if. 0=theItem=.line 0 	do. tabenginex 'titl' ; dtlf calco 	return. end.
 if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.
-if. (SP e. y) or (QT e. y) 	do. tabenginex 'vunn' ; theItem ; y 	return. end.
+if. SP e. y		do. tabenginex 'vunn' ; theItem ; y 	return. end.
 if. isNumeric y		do. tabenginex 'valu' ; theItem ; y 	return. end.
   NB. "command-char" prefixes...
 select. {.y
-case. '/' do. tabenginex }.y           NB. general CAL-instruction
-case. '$' do. tabenginex 'open' ; }.y  NB. load SAMPLE*
-case.  QT do. tabenginex 'name' ; theItem ; }.y
+case. '!' do. tabenginex }.y           NB. general CAL-instruction
+case. '$' do. 1&tabenginex 'open' ; }.y  NB. load SAMPLE*
+case.  QT do. tabenginex 'name' ; theItem ; y-.QT
 case. '=' do. tabenginex 'fmla' ; theItem ; }.y
 case. '[' do. tabenginex 'unit' ; theItem ; y-.'[]'
 case. '+' do. tabenginex 'addv' ; theItem ; }.y

@@ -11,20 +11,12 @@ clear LOC
 BLOC=: <,LOC
 coinsert 'jgl2'
 
-AABUILT=: '2018-10-13  03:05:45'
-AABUILT=: '2018-10-14  02:58:57'
-AABUILT=: '2018-10-14  15:58:43'
-AABUILT=: '2018-10-14  16:18:11'
-AABUILT=: '2018-10-14  17:30:04'
-AABUILT=: '2018-10-14  19:10:24'
-AABUILT=: '2018-10-14  19:43:12'
-AABUILT=: '2018-10-15  00:43:53'
-AABUILT=: '2018-10-15  01:01:21'
-AABUILT=: '2018-10-15  05:08:20'
-AABUILT=: '2018-10-16  00:40:04'
-AABUILT=: '2018-10-16  01:07:29'
-AABUILT=: '2018-10-28  01:34:18'
-AABUILT=: '2018-10-28  01:36:33'
+invalplot=: empty
+
+
+AABUILT=: '2018-11-06  00:23:42'
+AABUILT=: '2018-11-07  18:30:30'
+AABUILT=: '2018-11-07  19:03:28'
 
 '==================== [tabby] constants ===================='
 
@@ -69,6 +61,7 @@ DQ=: '"'
 ITEMS=: i.0
 NOCONFIRM_MAX=: 10
 PEN_WIDTH=: 3
+PMOVES=: 0
 PNG=: temp 'tabula-toolbar.png'
 SL=: '/'
 TABNDX=: 0
@@ -380,7 +373,6 @@ set1u_like	1 selected line, restores selection
 add1u_like	set1u_like but puts v=1 in CAL instruction
 setv0_like	set1u_like but ignores shift
 subitems_like	2 selected lines, order significant
-undoredo_like	ignores line selection
 )
 
 coclass 'tabby'
@@ -405,8 +397,8 @@ tab_moveu_button=: 'movu'&movud
 tab_moved_button=: 'movd'&movud
 tab_moveb_button=: 'movb'&movtb
 tab_dupit_button=: equal
-tab_updex_button=: 'exch'&undoredo_like
-tab_repet_button=: 'Repe'&undoredo_like
+tab_updex_button=: tabenginex bind 'exch'
+tab_repet_button=: tabenginex bind 'Repe'
 tab_tthld_button=: 'hold'&hold
 tab_thold_button=: 'holm'&hold
 tab_hidel_button=: notimp
@@ -647,12 +639,19 @@ copal=: 3 : 0
 
 wd 'psel tab; clipcopy *',tabengine 'CTBU'
 )
-undoredo=: undoredo_like=: 'Undo Redo' ddefine
+
+undoredo=: 3 : 0
+
+if. heldshift'' do. tabenginex 'Redo'
+elseif. heldcmnd'' do. flipstart''
+elseif. do. tabenginex 'Undo'
+end.
+)
+
+savts=: 'savs savt' ddefine
 
 tabenginex pickshift 2$ ;:x
 )
-
-savts=: 'savs savt'&undoredo_like
 
 additems=: additems_like=: 'plus' ddefine
 
@@ -809,6 +808,41 @@ activateTabWithId 3
 (refreshInfo shift updateInfo)''
 )
 
+'==================== [tabby] flip.ijs ===================='
+
+cocurrent 'tabby'
+
+FLIPSTATE=: 0
+FLIPENABLED=: 0
+FLIPTIMER=: 1000
+sys_timer_z_=: empty
+
+flipenabled=: 3 : 'FLIPENABLED'
+
+flipshow=: 3 : 0
+
+wd'timer 0'
+if. flipenabled'' do.
+
+  tabenginex FLIPSTATE pick ;:'Undo Redo'
+  FLIPSTATE=: -.FLIPSTATE
+  sys_timer_z_=: flipshow_tabby_
+  wd'timer ',":FLIPTIMER
+end.
+)
+
+flipdisable=: 3 : 0
+
+wd'timer 0'
+FLIPENABLED=: 0
+)
+
+flipstart=: 3 : 0
+
+FLIPENABLED=: 1
+flipshow''
+)
+
 '==================== [tabby] open.ijs ===================='
 0 :0
 Tuesday 18 September 2018  09:17:14
@@ -889,67 +923,6 @@ else.
 end.
 )
 
-'==================== [tabby] plot.ijs ===================='
-0 :0
-Tuesday 11 September 2018  00:11:15
--
-copied raw from math/tabula-------UNFINISHED
-)
-
-coclass 'tabby'
-
-invalplot=: erase&listnameswithprefix bind 'PLOT'
-plotb=: 3 : 'replot PLOTF=:''bar'''
-plotl=: 3 : 'replot PLOTF=:''line'''
-plotp=: 3 : 'replot PLOTF=:''pie'''
-plots=: 3 : 'replot PLOTF=:''surface'''
-
-plotx=: 3 : 0
-smoutput sw 'plotx: y=(y)'
-PLOTX=: firstItem''
-PLOT=: tabengine 'PLOT' ; PLOTX ; y
-undo''
-Y=. {: i.#PLOT
-PLOTY=: Y default 'PLOTY'
-PLOTF=: 'line' default 'PLOTF'
-PLOTF plot (PLOTX{PLOT) ; (PLOTY{PLOT)
-sellines PLOTY
-)
-
-replot=: 3 : 0
-if. 0~:nc<'PLOT' do.
-  confirm '>>> No action: no plot steps specified yet'
-  return.
-end.
-if. heldshift'' do.
-  PLOTY=: (0,PLOTX) -.~ i.#PLOT
-else.
-  Y=. (0,PLOTX) -.~ ".panel_select
-  if. 0<#Y do. PLOTY=: Y end.
-end.
-PLOTF=: 'line' default 'PLOTF'
-PLOTF plot (PLOTX{PLOT) ; (PLOTY{PLOT)
-sellines PLOTY
-)
-
-stept=: 3 : 0
-theItem=. line 0
-setSelection theItem
-val=. | tabengine 'VALU' ; theItem
-if. val=0 do.
-  confirm '>>> cannot plot zero-to-zero'
-  return.
-end.
-if. heldshift'' do.
-  z=. (-|val),(|val),100
-else.
-  if. val<0 do. z=. val,0,100 else. z=. 0,val,100 end.
-end.
-smoutput '??? what to do with: steps ',":z
-)
-
-
-
 '==================== [tabby] utilities ===================='
 
 cocurrent 'tabby'
@@ -958,9 +931,8 @@ dtlf=: #~ ([: +./\. (10{a.)&~:)
 shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
 isEmpty=: 0 = [: */ $
 isNaN=: 128!:5
-isNumeric=: 3 : '-.any isNaN _.". y'
-DN=. _
-numeral_i=: ([ ([ { [: (([: -. isNaN) # ]) ]) _. ". [: ": ]) :: DN
+isNumeric=: (3 : '-.any isNaN _.". y') :: 0:
+numeral_i=: ([ ([ { [: (([: -. isNaN) # ]) ]) _. ". [: ": ]) :: _:
 
 n0=: firstnum=: 0&numeral_i
 secondnum=: 1&numeral_i
@@ -1060,12 +1032,17 @@ panel_select=: SP ,~ ":theItem
 wd 'psel tab; set panel select ',":theItem
 )
 
+clearSelection=: 3 : 0
+theItem=. _1
+panel_select=: SP ,~ ":theItem
+wd 'psel tab; set panel select ',":theItem
+)
+
 tab_open=: 3 : 0
 
 window_close''
 wd TABU
 wd 'psel tab'
-wd 'pmove ' , ":XYWH
 wd 'set g wh _1 64'
 refreshInfo''
 t=. ,:UNSET
@@ -1077,13 +1054,17 @@ wd 'set preci items *', o2f ": i.16
 wd 'set unico items *',CONTENT_UNICO
 wd 'set panel font fixfont'
 wd 'set panel items *',UNSET
-wd 'pmoves 1384 23 536 450'
+if. PMOVES do.
+  wd :: 0: 'pmoves ' , ":XYWH
+else.
+  wd 'pmove ' , ":XYWH
+end.
 wd 'pshow'
 fill_tools ''
 )
 
 window_close=: 3 : 0
-wd :: EMPTY 'psel tab; pclose;'
+wd :: 0: 'psel tab; pclose;'
 )
 
 fill_tools=: 0 ddefine
@@ -1243,10 +1224,10 @@ wd 'psel tab; set calco text *',calco=:,":y
 
 setcalcovalue=: 3 : 0
 
-if. 0<theItem=. line 0 do.
-  setcalco tabengine 'VALF' ; theItem
-else.
-  setcalco panel -. LF
+select. theItem=. line 0
+case. _1 do. setcalco ''
+case.  0 do. setcalco panel -. LF
+case.    do. setcalco tabengine 'VALF' ; theItem
 end.
 )
 
@@ -1301,11 +1282,13 @@ end.
 
 tabenginex=: '' ddefine
 
+
 tabengine y
 confirm tabengine'MSSG'
 showTtable''
-if. 0=#x do. restoreSelection''
-else.        setSelection x
+if. 0=#x     do. restoreSelection''
+elseif. x=_1 do. clearSelection''
+elseif.      do. setSelection x
 end.
 updatevaluebar''
 restoreFocusToInputField''
@@ -1317,16 +1300,16 @@ interpretCalco=: 3 : 0
 
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
 
-if. '$$'-:y 		do. tabenginex 'samp' 		return. end.
+if. '$$'-:y 		do. 1&tabenginex 'samp' 		return. end.
 if. 0=theItem=.line 0 	do. tabenginex 'titl' ; dtlf calco 	return. end.
 if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.
-if. (SP e. y) or (QT e. y) 	do. tabenginex 'vunn' ; theItem ; y 	return. end.
+if. SP e. y		do. tabenginex 'vunn' ; theItem ; y 	return. end.
 if. isNumeric y		do. tabenginex 'valu' ; theItem ; y 	return. end.
 
 select. {.y
-case. '/' do. tabenginex }.y
-case. '$' do. tabenginex 'open' ; }.y
-case.  QT do. tabenginex 'name' ; theItem ; }.y
+case. '!' do. tabenginex }.y
+case. '$' do. 1&tabenginex 'open' ; }.y
+case.  QT do. tabenginex 'name' ; theItem ; y-.QT
 case. '=' do. tabenginex 'fmla' ; theItem ; }.y
 case. '[' do. tabenginex 'unit' ; theItem ; y-.'[]'
 case. '+' do. tabenginex 'addv' ; theItem ; }.y

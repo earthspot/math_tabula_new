@@ -42,6 +42,7 @@ DQ=: '"'
 ITEMS=: i.0  NB. cache of valid item ids after last tabengine call
 NOCONFIRM_MAX=: 10  NB. suppress: confirm for this number of calls
 PEN_WIDTH=: 3
+PMOVES=: 0  NB. =1 to use new: 'pmoves' wd-feature (j807 onwards)
 PNG=: temp 'tabula-toolbar.png'
 SL=: '/'
 TABNDX=: 0

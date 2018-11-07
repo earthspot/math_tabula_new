@@ -16,7 +16,6 @@ set1u_like	1 selected line, restores selection
 add1u_like	set1u_like but puts v=1 in CAL instruction
 setv0_like	set1u_like but ignores shift
 subitems_like	2 selected lines, order significant
-undoredo_like	ignores line selection
 )
 
 coclass 'tabby'
@@ -29,9 +28,6 @@ tab_newtt_button=: newtt
 tab_opens_button=: openss
 tab_opent_button=: 'open'&opentt
 tab_appet_button=: 'appe'&opentt
-NB. tab_savex_button=: 'save'&undoredo_like
-NB. tab_saves_button=: 'savs'&undoredo_like
-NB. tab_savet_button=: 'savt'&undoredo_like
 tab_savex_button=: tabenginex bind 'save'
 tab_saves_button=: tabenginex bind 'savs'
 tab_savet_button=: tabenginex bind 'savt'
@@ -62,11 +58,11 @@ NB. tab_newsl_button=: newsl
 NB. tab_merge_button=: merge
 NB. tab_delit_button=: delit
 tab_dupit_button=: equal
-tab_updex_button=: 'exch'&undoredo_like
+tab_updex_button=: tabenginex bind 'exch'
 
 NB. Handlers for menu: Command
 
-tab_repet_button=: 'Repe'&undoredo_like
+tab_repet_button=: tabenginex bind 'Repe'
 tab_tthld_button=: 'hold'&hold  NB. transient hold
 tab_thold_button=: 'holm'&hold  NB. mandatory hold
 tab_hidel_button=: notimp
@@ -327,20 +323,18 @@ copal=: 3 : 0
 wd 'psel tab; clipcopy *',tabengine 'CTBU'
 )
 
-NB. undoredo=: undoredo_like=: 'Undo Redo' ddefine
-NB.   NB. Undo / Redo -last action
-NB. confirm tabengine pickshift 2$ ;:x
-NB. showTtable''
-NB. updatevaluebar''
-NB. restoreFocusToInputField''
-NB. )
-
-undoredo=: undoredo_like=: 'Undo Redo' ddefine
+undoredo=: 3 : 0
   NB. Undo / Redo -last action
-tabenginex pickshift 2$ ;:x
+if. heldshift'' do. tabenginex 'Redo'
+elseif. heldcmnd'' do. flipstart''
+elseif. do. tabenginex 'Undo'
+end.
 )
 
-savts=: 'savs savt'&undoredo_like
+savts=: 'savs savt' ddefine
+  NB. Save t-table As SAMPLE / title
+tabenginex pickshift 2$ ;:x
+)
 
 additems=: additems_like=: 'plus' ddefine
   NB. Add all selected items

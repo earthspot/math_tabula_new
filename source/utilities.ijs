@@ -7,7 +7,7 @@ dtlf=: #~ ([: +./\. (10{a.)&~:)  NB. delete trailing LF's
 shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
 isEmpty=: 0 = [: */ $
 isNaN=: 128!:5
-isNumeric=: 3 : '-.any isNaN _.". y'
+isNumeric=: (3 : '-.any isNaN _.". y') :: 0:
 
 NB. numeral_i=: (4 : 0) :: _.
 NB.   NB. extracts numeral (x) from (lit|num) y
@@ -16,9 +16,8 @@ NB.   NB. returns (_) if there is no numeral (x)
 NB. x{ (-. 128!:5 z) # z=. _.". ":y
 NB. )
 
-DN=. _  NB. the default number returned (NOTE: =. is transient!)
 NB. numeral_i=: ([ ([ { [: (([: -. isNaN) # ]) ]) 0 0 ,~ _. ". [: ": ]) :: _
-numeral_i=: ([ ([ { [: (([: -. isNaN) # ]) ]) _. ". [: ": ]) :: DN
+numeral_i=: ([ ([ { [: (([: -. isNaN) # ]) ]) _. ". [: ": ]) :: _:
 
 n0=: firstnum=: 0&numeral_i
 secondnum=: 1&numeral_i
