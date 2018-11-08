@@ -321,36 +321,55 @@ updatevaluebar''
 restoreFocusToInputField''
 )
 
+dropfinal=: 4 : 'if. y-: {:x do. }:x else. x end.'  NB. drop {:x if = y
+
 interpretCalco=: 3 : 0
   NB. interpret the user-input command string: y
   NB. If y is empty then ASSUME called as a wd-handler
   NB. In which case interpret contents of TABU wd-cache: calco
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
-  NB. Miscellaneous forms of y...
-if. '$$'-:y 		do. 1&tabenginex 'samp' 		return. end.
+'y0 y1'=. 2{.y
+  NB. Act on miscellaneous forms of y
+  NB. No line needs to be selected for these…
+if. '$$'-:y 		do. openss''			return. end.
+if. ('$'=y0)and y1 e. '0123456789' do. openss y1		return. end.
 if. 0=theItem=.line 0 	do. tabenginex 'titl' ; dtlf calco 	return. end.
 if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.
-if. SP e. y		do. tabenginex 'vunn' ; theItem ; y 	return. end.
-if. isNumeric y		do. tabenginex 'valu' ; theItem ; y 	return. end.
+  NB. From now on, needs a valid line selection…
+  NB. "single-char"
+if. isDigit y do. tabenginex 'valu' ; theItem ; y return. end.
+select. y
+case. ,'-' do. tabenginex 'negv' ; theItem 	return.
+case. ,'*' do. tabenginex 'sign' ; theItem 	return.
+fcase. ,'/' do.
+case. ,'%' do. tabenginex 'invv' ; theItem 	return.
+end.
+if. 1=#y	do. confirm '>>> single char unhandled: ',brack y 	return. end.
   NB. "command-char" prefixes...
 select. {.y
 case. '!' do. tabenginex }.y           NB. general CAL-instruction
-case. '$' do. 1&tabenginex 'open' ; }.y  NB. load SAMPLE*
-case.  QT do. tabenginex 'name' ; theItem ; y-.QT
+case.  QT do. tabenginex 'name' ; theItem ; }.y dropfinal QT
 case. '=' do. tabenginex 'fmla' ; theItem ; }.y
-case. '[' do. tabenginex 'unit' ; theItem ; y-.'[]'
+case. '[' do. tabenginex 'unit' ; theItem ; }.y dropfinal ']'
 case. '+' do. tabenginex 'addv' ; theItem ; }.y
 case. '-' do. tabenginex 'subv' ; theItem ; }.y
 case. '*' do. tabenginex 'mulv' ; theItem ; }.y
-case. '/' do. tabenginex 'divv' ; theItem ; }.y
+fcase.'/' do.
+case. '%' do. tabenginex 'divv' ; theItem ; }.y
 case. '^' do. tabenginex 'rtov' ; theItem ; }.y
-case.     do. theItem interpretQuantity y
+case.     do. theItem interpretQty y
 end.
 )
 
-interpretQuantity=: 4 : 0
-  NB. treat y as a quantity to go into item {x}
-]qty=. tabengine 'UUUU' ; y
-sllog 'interpretQuantity y qty'
+isDigit=: (3 : 0) :: 0:
+  NB. =1 if y is a single digit
+{. (1=#y) and (".y) e. i.10
+)
+
+interpretQty=: 4 : 0
+  NB. treat y as a qty to go into item {x} --if compatible
+if. isNumeric y do. tabenginex 'valu' ; x ; y return. end.
+qty=. tabengine 'UUUU' ; y
+smoutput llog 'interpretQty x y qty'
 tabenginex 'vunn' ; x ; qty
 )

@@ -17,6 +17,8 @@ invalplot=: empty
 AABUILT=: '2018-11-06  00:23:42'
 AABUILT=: '2018-11-07  18:30:30'
 AABUILT=: '2018-11-07  19:03:28'
+AABUILT=: '2018-11-07  23:59:45'
+AABUILT=: '2018-11-08  00:28:50'
 
 '==================== [tabby] constants ===================='
 
@@ -868,7 +870,8 @@ if. (tabengine 'DIRT') and -.heldalt'' do.
 
 openss=: 3 : 0
 
-tabengine'open $$'
+if. 0=#y do. y=. '$$' end.
+tabengine'open ',":y
 showTtable''
 setFormTitle''
 tab_panel_select 1
@@ -1294,37 +1297,56 @@ updatevaluebar''
 restoreFocusToInputField''
 )
 
+dropfinal=: 4 : 'if. y-: {:x do. }:x else. x end.'
+
 interpretCalco=: 3 : 0
 
 
 
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
+'y0 y1'=. 2{.y
 
-if. '$$'-:y 		do. 1&tabenginex 'samp' 		return. end.
+
+if. '$$'-:y 		do. openss''			return. end.
+if. ('$'=y0)and y1 e. '0123456789' do. openss y1		return. end.
 if. 0=theItem=.line 0 	do. tabenginex 'titl' ; dtlf calco 	return. end.
 if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.
-if. SP e. y		do. tabenginex 'vunn' ; theItem ; y 	return. end.
-if. isNumeric y		do. tabenginex 'valu' ; theItem ; y 	return. end.
+
+
+if. isDigit y do. tabenginex 'valu' ; theItem ; y return. end.
+select. y
+case. ,'-' do. tabenginex 'negv' ; theItem 	return.
+case. ,'*' do. tabenginex 'sign' ; theItem 	return.
+fcase. ,'/' do.
+case. ,'%' do. tabenginex 'invv' ; theItem 	return.
+end.
+if. 1=#y	do. confirm '>>> single char unhandled: ',brack y 	return. end.
 
 select. {.y
 case. '!' do. tabenginex }.y
-case. '$' do. 1&tabenginex 'open' ; }.y
-case.  QT do. tabenginex 'name' ; theItem ; y-.QT
+case.  QT do. tabenginex 'name' ; theItem ; }.y dropfinal QT
 case. '=' do. tabenginex 'fmla' ; theItem ; }.y
-case. '[' do. tabenginex 'unit' ; theItem ; y-.'[]'
+case. '[' do. tabenginex 'unit' ; theItem ; }.y dropfinal ']'
 case. '+' do. tabenginex 'addv' ; theItem ; }.y
 case. '-' do. tabenginex 'subv' ; theItem ; }.y
 case. '*' do. tabenginex 'mulv' ; theItem ; }.y
-case. '/' do. tabenginex 'divv' ; theItem ; }.y
+fcase.'/' do.
+case. '%' do. tabenginex 'divv' ; theItem ; }.y
 case. '^' do. tabenginex 'rtov' ; theItem ; }.y
-case.     do. theItem interpretQuantity y
+case.     do. theItem interpretQty y
 end.
 )
 
-interpretQuantity=: 4 : 0
+isDigit=: (3 : 0) :: 0:
 
-]qty=. tabengine 'UUUU' ; y
-sllog 'interpretQuantity y qty'
+{. (1=#y) and (".y) e. i.10
+)
+
+interpretQty=: 4 : 0
+
+if. isNumeric y do. tabenginex 'valu' ; x ; y return. end.
+qty=. tabengine 'UUUU' ; y
+smoutput llog 'interpretQty x y qty'
 tabenginex 'vunn' ; x ; qty
 )
 '==================== [tabby] traceverbs ===================='

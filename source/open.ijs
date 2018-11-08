@@ -23,8 +23,9 @@ if. (tabengine 'DIRT') and -.heldalt'' do.
 )
 
 openss=: 3 : 0
-  NB. open SAMPLE
-tabengine'open $$'
+  NB. open SAMPLE*
+if. 0=#y do. y=. '$$' end.
+tabengine'open ',":y
 showTtable''
 setFormTitle''
 tab_panel_select 1
