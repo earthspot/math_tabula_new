@@ -27,3 +27,5 @@ smoutput '--- run.ijs: BUILTFILE loaded: ',BUILTFILE
 load TESTFILE
 smoutput '--- run.ijs: TESTFILE completed without discrepancies: ',TESTFILE
 smoutput 4$LF
+
+onload_z_=: do

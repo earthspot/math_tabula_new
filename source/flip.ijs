@@ -1,39 +1,32 @@
 	NB. tabby - flip.ijs
 '==================== [tabby] flip.ijs ===================='
+0 :0
+Friday 30 November 2018  09:27:43
+-
+Performs Undo/Redo after pause until one of these occurs…
+  FLIPSTATE takes some other value than 0 or 1 (e.g. _1)
+  something else assigns: sys_timer_z_ (e.g. tab_g_mmove)
+)
 
 cocurrent 'tabby'
 
-FLIPSTATE=: 0
-FLIPENABLED=: 0
+FLIPSTATE=: _1
 FLIPTIMER=: 1000 NB. (millisecs) delay before sys_timer_z_''
 
-NB. test=: flipdisable
+NB. test=: 3 : 'FLIPSTATE=:_1'
 sys_timer_z_=: empty
-
-flipenabled=: 3 : 'FLIPENABLED'
 
 flipshow=: 3 : 0
   NB. show the (next) flip state
 wd'timer 0'
-if. flipenabled'' do.
+if. 1={.y do. FLIPSTATE=: 1 end.
+if. isBool FLIPSTATE do.
   NB.   smoutput 'flipshow ',":FLIPSTATE
-  tabenginex FLIPSTATE pick ;:'Undo Redo'
+  tabenginex FLIPSTATE pick ;:'Redo Undo'
   FLIPSTATE=: -.FLIPSTATE
   sys_timer_z_=: flipshow_tabby_
   wd'timer ',":FLIPTIMER
 end.
 )
 
-flipdisable=: 3 : 0
-  NB. stop the timer & disable
-wd'timer 0'
-FLIPENABLED=: 0
-)
-
-flipstart=: 3 : 0
-  NB. kick-off flipping
-FLIPENABLED=: 1
-flipshow''
-)
-
-NB. onload 'flipstart 1'
+NB. onload 'flipshow 1'

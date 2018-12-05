@@ -65,6 +65,7 @@ tab_panel_select 1
 
 opent=: 3 : 0
   NB. toolbar sub-handler
+if. heldcmnd'' do. start_ttb_'' end.  NB. extra: launch: ttbrowse
 if. heldshift'' do. opentt'' else. openss'' end.
 )
 

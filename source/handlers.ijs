@@ -313,6 +313,7 @@ newtt=: 3 : 0
 tabengine 'newt'
 confirm tabengine'MSSG'
 showTtable''
+setFormTitle''
 setunitsEmpty''
 setcalco '' NB. tabengine 'TITU'
 restoreFocusToInputField''
@@ -326,7 +327,7 @@ wd 'psel tab; clipcopy *',tabengine 'CTBU'
 undoredo=: 3 : 0
   NB. Undo / Redo -last action
 if. heldshift'' do. tabenginex 'Redo'
-elseif. heldcmnd'' do. flipstart''
+elseif. heldcmnd'' do. flipshow 1
 elseif. do. tabenginex 'Undo'
 end.
 )
@@ -468,32 +469,6 @@ add1u=: 'add1 sub1'&set1u_like  NB. Add 1 / Subtract 1
 addpc=: 'ad1p sb1p'&set1u_like  NB. Add 1% / Subtract 1%
 by2pi=: 'pimv ptmv'&set1u_like  NB. times PI / times 2*PI
 merge=: 'merg'&subitems_like  NB. Merge selected lines
-
-black=: 3 : 0
-  NB. user-defined tool
-if. 'empty'-: 5!:5<'sllog' do. sllog=: sllog1=: smoutput@llog
-else. sllog=: empty
-end.
-smoutput '>>> black: sllog is: ',5!:5<'sllog'
-)
-
-red=: 3 : 0
-  NB. user-defined tool
-smoutput '============================='
-)
-
-green=: 3 : 0
-  NB. user-defined tool
-smoutput ' '
-NB. smoutput ('Undo'"_) shift ('Redo'"_)''
-NB. smoutput (heldshift'') pick ;:'Undo Redo'
-NB. smoutput sw 'heldshift=(heldshift _) heldalt=(heldalt _) sysmodifiers=(sysmodifiers)'
-)
-
-blue=: 3 : 0
-  NB. user-defined tool
-smoutput '>>> blue: not implemented'
-)
 
 hlpt=: 3 : 0
   NB. Help for TABULA

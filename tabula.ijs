@@ -1,5 +1,5 @@
 0 :0
-Saturday 13 October 2018  03:02:24
+Wednesday 5 December 2018  05:32:20
 -
 TABULA: scientific units calculator
 -simplified architecture
@@ -19,6 +19,9 @@ AABUILT=: '2018-11-07  18:30:30'
 AABUILT=: '2018-11-07  19:03:28'
 AABUILT=: '2018-11-07  23:59:45'
 AABUILT=: '2018-11-08  00:28:50'
+AABUILT=: '2018-11-30  08:21:40'
+AABUILT=: '2018-11-30  09:24:31'
+AABUILT=: '2018-11-30  09:28:46'
 
 '==================== [tabby] constants ===================='
 
@@ -631,6 +634,7 @@ tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
 newtt=: 3 : 0
 tabengine 'newt'
 confirm tabengine'MSSG'
+setFormTitle''
 showTtable''
 setunitsEmpty''
 setcalco ''
@@ -645,7 +649,7 @@ wd 'psel tab; clipcopy *',tabengine 'CTBU'
 undoredo=: 3 : 0
 
 if. heldshift'' do. tabenginex 'Redo'
-elseif. heldcmnd'' do. flipstart''
+elseif. heldcmnd'' do. flipshow 1
 elseif. do. tabenginex 'Undo'
 end.
 )
@@ -774,29 +778,6 @@ addpc=: 'ad1p sb1p'&set1u_like
 by2pi=: 'pimv ptmv'&set1u_like
 merge=: 'merg'&subitems_like
 
-black=: 3 : 0
-
-if. 'empty'-: 5!:5<'sllog' do. sllog=: sllog1=: smoutput@llog
-else. sllog=: empty
-end.
-smoutput '>>> black: sllog is: ',5!:5<'sllog'
-)
-
-red=: 3 : 0
-
-smoutput '============================='
-)
-
-green=: 3 : 0
-
-smoutput ' '
-)
-
-blue=: 3 : 0
-
-smoutput '>>> blue: not implemented'
-)
-
 hlpt=: 3 : 0
 
 if. heldshift'' do. textview HELP_cal_ , CAL_cal_
@@ -811,38 +792,31 @@ activateTabWithId 3
 )
 
 '==================== [tabby] flip.ijs ===================='
+0 :0
+Friday 30 November 2018  09:27:43
+-
+Performs Undo/Redo after pause until one of these occurs…
+  FLIPSTATE takes some other value than 0 or 1 (e.g. _1)
+  something else assigns: sys_timer_z_ (e.g. tab_g_mmove)
+)
 
 cocurrent 'tabby'
 
-FLIPSTATE=: 0
-FLIPENABLED=: 0
+FLIPSTATE=: _1
 FLIPTIMER=: 1000
 sys_timer_z_=: empty
-
-flipenabled=: 3 : 'FLIPENABLED'
 
 flipshow=: 3 : 0
 
 wd'timer 0'
-if. flipenabled'' do.
+if. 1={.y do. FLIPSTATE=: 1 end.
+if. isBool FLIPSTATE do.
 
-  tabenginex FLIPSTATE pick ;:'Undo Redo'
+  tabenginex FLIPSTATE pick ;:'Redo Undo'
   FLIPSTATE=: -.FLIPSTATE
   sys_timer_z_=: flipshow_tabby_
   wd'timer ',":FLIPTIMER
 end.
-)
-
-flipdisable=: 3 : 0
-
-wd'timer 0'
-FLIPENABLED=: 0
-)
-
-flipstart=: 3 : 0
-
-FLIPENABLED=: 1
-flipshow''
 )
 
 '==================== [tabby] open.ijs ===================='
@@ -911,6 +885,7 @@ tab_panel_select 1
 
 opent=: 3 : 0
 
+if. heldcmnd'' do. start_ttb_'' end.
 if. heldshift'' do. opentt'' else. openss'' end.
 )
 
@@ -1463,6 +1438,46 @@ case.     do. mm1 z=. TRACEVERBS=: ~. ;: y
 end.
 smoutput '+++ traceverbs: #traced=',":#z
 smoutput >TRACEVERBS
+)
+
+'==================== [tabby] user.ijs ===================='
+0 :0
+Friday 30 November 2018  07:44:16
+)
+
+coclass 'tabby'
+
+
+USERSCRIPT_z_=: jpath '~Gittab/source/user.ijs'
+
+usertool=: 3 : 0
+
+ssw '+++ usertool: sysmodifiers=(sysmodifiers)'
+if. heldshift'' do. open USERSCRIPT_z_ return. end.
+)
+
+black=: 3 : 0
+usertool''
+if. 'empty'-: 5!:5<'sllog' do. sllog=: sllog1=: smoutput@llog
+else. sllog=: empty
+end.
+smoutput '>>> black: sllog is: ',5!:5<'sllog'
+)
+
+red=: 3 : 0
+usertool''
+smoutput '============================='
+)
+
+green=: 3 : 0
+usertool''
+smoutput ' '
+)
+
+blue=: 3 : 0
+usertool''
+if. heldcmnd'' do. smoutput'>>> blue: cmnd' return. end.
+smoutput '>>> blue: not implemented'
 )
 
 '==================== [tabby] start ===================='
