@@ -347,7 +347,9 @@ end.
 if. 1=#y	do. confirm '>>> single char unhandled: ',brack y 	return. end.
   NB. "command-char" prefixes...
 select. {.y
-case. '!' do. tabenginex }.y           NB. general CAL-instruction
+case. '!' do. tabenginex }.y      NB. general CAL-instruction
+case. ';' do. 'tabby'&locDo }.y   NB. execute J phrase in _tabby_
+case. ':' do. 'cal'&locDo }.y     NB. execute J phrase in _cal_
 case.  QT do. tabenginex 'name' ; theItem ; }.y dropfinal QT
 case. '=' do. tabenginex 'fmla' ; theItem ; }.y
 case. '[' do. tabenginex 'unit' ; theItem ; }.y dropfinal ']'
@@ -359,6 +361,11 @@ case. '%' do. tabenginex 'divv' ; theItem ; }.y
 case. '^' do. tabenginex 'rtov' ; theItem ; }.y
 case.     do. theItem interpretQty y
 end.
+)
+
+locDo=: 4 : 0
+cocurrent x
+do y
 )
 
 isDigit=: (3 : 0) :: 0:

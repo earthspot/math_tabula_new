@@ -3,6 +3,32 @@
 
 cocurrent 'tabby'
 
+imgview=: 3 : 0
+  NB. show the image at path: (y)
+  NB. e.g. imgview temp 'breakback.jpg' (only works for .jpg)
+wd :: 0: 'psel form; pclose'
+a=: readimg_jqtide_ nom=. y
+wd 'pc form closeok; pn ',nom
+wd 'cc g isidraw'
+wd 'set g minwh ', ":(|.$a)
+wd 'pshow'
+glsel 'g'
+glpixels 0 0 , (|.$a), ,a
+)
+
+jpgview=: 3 : 0
+z=. jpath '~cont/Resources/',y,'.jpg'
+NB. smoutput '+++ jpgview: path=',z
+imgview z
+)
+
+sampleview=: 3 : 0
+  NB. cycles round available $*.jpg in Resources of T
+NSAMPLE=: >: _1 default 'NSAMPLE'
+if. -. NSAMPLE e. i.8 do. NSAMPLE=: 0 end.
+jpgview '$',":NSAMPLE
+)
+
 dtlf=: #~ ([: +./\. (10{a.)&~:)  NB. delete trailing LF's
 shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
 isEmpty=: 0 = [: */ $
@@ -25,7 +51,7 @@ first2nums=: 0 1&numeral_i
 
 test_numeral_i=: 3 : 0
   NB. assertion test
-DN=. y
+DN=. _
 list0=: '_55.12 66 77'
 list1=: '_55.12 xx 66 77'
 list2=: 'xx _55.12 66 77'
@@ -63,4 +89,7 @@ foo a3 ; first2nums list3
 foo a3 ; first2nums list1
 )
 
-test_numeral_i DN
+onload 'test_numeral_i 0'
+
+onload 'imgview temp ''breakback.jpg'''
+onload 'imgview temp ''toucan.jpg'''

@@ -10,7 +10,7 @@ coclass LOC=.'tabby'
 clear LOC
 BLOC=: <,LOC
 coinsert 'jgl2'
-
+onload_z_=: empty
 invalplot=: empty
 
 
@@ -23,6 +23,12 @@ AABUILT=: '2018-11-30  08:21:40'
 AABUILT=: '2018-11-30  09:24:31'
 AABUILT=: '2018-11-30  09:28:46'
 AABUILT=: '2018-12-23  03:58:34'
+AABUILT=: '2018-12-28  00:45:17'
+AABUILT=: '2018-12-28  00:50:21'
+AABUILT=: '2018-12-28  00:50:28'
+AABUILT=: '2018-12-28  00:51:21'
+AABUILT=: '2018-12-28  00:52:23'
+AABUILT=: '2018-12-28  00:59:55'
 
 '==================== [tabby] constants ===================='
 
@@ -906,6 +912,31 @@ end.
 
 cocurrent 'tabby'
 
+imgview=: 3 : 0
+
+
+wd :: 0: 'psel form; pclose'
+a=: readimg_jqtide_ nom=. y
+wd 'pc form closeok; pn ',nom
+wd 'cc g isidraw'
+wd 'set g minwh ', ":(|.$a)
+wd 'pshow'
+glsel 'g'
+glpixels 0 0 , (|.$a), ,a
+)
+
+jpgview=: 3 : 0
+z=. jpath '~cont/Resources/',y,'.jpg'
+imgview z
+)
+
+sampleview=: 3 : 0
+
+NSAMPLE=: >: _1 default 'NSAMPLE'
+if. -. NSAMPLE e. i.8 do. NSAMPLE=: 0 end.
+jpgview '$',":NSAMPLE
+)
+
 dtlf=: #~ ([: +./\. (10{a.)&~:)
 shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
 isEmpty=: 0 = [: */ $
@@ -919,7 +950,7 @@ first2nums=: 0 1&numeral_i
 
 test_numeral_i=: 3 : 0
 
-DN=. y
+DN=. _
 list0=: '_55.12 66 77'
 list1=: '_55.12 xx 66 77'
 list2=: 'xx _55.12 66 77'
@@ -955,7 +986,10 @@ foo a3 ; first2nums list3
 foo a3 ; first2nums list1
 )
 
-test_numeral_i DN
+onload 'test_numeral_i 0'
+
+onload 'imgview temp ''breakback.jpg'''
+onload 'imgview temp ''toucan.jpg'''
 
 '==================== [tabby] main ===================='
 0 :0
@@ -1300,6 +1334,8 @@ if. 1=#y	do. confirm '>>> single char unhandled: ',brack y 	return. end.
 
 select. {.y
 case. '!' do. tabenginex }.y
+case. ';' do. 'tabby'&locDo }.y
+case. ':' do. 'cal'&locDo }.y
 case.  QT do. tabenginex 'name' ; theItem ; }.y dropfinal QT
 case. '=' do. tabenginex 'fmla' ; theItem ; }.y
 case. '[' do. tabenginex 'unit' ; theItem ; }.y dropfinal ']'
@@ -1311,6 +1347,11 @@ case. '%' do. tabenginex 'divv' ; theItem ; }.y
 case. '^' do. tabenginex 'rtov' ; theItem ; }.y
 case.     do. theItem interpretQty y
 end.
+)
+
+locDo=: 4 : 0
+cocurrent x
+do y
 )
 
 isDigit=: (3 : 0) :: 0:
@@ -1472,7 +1513,6 @@ smoutput '============================='
 
 green=: 3 : 0
 usertool''
-smoutput ' '
 )
 
 blue=: 3 : 0

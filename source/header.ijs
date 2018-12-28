@@ -10,7 +10,7 @@ coclass LOC=.'tabby'
 clear LOC
 BLOC=: <,LOC	NB. used as self-locator
 coinsert 'jgl2'	NB. use gl2 verbs to paint the window
-
+onload_z_=: empty
 invalplot=: empty
 
 
@@ -23,3 +23,9 @@ AABUILT=: '2018-11-30  08:21:40'
 AABUILT=: '2018-11-30  09:24:31'
 AABUILT=: '2018-11-30  09:28:46'
 AABUILT=: '2018-12-23  03:58:34'
+AABUILT=: '2018-12-28  00:45:17'
+AABUILT=: '2018-12-28  00:50:21'
+AABUILT=: '2018-12-28  00:50:28'
+AABUILT=: '2018-12-28  00:51:21'
+AABUILT=: '2018-12-28  00:52:23'
+AABUILT=: '2018-12-28  00:59:55'

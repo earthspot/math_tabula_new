@@ -30,7 +30,7 @@ smoutput '============================='
 
 green=: 3 : 0
 usertool''
-smoutput ' '
+NB. sampleview''
 )
 
 blue=: 3 : 0
