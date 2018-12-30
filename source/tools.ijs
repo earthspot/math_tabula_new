@@ -13,7 +13,7 @@ TOOLHINT=: >cutopen 0 : 0
 1  opent     Open SAMPLE ⇧ Open ttable… ⌘ ttbrowse
 2  savts     Save ttable as SAMPLE ⇧ Save ttable as Title
 3  copal     Copy entire ttable
-4  undoredo  Undo ⇧ Redo
+4  undoredo  Undo ⇧ Redo ⌘ Animated Undo<-->Redo
 5  additems  Add {ABC}
 6  subitems  {A} minus {B} ⇧ {B} minus {A}
 7  mulitems  Multiply {ABC}

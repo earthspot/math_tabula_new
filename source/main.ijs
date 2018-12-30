@@ -67,13 +67,13 @@ wd 'psel tab'
 wd 'set g wh _1 64'
 refreshInfo''
 t=. ,:UNSET
-wd 'set cons font fixfont'
+wd 'set cons font ',FIXFONT
 wd 'set cons items *',x2f t
-wd 'set func font fixfont'
+wd 'set func font ',FIXFONT
 wd 'set func items *',x2f t
 wd 'set preci items *', o2f ": i.16
 wd 'set unico items *',CONTENT_UNICO
-wd 'set panel font fixfont'
+wd 'set panel font ',FIXFONT
 wd 'set panel items *',UNSET
 NB. confirm 'Click a line and perform some operation on it...'
 if. PMOVES do.
@@ -332,6 +332,7 @@ if. 0=#y do. y=. dltb calco else. y=. dltb y end.
   NB. Act on miscellaneous forms of y
   NB. No line needs to be selected for these…
 if. '$$'-:y 		do. openss''			return. end.
+if. (y-:'$')or(y-:,'$') 	do. openss'$'			return. end.
 if. ('$'=y0)and y1 e. '0123456789' do. openss y1		return. end.
 if. 0=theItem=.line 0 	do. tabenginex 'titl' ; dtlf calco 	return. end.
 if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.

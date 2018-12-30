@@ -1,5 +1,5 @@
 0 :0
-Saturday 13 October 2018  03:02:24
+Sunday 30 December 2018  04:46:19
 -
 TABULA: scientific units calculator
 -simplified architecture
@@ -8,24 +8,11 @@ TABULA: scientific units calculator
 clear 'tabby'	NB. >>>>> DELETE THIS LINE IN RELEASED ADDON
 coclass LOC=.'tabby'
 clear LOC
-BLOC=: <,LOC	NB. used as self-locator
 coinsert 'jgl2'	NB. use gl2 verbs to paint the window
 onload_z_=: empty
 invalplot=: empty
+startonload=: start
+startonload=: empty
 
-
-AABUILT=: '2018-11-06  00:23:42'
-AABUILT=: '2018-11-07  18:30:30'
-AABUILT=: '2018-11-07  19:03:28'
-AABUILT=: '2018-11-07  23:59:45'
-AABUILT=: '2018-11-08  00:28:50'
-AABUILT=: '2018-11-30  08:21:40'
-AABUILT=: '2018-11-30  09:24:31'
-AABUILT=: '2018-11-30  09:28:46'
-AABUILT=: '2018-12-23  03:58:34'
-AABUILT=: '2018-12-28  00:45:17'
-AABUILT=: '2018-12-28  00:50:21'
-AABUILT=: '2018-12-28  00:50:28'
-AABUILT=: '2018-12-28  00:51:21'
-AABUILT=: '2018-12-28  00:52:23'
-AABUILT=: '2018-12-28  00:59:55'
+AABUILT=: '2018-12-30  04:47:19'
+AABUILT=: '2018-12-30  04:53:51'

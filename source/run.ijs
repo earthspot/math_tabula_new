@@ -1,17 +1,10 @@
 NB. tabby - run
 0 :0
-Thursday 20 September 2018  09:32:07
+Sunday 30 December 2018  04:52:51
 -
 open BUILTFILE
 open TESTFILE
 )
-
-  NB. Since neither TABBY nor CAL create TPATH_UU or sl
-  NB. but CAL needs BOTH in [cal] start
-  NB. --make sure they are set up here
-  NB. for a build/run of TABBY from cold...
-require '~Gituu/source/paths.ijs' NB. the definitive source for TPATH_UU*
-NB. TPATH_UU=: jpath'~Gituu'
 
 cocurrent 'base'
 
@@ -28,4 +21,9 @@ load TESTFILE
 smoutput '--- run.ijs: TESTFILE completed without discrepancies: ',TESTFILE
 smoutput 4$LF
 
+NOPLOT_z_=: 1  NB. disable plot package for j807 builds
+
 onload_z_=: do
+
+NB. check TABBY header for assignment of: startonload
+start_tabby_''

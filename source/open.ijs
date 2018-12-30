@@ -47,16 +47,16 @@ wd 'psel tab; pn ',tabengine 'TFIT'
 opentt=: 'open' ddefine
   NB. x=='open' - open selected t-table
   NB. x=='append' - append selected t-table
-  NB. Side effect: reassigns TPATH_TTABLES to path of last t-table
-  NB. BUT a LOCAL copy: TPATH_TTABLES_tabby_ is created by: start
+  NB. TPTT is cache to remember last used folder
+TPTT=: 'TPTT' default~ tabengine 'TPTT'
 if. hasChanged'' do. return. end.
 inst=. 4{.x
 invalplot''
 title=. sw 'Choose a ttable to (x)…'
   NB. not used by Mac version of jqt??
-path=. launder wd sw 'mb open "(title)" *',TPATH_TTABLES
+path=. launder wd sw 'mb open "(title)" *',TPTT
 if. 0=#path do. confirm sw '>>> (x)...cancelled' return. end.
-TPATH_TTABLES=: pathof path  NB. change ONLY the local copy
+TPTT=: pathof path  NB. change ONLY the local copy
 confirm tabengine inst,SP,path
 showTtable''
 setFormTitle''
@@ -71,8 +71,10 @@ if. heldshift'' do. opentt'' else. openss'' end.
 
 savea=: 3 : 0
   NB. Save As...
+  NB. TPTT is cache to remember last used folder
+TPTT=: 'TPTT' default~ tabengine 'TPTT'
 title=. 'Save ttable as…'
-nom=. wd sw 'mb save "(title)" *',TPATH_TTABLES
+nom=. wd sw 'mb save "(title)" *',TPTT
 if. 0=#nom do.
   confirm '>>> Save As... cancelled'
 else.

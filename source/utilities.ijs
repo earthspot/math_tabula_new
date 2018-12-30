@@ -17,7 +17,7 @@ glpixels 0 0 , (|.$a), ,a
 )
 
 jpgview=: 3 : 0
-z=. jpath '~cont/Resources/',y,'.jpg'
+z=. jpath '~Resources/',y,'.jpg'
 NB. smoutput '+++ jpgview: path=',z
 imgview z
 )

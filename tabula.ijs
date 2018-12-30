@@ -1,5 +1,5 @@
 0 :0
-Saturday 13 October 2018  03:02:24
+Sunday 30 December 2018  04:46:19
 -
 TABULA: scientific units calculator
 -simplified architecture
@@ -8,27 +8,14 @@ TABULA: scientific units calculator
 clear 'tabby'
 coclass LOC=.'tabby'
 clear LOC
-BLOC=: <,LOC
 coinsert 'jgl2'
 onload_z_=: empty
 invalplot=: empty
+startonload=: start
+startonload=: empty
 
-
-AABUILT=: '2018-11-06  00:23:42'
-AABUILT=: '2018-11-07  18:30:30'
-AABUILT=: '2018-11-07  19:03:28'
-AABUILT=: '2018-11-07  23:59:45'
-AABUILT=: '2018-11-08  00:28:50'
-AABUILT=: '2018-11-30  08:21:40'
-AABUILT=: '2018-11-30  09:24:31'
-AABUILT=: '2018-11-30  09:28:46'
-AABUILT=: '2018-12-23  03:58:34'
-AABUILT=: '2018-12-28  00:45:17'
-AABUILT=: '2018-12-28  00:50:21'
-AABUILT=: '2018-12-28  00:50:28'
-AABUILT=: '2018-12-28  00:51:21'
-AABUILT=: '2018-12-28  00:52:23'
-AABUILT=: '2018-12-28  00:59:55'
+AABUILT=: '2018-12-30  04:47:19'
+AABUILT=: '2018-12-30  04:53:51'
 
 '==================== [tabby] constants ===================='
 
@@ -70,6 +57,7 @@ COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
 DIAMETER=: 30
 DQ=: '"'
+FIXFONT=: '"Menlo" 14'
 ITEMS=: i.0
 NOCONFIRM_MAX=: 10
 PEN_WIDTH=: 3
@@ -126,6 +114,89 @@ unico                              =: UNSET
 unico_select                       =: '_1'
 xunit                              =: UNSET
 xunit_select                       =: '_1'
+
+'==================== [tabby] utilities ===================='
+
+cocurrent 'tabby'
+
+imgview=: 3 : 0
+
+
+wd :: 0: 'psel form; pclose'
+a=: readimg_jqtide_ nom=. y
+wd 'pc form closeok; pn ',nom
+wd 'cc g isidraw'
+wd 'set g minwh ', ":(|.$a)
+wd 'pshow'
+glsel 'g'
+glpixels 0 0 , (|.$a), ,a
+)
+
+jpgview=: 3 : 0
+z=. jpath '~Resources/',y,'.jpg'
+imgview z
+)
+
+sampleview=: 3 : 0
+
+NSAMPLE=: >: _1 default 'NSAMPLE'
+if. -. NSAMPLE e. i.8 do. NSAMPLE=: 0 end.
+jpgview '$',":NSAMPLE
+)
+
+dtlf=: #~ ([: +./\. (10{a.)&~:)
+shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
+isEmpty=: 0 = [: */ $
+isNaN=: 128!:5
+isNumeric=: (3 : '-.any isNaN _.". y') :: 0:
+numeral_i=: ([ ([ { [: (([: -. isNaN) # ]) ]) _. ". [: ": ]) :: _:
+
+n0=: firstnum=: 0&numeral_i
+secondnum=: 1&numeral_i
+first2nums=: 0 1&numeral_i
+
+test_numeral_i=: 3 : 0
+
+DN=. _
+list0=: '_55.12 66 77'
+list1=: '_55.12 xx 66 77'
+list2=: 'xx _55.12 66 77'
+list3=: 'xx _55.12 xx 66 77'
+a0=: _55.12 [a1=: 66 [a2=: 77 [a3=: _55.12 66
+foo=. assert&(-:/)
+foo a0 ; 0 numeral_i list1
+foo 66 ; 1 numeral_i list1
+foo 77 ; 2 numeral_i list1
+foo DN ; 3 numeral_i list1
+foo DN ; 4 numeral_i list1
+foo DN ; 5 numeral_i list1
+foo DN ; 99 numeral_i list1
+foo a0 ; firstnum ".list0
+foo a1 ; secondnum ".list0
+foo a0 ; firstnum list0
+foo a1 ; secondnum list0
+foo a0 ; firstnum list2
+foo a1 ; secondnum list2
+foo a0 ; firstnum list1
+foo a1 ; secondnum list1
+foo a3 ; first2nums list3
+foo a3 ; first2nums list1
+foo 1  ; firstnum ,'1'
+foo 1  ; firstnum '1'
+foo DN ; firstnum 'x'
+foo DN ; firstnum 'xx'
+foo DN ; firstnum ''
+foo DN ; secondnum ''
+foo DN ; secondnum '1'
+foo DN ; secondnum '_55.12 xx'
+foo a3 ; first2nums list3
+foo a3 ; first2nums list1
+)
+
+onload 'test_numeral_i 0'
+
+onload 'imgview temp ''breakback.jpg'''
+onload 'imgview temp ''toucan.jpg'''
 
 '==================== [tabby] forms ===================='
 0 :0
@@ -338,7 +409,7 @@ TOOLHINT=: >cutopen 0 : 0
 1  opent     Open SAMPLE ⇧ Open ttable… ⌘ ttbrowse
 2  savts     Save ttable as SAMPLE ⇧ Save ttable as Title
 3  copal     Copy entire ttable
-4  undoredo  Undo ⇧ Redo
+4  undoredo  Undo ⇧ Redo ⌘ Animated Undo<-->Redo
 5  additems  Add {ABC}
 6  subitems  {A} minus {B} ⇧ {B} minus {A}
 7  mulitems  Multiply {ABC}
@@ -875,15 +946,15 @@ opentt=: 'open' ddefine
 
 
 
-
+TPTT=: 'TPTT' default~ tabengine 'TPTT'
 if. hasChanged'' do. return. end.
 inst=. 4{.x
 invalplot''
 title=. sw 'Choose a ttable to (x)…'
 
-path=. launder wd sw 'mb open "(title)" *',TPATH_TTABLES
+path=. launder wd sw 'mb open "(title)" *',TPTT
 if. 0=#path do. confirm sw '>>> (x)...cancelled' return. end.
-TPATH_TTABLES=: pathof path
+TPTT=: pathof path
 confirm tabengine inst,SP,path
 showTtable''
 setFormTitle''
@@ -898,8 +969,10 @@ if. heldshift'' do. opentt'' else. openss'' end.
 
 savea=: 3 : 0
 
+
+TPTT=: 'TPTT' default~ tabengine 'TPTT'
 title=. 'Save ttable as…'
-nom=. wd sw 'mb save "(title)" *',TPATH_TTABLES
+nom=. wd sw 'mb save "(title)" *',TPTT
 if. 0=#nom do.
   confirm '>>> Save As... cancelled'
 else.
@@ -907,89 +980,6 @@ else.
   tabenginex 'sava' ; ijs nom
 end.
 )
-
-'==================== [tabby] utilities ===================='
-
-cocurrent 'tabby'
-
-imgview=: 3 : 0
-
-
-wd :: 0: 'psel form; pclose'
-a=: readimg_jqtide_ nom=. y
-wd 'pc form closeok; pn ',nom
-wd 'cc g isidraw'
-wd 'set g minwh ', ":(|.$a)
-wd 'pshow'
-glsel 'g'
-glpixels 0 0 , (|.$a), ,a
-)
-
-jpgview=: 3 : 0
-z=. jpath '~cont/Resources/',y,'.jpg'
-imgview z
-)
-
-sampleview=: 3 : 0
-
-NSAMPLE=: >: _1 default 'NSAMPLE'
-if. -. NSAMPLE e. i.8 do. NSAMPLE=: 0 end.
-jpgview '$',":NSAMPLE
-)
-
-dtlf=: #~ ([: +./\. (10{a.)&~:)
-shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
-isEmpty=: 0 = [: */ $
-isNaN=: 128!:5
-isNumeric=: (3 : '-.any isNaN _.". y') :: 0:
-numeral_i=: ([ ([ { [: (([: -. isNaN) # ]) ]) _. ". [: ": ]) :: _:
-
-n0=: firstnum=: 0&numeral_i
-secondnum=: 1&numeral_i
-first2nums=: 0 1&numeral_i
-
-test_numeral_i=: 3 : 0
-
-DN=. _
-list0=: '_55.12 66 77'
-list1=: '_55.12 xx 66 77'
-list2=: 'xx _55.12 66 77'
-list3=: 'xx _55.12 xx 66 77'
-a0=: _55.12 [a1=: 66 [a2=: 77 [a3=: _55.12 66
-foo=. assert&(-:/)
-foo a0 ; 0 numeral_i list1
-foo 66 ; 1 numeral_i list1
-foo 77 ; 2 numeral_i list1
-foo DN ; 3 numeral_i list1
-foo DN ; 4 numeral_i list1
-foo DN ; 5 numeral_i list1
-foo DN ; 99 numeral_i list1
-foo a0 ; firstnum ".list0
-foo a1 ; secondnum ".list0
-foo a0 ; firstnum list0
-foo a1 ; secondnum list0
-foo a0 ; firstnum list2
-foo a1 ; secondnum list2
-foo a0 ; firstnum list1
-foo a1 ; secondnum list1
-foo a3 ; first2nums list3
-foo a3 ; first2nums list1
-foo 1  ; firstnum ,'1'
-foo 1  ; firstnum '1'
-foo DN ; firstnum 'x'
-foo DN ; firstnum 'xx'
-foo DN ; firstnum ''
-foo DN ; secondnum ''
-foo DN ; secondnum '1'
-foo DN ; secondnum '_55.12 xx'
-foo a3 ; first2nums list3
-foo a3 ; first2nums list1
-)
-
-onload 'test_numeral_i 0'
-
-onload 'imgview temp ''breakback.jpg'''
-onload 'imgview temp ''toucan.jpg'''
 
 '==================== [tabby] main ===================='
 0 :0
@@ -1059,13 +1049,13 @@ wd 'psel tab'
 wd 'set g wh _1 64'
 refreshInfo''
 t=. ,:UNSET
-wd 'set cons font fixfont'
+wd 'set cons font ',FIXFONT
 wd 'set cons items *',x2f t
-wd 'set func font fixfont'
+wd 'set func font ',FIXFONT
 wd 'set func items *',x2f t
 wd 'set preci items *', o2f ": i.16
 wd 'set unico items *',CONTENT_UNICO
-wd 'set panel font fixfont'
+wd 'set panel font ',FIXFONT
 wd 'set panel items *',UNSET
 if. PMOVES do.
   wd :: 0: 'pmoves ' , ":XYWH
@@ -1318,6 +1308,7 @@ if. 0=#y do. y=. dltb calco else. y=. dltb y end.
 
 
 if. '$$'-:y 		do. openss''			return. end.
+if. (y-:'$')or(y-:,'$') 	do. openss'$'			return. end.
 if. ('$'=y0)and y1 e. '0123456789' do. openss y1		return. end.
 if. 0=theItem=.line 0 	do. tabenginex 'titl' ; dtlf calco 	return. end.
 if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.
@@ -1528,13 +1519,12 @@ cocurrent 'tabby'
 start=: 3 : 0
 traceverbs 'OFF'
 wd 'timer 0'
-load '~Gitcal/cal.ijs'
+load '~CAL/cal.ijs'
 
 tabengine=: tabengine_cal_
  sesi_z_=: smoutput
 
 tabengine 'Init'
-TPATH_TTABLES=: tabengine'TPTT'
 tab_open''
 setpreci 3
 setunico 1
@@ -1543,4 +1533,4 @@ updatevaluebar''
 restoreFocusToInputField''
 )
 
-start''
+startonload''
