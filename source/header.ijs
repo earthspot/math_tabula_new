@@ -1,5 +1,5 @@
 0 :0
-Sunday 30 December 2018  04:46:19
+Monday 31 December 2018  02:45:18
 -
 TABULA: scientific units calculator
 -simplified architecture
@@ -11,8 +11,9 @@ clear LOC
 coinsert 'jgl2'	NB. use gl2 verbs to paint the window
 onload_z_=: empty
 invalplot=: empty
-startonload=: start
-startonload=: empty
+startonload_z_=: start_tabby_
+NB. startonload_z_=: empty
 
-AABUILT=: '2018-12-30  04:47:19'
-AABUILT=: '2018-12-30  04:53:51'
+AABUILT=: '2018-12-31  02:35:28'
+AABUILT=: '2018-12-31  03:30:33'
+AABUILT=: '2018-12-31  03:49:24'

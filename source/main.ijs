@@ -178,6 +178,7 @@ i.0 0
 )
 
 activateTabWithId=: 3 : 0
+updateInfo''  NB. else Info panel contents will be lost
 wd 'psel tab; set tabs active ',":TABNDX=: y
 )
 

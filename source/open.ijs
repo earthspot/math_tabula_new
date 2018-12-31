@@ -40,7 +40,10 @@ pathof=: ] {.~ [: >: SL i:~ ]
 
 setFormTitle=: 3 : 0
   NB. set the title of the window to identify the t-table
-wd 'psel tab; pn ',tabengine 'TFIT'
+]flag=. (tabengine'DIRT')#brack'UNSAVED'
+]fname=. tabengine 'TFIT'
+]title=. sw 'TABULA (flag) (fname)'
+wd 'psel tab; pn ',title
   NB. other instrs to look at: TNAM TNMS
 )
 
