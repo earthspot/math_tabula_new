@@ -324,6 +324,11 @@ restoreFocusToInputField''
 
 dropfinal=: 4 : 'if. y-: {:x do. }:x else. x end.'  NB. drop {:x if = y
 
+cle=: 3 : 0
+  NB. serves interpretCalco: optionally clear calco after command
+if. heldshift'' do. setcalco'' end.
+)
+
 interpretCalco=: 3 : 0
   NB. interpret the user-input command string: y
   NB. If y is empty then ASSUME called as a wd-handler
@@ -335,11 +340,18 @@ if. 0=#y do. y=. dltb calco else. y=. dltb y end.
 if. '$$'-:y 		do. openss''			return. end.
 if. (y-:'$')or(y-:,'$') 	do. openss'$'			return. end.
 if. ('$'=y0)and y1 e. '0123456789' do. openss y1		return. end.
+  NB. "command-char" prefixes needing no line selected...
+select. {.y
+case. ',' do. cle smoutput }.y [wd 'ide show'	return.
+case. '!' do. tabenginex }.y			return.  NB. CAL instr
+case. ';' do. 'tabby'&locDo }.y		return.  NB. _tabby_ phrase
+case. ':' do. 'cal'&locDo }.y		return.  NB. _cal_ phrase
+end.
 if. 0=theItem=.line 0 	do. tabenginex 'titl' ; dtlf calco 	return. end.
 if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.
   NB. From now on, needs a valid line selection…
-  NB. "single-char"
-if. isDigit y do. tabenginex 'valu' ; theItem ; y return. end.
+  NB. "single-char" commands
+if. isDigit y do. tabenginex 'valu' ; theItem ; y		return. end.
 select. y
 case. ,'-' do. tabenginex 'negv' ; theItem 	return.
 case. ,'*' do. tabenginex 'sign' ; theItem 	return.
@@ -349,9 +361,6 @@ end.
 if. 1=#y	do. confirm '>>> single char unhandled: ',brack y 	return. end.
   NB. "command-char" prefixes...
 select. {.y
-case. '!' do. tabenginex }.y      NB. general CAL-instruction
-case. ';' do. 'tabby'&locDo }.y   NB. execute J phrase in _tabby_
-case. ':' do. 'cal'&locDo }.y     NB. execute J phrase in _cal_
 case.  QT do. tabenginex 'name' ; theItem ; }.y dropfinal QT
 case. '=' do. tabenginex 'fmla' ; theItem ; }.y
 case. '[' do. tabenginex 'unit' ; theItem ; }.y dropfinal ']'
@@ -363,6 +372,7 @@ case. '%' do. tabenginex 'divv' ; theItem ; }.y
 case. '^' do. tabenginex 'rtov' ; theItem ; }.y
 case.     do. theItem interpretQty y
 end.
+i.0 0
 )
 
 locDo=: 4 : 0

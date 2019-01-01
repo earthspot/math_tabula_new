@@ -15,6 +15,12 @@ startonload_z_=: start_tabby_
 AABUILT=: '2018-12-31  02:35:28'
 AABUILT=: '2018-12-31  03:30:33'
 AABUILT=: '2018-12-31  03:49:24'
+AABUILT=: '2018-12-31  08:39:53'
+AABUILT=: '2018-12-31  08:40:15'
+AABUILT=: '2018-12-31  09:18:56'
+AABUILT=: '2018-12-31  09:20:14'
+AABUILT=: '2018-12-31  09:25:26'
+AABUILT=: '2018-12-31  10:02:03'
 
 '==================== [tabby] constants ===================='
 
@@ -925,7 +931,9 @@ if. 0=#y do. y=. '$$' end.
 tabengine'open ',":y
 showTtable''
 setFormTitle''
-tab_panel_select 1
+setSelection 1
+tab_panel_select''
+restoreFocusToInputField''
 )
 
 launder=: 3 : 0
@@ -937,7 +945,10 @@ pathof=: ] {.~ [: >: SL i:~ ]
 
 setFormTitle=: 3 : 0
 
-wd 'psel tab; pn ',tabengine 'TFIT'
+]flag=. (tabengine'DIRT')#brack'UNSAVED'
+]fname=. tabengine 'TFIT'
+]title=. sw 'TABULA (flag) (fname)'
+wd 'psel tab; pn ',title
 
 )
 
@@ -957,12 +968,14 @@ TPTT=: pathof path
 confirm tabengine inst,SP,path
 showTtable''
 setFormTitle''
-tab_panel_select 1
+setSelection 1
+tab_panel_select''
+restoreFocusToInputField''
 )
 
 opent=: 3 : 0
 
-if. heldcmnd'' do. start_ttb_'' end.
+if. heldcmnd'' do. start_ttb_'' return. end.
 if. heldshift'' do. opentt'' else. openss'' end.
 )
 
@@ -1299,6 +1312,11 @@ restoreFocusToInputField''
 
 dropfinal=: 4 : 'if. y-: {:x do. }:x else. x end.'
 
+cle=: 3 : 0
+
+if. heldshift'' do. setcalco'' end.
+)
+
 interpretCalco=: 3 : 0
 
 
@@ -1310,11 +1328,18 @@ if. 0=#y do. y=. dltb calco else. y=. dltb y end.
 if. '$$'-:y 		do. openss''			return. end.
 if. (y-:'$')or(y-:,'$') 	do. openss'$'			return. end.
 if. ('$'=y0)and y1 e. '0123456789' do. openss y1		return. end.
+
+select. {.y
+case. ',' do. cle smoutput }.y [wd 'ide show'	return.
+case. '!' do. tabenginex }.y			return.
+case. ';' do. 'tabby'&locDo }.y		return.
+case. ':' do. 'cal'&locDo }.y		return.
+end.
 if. 0=theItem=.line 0 	do. tabenginex 'titl' ; dtlf calco 	return. end.
 if. -.isValidItem theItem	do. confirm '>>> no line selected' 	return. end.
 
 
-if. isDigit y do. tabenginex 'valu' ; theItem ; y return. end.
+if. isDigit y do. tabenginex 'valu' ; theItem ; y		return. end.
 select. y
 case. ,'-' do. tabenginex 'negv' ; theItem 	return.
 case. ,'*' do. tabenginex 'sign' ; theItem 	return.
@@ -1324,9 +1349,6 @@ end.
 if. 1=#y	do. confirm '>>> single char unhandled: ',brack y 	return. end.
 
 select. {.y
-case. '!' do. tabenginex }.y
-case. ';' do. 'tabby'&locDo }.y
-case. ':' do. 'cal'&locDo }.y
 case.  QT do. tabenginex 'name' ; theItem ; }.y dropfinal QT
 case. '=' do. tabenginex 'fmla' ; theItem ; }.y
 case. '[' do. tabenginex 'unit' ; theItem ; }.y dropfinal ']'
@@ -1338,6 +1360,7 @@ case. '%' do. tabenginex 'divv' ; theItem ; }.y
 case. '^' do. tabenginex 'rtov' ; theItem ; }.y
 case.     do. theItem interpretQty y
 end.
+i.0 0
 )
 
 locDo=: 4 : 0
