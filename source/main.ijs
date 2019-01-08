@@ -24,6 +24,7 @@ t=. tabengine'CTBU'
 if. LF e. t do. wd 'psel tab; set panel items *',t
 else.           wd 'psel tab; set panel items ',dquote t
 end.
+setFormTitle''
 ITEMS=: tabengine'ITMS'
 )
 
@@ -170,6 +171,7 @@ decrementToZero=: 0 >. [: <: default
 isErrorMessage=: [: +./ '>>>' E. ,
 
 confirm=: 3 : 0
+NB. smoutput '+++ confirm: ',y NB. TOO MUCH OUTPUT
 NOCONFIRM=: decrementToZero'NOCONFIRM'
 if. isErrorMessage y do. putsb y [NOCONFIRM=: NOCONFIRM_MAX
 elseif. NOCONFIRM=0 do. putsb y
@@ -311,8 +313,11 @@ end.
 tabenginex=: '' ddefine
   NB. serves: interpretCalco, newc, newf, also toolbar tools
   NB. x== line number to select (if specified), _1 to clear
-tabengine y
-confirm tabengine'MSSG'
+]mmm=. ,tabengine y
+NB. ssw '... tabengine''y'' returned: [(mmm)]'
+mssg=. tabengine'MSSG'
+confirm mssg
+NB. ssw '... tabengine''MSSG'' returned: (mssg)'
 showTtable''
 if. 0=#x     do. restoreSelection''  NB. (selects {1} by default)
 elseif. x=_1 do. clearSelection''
@@ -391,4 +396,53 @@ if. isNumeric y do. tabenginex 'valu' ; x ; y return. end.
 qty=. tabengine 'UUUU' ; y
 smoutput llog 'interpretQty x y qty'
 tabenginex 'vunn' ; x ; qty
+)
+
+quit=: 3 : 0
+  NB. quit TABULA
+smoutput '+++ quit: not implemented'
+smoutput '... for now, use: wd''reset'' '
+)
+
+NB. The "plot" handlers
+
+replot=: 3 : 0
+  NB. handler: re-plot with selected item#s
+tabengine 'rplt' ; panel_select
+)
+
+stept=: 3 : 0
+  NB. handler: Plot 0 to {1}
+if. heldshift'' do. stepm'' return. end.
+tabengine 'pl0v' ; panel_select
+)
+
+stepu=: 3 : 0
+  NB. handler: Plot 1 to {1}
+tabengine 'pl1v' ; panel_select
+)
+
+stepm=: 3 : 0
+  NB. handler: Plot -{1} to {1}
+tabengine 'plvv' ; panel_select
+)
+
+plotb=: 3 : 0
+  NB. handler: Bar Chart
+tabengine 'plob' ; panel_select
+)
+
+plotl=: 3 : 0
+  NB. handler: Line Chart
+tabengine 'plol' ; panel_select
+)
+
+plotp=: 3 : 0
+  NB. handler: Pie Chart
+tabengine 'plop' ; panel_select
+)
+
+plots=: 3 : 0
+  NB. handler: Surface Chart
+tabengine 'plos' ; panel_select
 )

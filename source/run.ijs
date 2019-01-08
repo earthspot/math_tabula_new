@@ -21,7 +21,7 @@ load TESTFILE
 smoutput '--- run.ijs: TESTFILE completed without discrepancies: ',TESTFILE
 smoutput 4$LF
 
-NOPLOT_z_=: 1  NB. disable plot package for j807 builds
+NOPLOT_z_=: if807''  NB. disable plot package for j807 builds
 
 onload_z_=: do
 

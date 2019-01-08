@@ -20,6 +20,8 @@ menu savea "Save As..." "" "Save current ttable under new name" "save as...";
 menu delsa "Delete Saved Sample" "" "Delete saved default sample" "delete sample";
 menusep;
 menu stept "Plot 0 to (value)" "" "plot values" "plot";
+menu stepu "Plot 1 to (value)" "" "plot values" "plot";
+menu stepm "Plot -(value) to (value)" "" "plot values" "plot";
 menu plotl "Line Chart" "" "Specify plot: line" "line";
 menu plotb "Bar Chart" "" "Specify plot: bar" "bar";
 menu plotp "Pie Chart" "" "Specify plot: pie" "pie";

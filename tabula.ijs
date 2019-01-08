@@ -21,6 +21,17 @@ AABUILT=: '2018-12-31  09:18:56'
 AABUILT=: '2018-12-31  09:20:14'
 AABUILT=: '2018-12-31  09:25:26'
 AABUILT=: '2018-12-31  10:02:03'
+AABUILT=: '2019-01-01  20:19:09'
+AABUILT=: '2019-01-01  20:36:26'
+AABUILT=: '2019-01-03  05:56:31'
+AABUILT=: '2019-01-03  18:34:17'
+AABUILT=: '2019-01-03  19:25:53'
+AABUILT=: '2019-01-03  19:28:34'
+AABUILT=: '2019-01-06  08:59:27'
+AABUILT=: '2019-01-08  04:10:57'
+AABUILT=: '2019-01-08  05:04:00'
+AABUILT=: '2019-01-08  05:07:29'
+AABUILT=: '2019-01-08  05:51:17'
 
 '==================== [tabby] constants ===================='
 
@@ -73,11 +84,6 @@ TABNDX=: 0
 TIMER_HOVER=: 1000
 UNSET=: '<UNSET>'
 XYWH=: 1500 22 536 450
-
-
-UNDEFINED_z_=: _.
-INVALID_z_=: _.j_.
-
 
 
 calco                              =: UNSET
@@ -224,6 +230,8 @@ menu savea "Save As..." "" "Save current ttable under new name" "save as...";
 menu delsa "Delete Saved Sample" "" "Delete saved default sample" "delete sample";
 menusep;
 menu stept "Plot 0 to (value)" "" "plot values" "plot";
+menu stepu "Plot 1 to (value)" "" "plot values" "plot";
+menu stepm "Plot -(value) to (value)" "" "plot values" "plot";
 menu plotl "Line Chart" "" "Specify plot: line" "line";
 menu plotb "Bar Chart" "" "Specify plot: bar" "bar";
 menu plotp "Pie Chart" "" "Specify plot: pie" "pie";
@@ -475,7 +483,7 @@ tab_saves_button=: tabenginex bind 'savs'
 tab_savet_button=: tabenginex bind 'savt'
 tab_close_button=: tab_close
 tab_print_button=: notimp
-tab_quit_button=:  window_close
+tab_quit_button=:  quit
 tab_undo_button=:  tabenginex bind 'Undo'
 tab_redo_button=:  tabenginex bind 'Redo'
 tab_erasf_button=: 'orph'&childlike
@@ -662,7 +670,7 @@ wd 'timer 0'
 fill_tools''
 )
 
-tab_close=: window_close
+tab_close=: quit
 
 line=: 3 : 0 "0
 
@@ -945,9 +953,9 @@ pathof=: ] {.~ [: >: SL i:~ ]
 
 setFormTitle=: 3 : 0
 
-]flag=. (tabengine'DIRT')#brack'UNSAVED'
-]fname=. tabengine 'TFIT'
-]title=. sw 'TABULA (flag) (fname)'
+flag=. (tabengine'DIRT')#brack'UNSAVED'
+fname=. tabengine 'TFIT'
+title=. sw '(flag) TABULA (fname)'
 wd 'psel tab; pn ',title
 
 )
@@ -1018,6 +1026,7 @@ t=. tabengine'CTBU'
 if. LF e. t do. wd 'psel tab; set panel items *',t
 else.           wd 'psel tab; set panel items ',dquote t
 end.
+setFormTitle''
 ITEMS=: tabengine'ITMS'
 )
 
@@ -1299,8 +1308,9 @@ end.
 tabenginex=: '' ddefine
 
 
-tabengine y
-confirm tabengine'MSSG'
+]mmm=. ,tabengine y
+mssg=. tabengine'MSSG'
+confirm mssg
 showTtable''
 if. 0=#x     do. restoreSelection''
 elseif. x=_1 do. clearSelection''
@@ -1379,6 +1389,52 @@ if. isNumeric y do. tabenginex 'valu' ; x ; y return. end.
 qty=. tabengine 'UUUU' ; y
 smoutput llog 'interpretQty x y qty'
 tabenginex 'vunn' ; x ; qty
+)
+
+quit=: 3 : 0
+
+smoutput '+++ quit: not implemented'
+smoutput '... for now, use: wd''reset'' '
+)
+replot=: 3 : 0
+
+tabengine 'rplt' ; panel_select
+)
+
+stept=: 3 : 0
+
+if. heldshift'' do. stepm'' return. end.
+tabengine 'pl0v' ; panel_select
+)
+
+stepu=: 3 : 0
+
+tabengine 'pl1v' ; panel_select
+)
+
+stepm=: 3 : 0
+
+tabengine 'plvv' ; panel_select
+)
+
+plotb=: 3 : 0
+
+tabengine 'plob' ; panel_select
+)
+
+plotl=: 3 : 0
+
+tabengine 'plol' ; panel_select
+)
+
+plotp=: 3 : 0
+
+tabengine 'plop' ; panel_select
+)
+
+plots=: 3 : 0
+
+tabengine 'plos' ; panel_select
 )
 '==================== [tabby] traceverbs ===================='
 

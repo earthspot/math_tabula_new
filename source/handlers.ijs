@@ -39,7 +39,7 @@ NB. tab_plotp_button=: notimp
 NB. tab_plots_button=: notimp
 tab_close_button=: tab_close
 tab_print_button=: notimp
-tab_quit_button=:  window_close
+tab_quit_button=:  quit
 
 NB. Handlers for menu: Edit
 
@@ -253,7 +253,7 @@ wd 'timer 0'
 fill_tools''  NB. redraw toolbar with no hilite
 )
 
-tab_close=: window_close
+tab_close=: quit  NB. the goAway button, top-left
 
 line=: 3 : 0 "0
   NB. return the y'th selection

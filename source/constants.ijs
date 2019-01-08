@@ -52,11 +52,6 @@ TIMER_HOVER=: 1000 NB. (millisecs) delay before sys_timer_z_''
 UNSET=: '<UNSET>'
 XYWH=: 1500 22 536 450
 
-  NB. ---seem to be absent in CAL...
-UNDEFINED_z_=: _.
-INVALID_z_=: _.j_.
-
-
   NB. create wd-caches
 calco                              =: UNSET
 calco_select                       =: '0 0'
