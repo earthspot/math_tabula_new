@@ -399,9 +399,12 @@ tabenginex 'vunn' ; x ; qty
 )
 
 quit=: 3 : 0
-  NB. quit TABULA
-smoutput '+++ quit: not implemented'
-smoutput '... for now, use: wd''reset'' '
+  NB. quit TABULA, gatekept by unsaved changes
+tabengine 'plox'  NB. close plot window
+if. IDE do. window_close'' return. end.  NB. safe enough for now
+if. -.tabengine 'DIRT' do. exit''
+else. wdinfo 'Save unsaved t-table and try again…'
+end.
 )
 
 NB. The "plot" handlers

@@ -32,6 +32,7 @@ AABUILT=: '2019-01-08  04:10:57'
 AABUILT=: '2019-01-08  05:04:00'
 AABUILT=: '2019-01-08  05:07:29'
 AABUILT=: '2019-01-08  05:51:17'
+AABUILT=: '2019-01-09  12:43:06'
 
 '==================== [tabby] constants ===================='
 
@@ -1393,8 +1394,11 @@ tabenginex 'vunn' ; x ; qty
 
 quit=: 3 : 0
 
-smoutput '+++ quit: not implemented'
-smoutput '... for now, use: wd''reset'' '
+tabengine 'plox'
+if. IDE do. window_close'' return. end.
+if. -.tabengine 'DIRT' do. exit''
+else. wdinfo 'Save unsaved t-table and try again…'
+end.
 )
 replot=: 3 : 0
 
