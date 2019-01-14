@@ -9,4 +9,5 @@ open.ijs
 main.ijs
 traceverbs.ijs
 usertools.ijs
+quit.ijs
 start.ijs

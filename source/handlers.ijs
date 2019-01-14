@@ -156,7 +156,8 @@ tab_Lt3dl_button=: 't3dl'&childlike
 
 NB. Handlers for menu: Help
 
-tab_hinf_button=: updateInfo
+tab_hinf_button=: showttinf
+tab_togi_button=: ide
 
 NB. Handlers for misc controls
 
@@ -310,6 +311,7 @@ tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
 NB. toolbar pseudo-handlers...
 
 newtt=: 3 : 0
+if. -. preload'' do. return. end.
 tabengine 'newt'
 confirm tabengine'MSSG'
 showTtable''
@@ -454,16 +456,6 @@ restoreSelection''
 updatevaluebar''
 restoreFocusToInputField''
 )
-
-NB. add1u=: add1u_like=: 'add1 sub1' ddefine
-NB.   NB. Add 1 to / Subtract 1 from single item
-NB. inst=. pickshift 2$ ;:x
-NB. tabengine inst ; theItem=. line 0
-NB. showTtable''
-NB. restoreSelection''
-NB. updatevaluebar''
-NB. restoreFocusToInputField''
-NB. )
 
 add1u=: 'add1 sub1'&set1u_like  NB. Add 1 / Subtract 1
 addpc=: 'ad1p sb1p'&set1u_like  NB. Add 1% / Subtract 1%

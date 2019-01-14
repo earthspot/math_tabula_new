@@ -60,6 +60,13 @@ panel_select=: SP ,~ ":theItem
 wd 'psel tab; set panel select ',":theItem
 )
 
+fixfont=: 3 : 0
+  NB. the appropriate fixed-font for the platform
+if. if807'' do. 'fixfont'
+else.           '"Menlo" 14'
+end.
+)
+
 tab_open=: 3 : 0
   NB. serves: start
 window_close''
@@ -68,13 +75,15 @@ wd 'psel tab'
 wd 'set g wh _1 64'
 refreshInfo''
 t=. ,:UNSET
-wd 'set cons font ',FIXFONT
+wd 'set cons font ',fixfont''
+wd 'set func font ',fixfont''
+wd 'set panel font ',fixfont''
+wd 'set calco font ',fixfont''
+  NB. DONT set fixfont'' for preci or unico -too narrow
 wd 'set cons items *',x2f t
-wd 'set func font ',FIXFONT
 wd 'set func items *',x2f t
 wd 'set preci items *', o2f ": i.16
 wd 'set unico items *',CONTENT_UNICO
-wd 'set panel font ',FIXFONT
 wd 'set panel items *',UNSET
 NB. confirm 'Click a line and perform some operation on it...'
 if. PMOVES do.
@@ -173,7 +182,10 @@ isErrorMessage=: [: +./ '>>>' E. ,
 confirm=: 3 : 0
 NB. smoutput '+++ confirm: ',y NB. TOO MUCH OUTPUT
 NOCONFIRM=: decrementToZero'NOCONFIRM'
-if. isErrorMessage y do. putsb y [NOCONFIRM=: NOCONFIRM_MAX
+if. isErrorMessage y do.
+  wd'beep'
+  putsb y
+  NOCONFIRM=: NOCONFIRM_MAX
 elseif. NOCONFIRM=0 do. putsb y
 end.
 i.0 0
@@ -196,20 +208,22 @@ i.0 0
 )
 
 refreshInfo=: 3 : 0
-  NB. return CAL text for the Info panel
+  NB. return CAL text to show in the Info panel
 wd 'set info text *' , tabengine 'INFO'
 )
 
 supplyInfo=: 3 : 0
-  NB.  supply text y to CAL as the new Info
+  NB.  supply text (y) to CAL as the new Info panel contents
 tabengine 'info ',y
+setFormTitle''
 confirm sw '+++ supplyInfo: ($y) bytes registered'
 )
 
 updin=: updateInfo=: 3 : 0
   NB.  notify CAL of the current contents of "info" cache
 tabengine 'info ',info
-confirm sw '+++ updateInfo: ($y) bytes registered from "info" tab'
+setFormTitle''
+confirm sw '+++ updateInfo: ($info) bytes registered from "info" tab'
 )
 
 setpreci=: 3 : 0
@@ -396,15 +410,6 @@ if. isNumeric y do. tabenginex 'valu' ; x ; y return. end.
 qty=. tabengine 'UUUU' ; y
 smoutput llog 'interpretQty x y qty'
 tabenginex 'vunn' ; x ; qty
-)
-
-quit=: 3 : 0
-  NB. quit TABULA, gatekept by unsaved changes
-tabengine 'plox'  NB. close plot window
-if. IDE do. window_close'' return. end.  NB. safe enough for now
-if. -.tabengine 'DIRT' do. exit''
-else. wdinfo 'Save unsaved t-table and try again…'
-end.
 )
 
 NB. The "plot" handlers

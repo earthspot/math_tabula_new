@@ -6,6 +6,8 @@ open BUILTFILE
 open TESTFILE
 )
 
+IDE_z_=: 1  NB. can be assumed if this script is run
+
 cocurrent 'base'
 
 BUILTFILE_z_=: 1!:1 <jpath'~Gittab/builtfile'	NB. effectively: '~Gittab/tabula.ijs'

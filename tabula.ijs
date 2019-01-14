@@ -1,5 +1,5 @@
 0 :0
-Monday 31 December 2018  02:45:18
+Saturday 12 January 2019  08:41:56
 -
 TABULA: scientific units calculator
 -simplified architecture
@@ -10,29 +10,21 @@ coclass LOC=.'tabby'
 clear LOC
 coinsert 'jgl2'
 onload_z_=: empty
-invalplot=: empty
 startonload_z_=: start_tabby_
-AABUILT=: '2018-12-31  02:35:28'
-AABUILT=: '2018-12-31  03:30:33'
-AABUILT=: '2018-12-31  03:49:24'
-AABUILT=: '2018-12-31  08:39:53'
-AABUILT=: '2018-12-31  08:40:15'
-AABUILT=: '2018-12-31  09:18:56'
-AABUILT=: '2018-12-31  09:20:14'
-AABUILT=: '2018-12-31  09:25:26'
-AABUILT=: '2018-12-31  10:02:03'
-AABUILT=: '2019-01-01  20:19:09'
-AABUILT=: '2019-01-01  20:36:26'
-AABUILT=: '2019-01-03  05:56:31'
-AABUILT=: '2019-01-03  18:34:17'
-AABUILT=: '2019-01-03  19:25:53'
-AABUILT=: '2019-01-03  19:28:34'
-AABUILT=: '2019-01-06  08:59:27'
-AABUILT=: '2019-01-08  04:10:57'
-AABUILT=: '2019-01-08  05:04:00'
-AABUILT=: '2019-01-08  05:07:29'
-AABUILT=: '2019-01-08  05:51:17'
-AABUILT=: '2019-01-09  12:43:06'
+fixfont=: 3 : 0
+
+if. if807'' do. 'fixfont'
+else.           '"Menlo" 14'
+end.
+)
+
+AABUILT=: '2019-01-12  08:51:42'
+AABUILT=: '2019-01-12  09:05:52'
+AABUILT=: '2019-01-12  09:19:15'
+AABUILT=: '2019-01-12  16:03:01'
+AABUILT=: '2019-01-13  23:56:01'
+AABUILT=: '2019-01-13  23:57:45'
+AABUILT=: '2019-01-13  23:58:19'
 
 '==================== [tabby] constants ===================='
 
@@ -74,9 +66,8 @@ COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
 DIAMETER=: 30
 DQ=: '"'
-FIXFONT=: '"Menlo" 14'
 ITEMS=: i.0
-NOCONFIRM_MAX=: 10
+NOCONFIRM_MAX=: 20
 PEN_WIDTH=: 3
 PMOVES=: 0
 PNG=: temp 'tabula-toolbar.png'
@@ -212,7 +203,7 @@ onload 'imgview temp ''toucan.jpg'''
 
 '==================== [tabby] forms ===================='
 0 :0
-Monday 24 September 2018  03:56:40
+Saturday 12 January 2019  08:51:20
 )
 
 coclass 'tabby'
@@ -380,6 +371,7 @@ menupopz;
 menupop "Help";
 menu hlpt "Help for TABULA" "" "TABULA help" "help";
 menu hinf "Info for this ttable" "" "ttable info" "info";
+menu togi "Toggle J IDE" "" "toggle IDE" "IDE";
 menupopz;
 cc g isidraw;
 cc tabs tab;
@@ -577,7 +569,8 @@ tab_Lt3ml_button=: 't3ml'&childlike
 tab_Lt1dl_button=: 't1dl'&childlike
 tab_Lt2dl_button=: 't2dl'&childlike
 tab_Lt3dl_button=: 't3dl'&childlike
-tab_hinf_button=: updateInfo
+tab_hinf_button=: showttinf
+tab_togi_button=: ide
 tab_calco_button=:           interpretCalco
 tab_calco_changed=: empty
 tab_calco_char=: empty
@@ -724,6 +717,7 @@ end.
 
 tools=: 3 : 'b4x firstwords 3}."1 TOOLHINT'
 newtt=: 3 : 0
+if. -. preload'' do. return. end.
 tabengine 'newt'
 confirm tabengine'MSSG'
 showTtable''
@@ -865,6 +859,7 @@ restoreSelection''
 updatevaluebar''
 restoreFocusToInputField''
 )
+
 add1u=: 'add1 sub1'&set1u_like
 addpc=: 'ad1p sb1p'&set1u_like
 by2pi=: 'pimv ptmv'&set1u_like
@@ -921,21 +916,10 @@ CONTAINS IN-LINE ERROR/CONFIRMATION MESSAGES
 
 coclass 'tabby'
 
-hasChanged=: 3 : 0
-
-if. (tabengine 'DIRT') and -.heldalt'' do.
-  prompt=. 'Save current ttable?'
-  ask=. 'Ttable: ',tabengine 'TITL'
-  ask=. ask,LF,'has unsaved structural changes.'
-  ask=. ask,LF,'OK to continue (and lose the changes)?'
-  if. wdquery prompt;ask do.
-    confirm '>>> New/load ttable -cancelled'
-    1 return.end.end.
-0 return.
-)
 
 openss=: 3 : 0
 
+if. -. preload'' do. return. end.
 if. 0=#y do. y=. '$$' end.
 tabengine'open ',":y
 showTtable''
@@ -965,14 +949,16 @@ opentt=: 'open' ddefine
 
 
 
+if. (x-:'open') do.
+  if. -.preload'' do. return. end.
+end.
 TPTT=: 'TPTT' default~ tabengine 'TPTT'
-if. hasChanged'' do. return. end.
 inst=. 4{.x
 invalplot''
 title=. sw 'Choose a ttable to (x)…'
 
 path=. launder wd sw 'mb open "(title)" *',TPTT
-if. 0=#path do. confirm sw '>>> (x)...cancelled' return. end.
+if. 0=#path do. confirm sw '>>> (x) ...cancelled' return. end.
 TPTT=: pathof path
 confirm tabengine inst,SP,path
 showTtable''
@@ -1063,6 +1049,13 @@ panel_select=: SP ,~ ":theItem
 wd 'psel tab; set panel select ',":theItem
 )
 
+fixfont=: 3 : 0
+
+if. if807'' do. 'fixfont'
+else.           '"Menlo" 14'
+end.
+)
+
 tab_open=: 3 : 0
 
 window_close''
@@ -1071,13 +1064,15 @@ wd 'psel tab'
 wd 'set g wh _1 64'
 refreshInfo''
 t=. ,:UNSET
-wd 'set cons font ',FIXFONT
+wd 'set cons font ',fixfont''
+wd 'set func font ',fixfont''
+wd 'set panel font ',fixfont''
+wd 'set calco font ',fixfont''
+
 wd 'set cons items *',x2f t
-wd 'set func font ',FIXFONT
 wd 'set func items *',x2f t
 wd 'set preci items *', o2f ": i.16
 wd 'set unico items *',CONTENT_UNICO
-wd 'set panel font ',FIXFONT
 wd 'set panel items *',UNSET
 if. PMOVES do.
   wd :: 0: 'pmoves ' , ":XYWH
@@ -1170,7 +1165,10 @@ isErrorMessage=: [: +./ '>>>' E. ,
 
 confirm=: 3 : 0
 NOCONFIRM=: decrementToZero'NOCONFIRM'
-if. isErrorMessage y do. putsb y [NOCONFIRM=: NOCONFIRM_MAX
+if. isErrorMessage y do.
+  wd'beep'
+  putsb y
+  NOCONFIRM=: NOCONFIRM_MAX
 elseif. NOCONFIRM=0 do. putsb y
 end.
 i.0 0
@@ -1200,13 +1198,15 @@ wd 'set info text *' , tabengine 'INFO'
 supplyInfo=: 3 : 0
 
 tabengine 'info ',y
+setFormTitle''
 confirm sw '+++ supplyInfo: ($y) bytes registered'
 )
 
 updin=: updateInfo=: 3 : 0
 
 tabengine 'info ',info
-confirm sw '+++ updateInfo: ($y) bytes registered from "info" tab'
+setFormTitle''
+confirm sw '+++ updateInfo: ($info) bytes registered from "info" tab'
 )
 
 setpreci=: 3 : 0
@@ -1391,15 +1391,6 @@ qty=. tabengine 'UUUU' ; y
 smoutput llog 'interpretQty x y qty'
 tabenginex 'vunn' ; x ; qty
 )
-
-quit=: 3 : 0
-
-tabengine 'plox'
-if. IDE do. window_close'' return. end.
-if. -.tabengine 'DIRT' do. exit''
-else. wdinfo 'Save unsaved t-table and try again…'
-end.
-)
 replot=: 3 : 0
 
 tabengine 'rplt' ; panel_select
@@ -1558,7 +1549,7 @@ smoutput >TRACEVERBS
 
 '==================== [tabby] user.ijs ===================='
 0 :0
-Friday 30 November 2018  07:44:16
+Saturday 12 January 2019  16:09:03
 )
 
 coclass 'tabby'
@@ -1587,12 +1578,65 @@ smoutput '============================='
 
 green=: 3 : 0
 usertool''
+tabenginex 'tran'
 )
 
 blue=: 3 : 0
 usertool''
 if. heldcmnd'' do. smoutput'>>> blue: cmnd' return. end.
 smoutput '>>> blue: not implemented'
+)
+
+'==================== [quit] main ===================='
+0 :0
+Saturday 12 January 2019  07:46:33
+-
+Adapted from TABULA[OLD]
+CONTAINS IN-LINE ERROR/CONFIRMATION MESSAGES
+--replace if MESSAGE table provided in due course.
+-
+if. -. preload'' do. return. end.
+…In TABULA[OLD], called at top of: newtt opens opent quit
+)
+
+coclass 'tabby'
+
+invalplot=: 3 : 0
+
+tabengine 'plox'
+)
+
+inval_nuterm=: 3 : 0
+
+try. nuterm_close_nut_'' catch. end.
+)
+
+preload=: 3 : 0
+
+
+if. tabengine'DIRT' do.
+  par=. 'Save current t-table?'
+  msg=. 'The t-table: ', tabengine'TITL'	
+  msg=. msg,LF, '-has significant unsaved changes'	
+  msg=. msg,LF, '-which will be lost if you continue.' 	
+  msg=. msg,LF,LF, '(To rescue this t-table, press No)'	
+  msg=. msg,LF,LF,LF, 'OK to continue?'	
+  if. wdquery par;msg do.
+    confirm '>>> User cancelled: New/Load t-table'		
+    0 return.
+  end.
+end.
+invalplot''
+1 return.
+)
+
+quit=: 3 : 0
+
+if. -. preload'' do. return. end.
+window_close''
+if. IDE do. return. end.
+
+exit''
 )
 
 '==================== [tabby] start ===================='

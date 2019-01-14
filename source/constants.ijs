@@ -39,10 +39,8 @@ COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
 DIAMETER=: 30
 DQ=: '"'
-NB. FIXFONT=: 'fixfont'  NB. alternative for j807 +
-FIXFONT=: '"Menlo" 14'  NB. NEEDED for j805
 ITEMS=: i.0  NB. cache of valid item ids after last tabengine call
-NOCONFIRM_MAX=: 10  NB. suppress: confirm for this number of calls
+NOCONFIRM_MAX=: 20  NB. suppress: confirm for this number of calls
 PEN_WIDTH=: 3
 PMOVES=: 0  NB. =1 to use new: 'pmoves' wd-feature (j807 onwards)
 PNG=: temp 'tabula-toolbar.png'

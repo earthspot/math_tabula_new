@@ -1,7 +1,7 @@
 	NB. tabby - user.ijs
 '==================== [tabby] user.ijs ===================='
 0 :0
-Friday 30 November 2018  07:44:16
+Saturday 12 January 2019  16:09:03
 )
 
 coclass 'tabby'
@@ -30,7 +30,7 @@ smoutput '============================='
 
 green=: 3 : 0
 usertool''
-NB. sampleview''
+tabenginex 'tran'
 )
 
 blue=: 3 : 0

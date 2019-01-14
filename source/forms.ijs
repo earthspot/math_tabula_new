@@ -1,7 +1,7 @@
  	NB. tabby - forms.ijs
 '==================== [tabby] forms ===================='
 0 :0
-Monday 24 September 2018  03:56:40
+Saturday 12 January 2019  08:51:20
 )
 
 coclass 'tabby'
@@ -169,6 +169,7 @@ menupopz;
 menupop "Help";
 menu hlpt "Help for TABULA" "" "TABULA help" "help";
 menu hinf "Info for this ttable" "" "ttable info" "info";
+menu togi "Toggle J IDE" "" "toggle IDE" "IDE";
 menupopz;
 cc g isidraw;
 cc tabs tab;
