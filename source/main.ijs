@@ -1,17 +1,17 @@
 	NB. tabby - main.ijs
 '==================== [tabby] main ===================='
 0 :0
-Thursday 20 September 2018  08:46:58
+Tuesday 15 January 2019  01:54:11
 )
 
 coclass 'tabby'
 
-  NB. These are probably platform-specific
-heldshift=: 	3 : '1=".sysmodifiers'
-heldcmnd=: 	3 : '2=".sysmodifiers'
-heldshiftcmnd=:	3 : '3=".sysmodifiers'
-heldalt=: 	3 : '4=".sysmodifiers'
-heldshiftalt=:	3 : '5=".sysmodifiers'
+  NB. Moved to source file: platform_specific.ijs
+NB. heldshift=: 	3 : '1=".sysmodifiers'
+NB. heldcmnd=: 	3 : '2=".sysmodifiers'
+NB. heldshiftcmnd=:	3 : '3=".sysmodifiers'
+NB. heldalt=: 	3 : '4=".sysmodifiers'
+NB. heldshiftalt=:	3 : '5=".sysmodifiers'
 
 pickshift=: 3 : 0
   NB. return (0 pick y) or 1 pick y)
