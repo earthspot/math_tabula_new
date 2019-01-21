@@ -1573,7 +1573,8 @@ smoutput '>>> black: sllog is: ',5!:5<'sllog'
 
 red=: 3 : 0
 usertool''
-smoutput '============================='
+NB. smoutput '============================='
+load '~/plotsample.ijs'
 )
 
 green=: 3 : 0
