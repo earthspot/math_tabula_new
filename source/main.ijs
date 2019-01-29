@@ -75,13 +75,14 @@ wd 'psel tab'
 wd 'set g wh _1 64'
 refreshInfo''
 t=. ,:UNSET
-wd 'set cons font ',fixfont''
-wd 'set func font ',fixfont''
+NB. wd 'set cons font ',fixfont''
+NB. wd 'set func font ',fixfont''
+wd 'set func font "Menlo" 10'
 wd 'set panel font ',fixfont''
 wd 'set calco font ',fixfont''
   NB. DONT set fixfont'' for preci or unico -too narrow
-wd 'set cons items *',x2f t
-wd 'set func items *',x2f t
+NB. wd 'set cons items *',x2f t
+NB. wd 'set func items *',x2f t
 wd 'set preci items *', o2f ": i.16
 wd 'set unico items *',CONTENT_UNICO
 wd 'set panel items *',UNSET
@@ -155,17 +156,49 @@ restoreFocusToInputField''
 fillconsts=: 3 : 0
   NB. get filtered UUC via CAL
 inst=. (".casec) pick ;:'WUUC VUUC'
-TEXT=: tabengine inst ; searchc
-wd 'psel tab; set cons items *',listboxSafe TEXT
+BOXED=. boxcons x4f TTEXT=. tabengine inst ; searchc
+wd 'psel tab'
+wd 'set cons shape ',":SHAPE=. $BOXED
+wd 'set cons protect ',": , SHAPE$ 0 1 1 1  NB. protect some cols
+wd 'set cons hdr *Label Units Val Units'
+wd 'set cons data *', ; SP ,each dquote each BOXED
+wd 'set cons font ".SF NS Text" 12'
+wd 'set cons resizecol'
 )
 
 fillfuncts=: 3 : 0
   NB. get filtered UUF via CAL
 inst=. (".casef) pick ;:'WUUF VUUF'
-TEXT=: tabengine inst ; searchf
-wd 'psel tab; set func items *',listboxSafe TEXT
+BOXED=. boxfunc x4f TEXT=. tabengine inst ; searchf
+wd 'psel tab'
+wd 'set func shape ',":SHAPE=. $BOXED
+wd 'set func protect ',": , SHAPE$ 0 1 1  NB. protect some cols
+wd 'set func hdr *Label Units Formula'
+wd 'set func data *', ; SP ,each dquote each BOXED
+wd 'set func font ".SF NS Text" 12'
+wd 'set func resizecol'
 )
 
+boxcons=: 3 : 0 "1
+  NB. cut 1 LINE OF the text of UUF (cf udat_uu_)
+'y zdesc'=. 2{. ']'cut y
+zdesc=. dltb zdesc -.TAB
+'y znits'=. 2{. '['cut y
+zvalu=. (i=. y i. SP){.y=. deb y-.TAB
+znitv=. }.i}.y
+zdesc; znits; zvalu; znitv
+)
+
+boxfunc=: 3 : 0 "1
+  NB. cut 1 LINE OF the text of UUF (cf udat_uu_)
+'y zdesc'=. 2{. ']'cut y
+zdesc=. dltb zdesc -.TAB
+'y znits'=. 2{. '['cut y
+zfmla=. deb y-.TAB
+zdesc; znits; zfmla
+)
+
+0 :0
 listboxSafe=: 3 : 0
   NB. LF-sep text: (y) in a form Qt listbox won't munge
 DQ,~ DQ, y rplc LF ; DQ,SP,DQ
@@ -349,6 +382,7 @@ if. heldshift'' do. setcalco'' end.
 )
 
 interpretCalco=: 3 : 0
+  NB. BETTER AS A DAISYCHAIN? <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   NB. interpret the user-input command string: y
   NB. If y is empty then ASSUME called as a wd-handler
   NB. In which case interpret contents of TABU wd-cache: calco
@@ -408,7 +442,7 @@ interpretQty=: 4 : 0
   NB. treat y as a qty to go into item {x} --if compatible
 if. isNumeric y do. tabenginex 'valu' ; x ; y return. end.
 qty=. tabengine 'UUUU' ; y
-smoutput llog 'interpretQty x y qty'
+NB. smoutput llog 'interpretQty x y qty'
 tabenginex 'vunn' ; x ; qty
 )
 

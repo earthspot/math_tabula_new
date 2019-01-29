@@ -25,6 +25,28 @@ AABUILT=: '2019-01-12  16:03:01'
 AABUILT=: '2019-01-13  23:56:01'
 AABUILT=: '2019-01-13  23:57:45'
 AABUILT=: '2019-01-13  23:58:19'
+AABUILT=: '2019-01-29  03:39:43'
+AABUILT=: '2019-01-29  03:41:44'
+AABUILT=: '2019-01-29  03:53:40'
+AABUILT=: '2019-01-29  03:59:10'
+AABUILT=: '2019-01-29  04:00:20'
+AABUILT=: '2019-01-29  04:04:02'
+AABUILT=: '2019-01-29  04:07:57'
+AABUILT=: '2019-01-29  04:22:07'
+AABUILT=: '2019-01-29  04:23:25'
+AABUILT=: '2019-01-29  04:29:04'
+AABUILT=: '2019-01-29  04:33:29'
+AABUILT=: '2019-01-29  04:40:14'
+AABUILT=: '2019-01-29  04:42:03'
+AABUILT=: '2019-01-29  04:48:16'
+AABUILT=: '2019-01-29  04:54:21'
+AABUILT=: '2019-01-29  05:06:42'
+AABUILT=: '2019-01-29  05:38:37'
+AABUILT=: '2019-01-29  05:47:39'
+AABUILT=: '2019-01-29  05:52:19'
+AABUILT=: '2019-01-29  05:56:38'
+AABUILT=: '2019-01-29  06:05:23'
+AABUILT=: '2019-01-29  06:12:40'
 
 '==================== [tabby] constants ===================='
 
@@ -384,14 +406,14 @@ cc xunit combobox;
 bin z;
 cc panel listbox multiple;
 tabnew Constants;
-cc cons listbox;
+cc cons table;
 bin h;
 cc cappend button;cn "Append";
 cc searchc edit;
 cc casec checkbox;cn "case-sensitive";
 bin z;
 tabnew Functions;
-cc func listbox;
+cc func table;
 bin h;
 cc fappend button;cn "Append";
 cc searchf edit;
@@ -578,9 +600,15 @@ tab_cappend_button=:         newc
 tab_casec_button=:           fillconsts
 tab_casef_button=:           fillfuncts
 tab_cons_button=:            newc
+ tab_cons_mark=: empty
+ tab_cons_mbldbl=:            newc
+ tab_cons_mbldown=: empty
 tab_cons_select=: empty
 tab_fappend_button=:         newf
 tab_func_button=:            newf
+ tab_func_mark=: empty
+ tab_func_mbldbl=:            newf
+ tab_func_mbldown=: empty
 tab_func_select=: empty
 tab_g_focus=: empty
 tab_g_focuslost=: empty
@@ -614,7 +642,7 @@ holdcons=: '=' ,~ ]
 newc=: 3 : 0
 
 
-cons newc y
+y newc~ consLine''
 :
 	x_tabby_=: x
 if. 0=#x-.SP do.
@@ -628,7 +656,7 @@ end.
 newf=: 3 : 0
 
 
-func newf y
+y newf~ funcLine''
 :
 if. 0=#x-.SP do.
   confirm '>>> No action: select a single line'
@@ -636,6 +664,18 @@ else.
   activateTabWithId 0
   _ tabenginex 'func ',x
 end.
+)
+
+consLine=: 3 : 0
+
+'zdesc znits znitv zvalu'=: cuT wd'psel tab; get cons row ',firstwords cons
+sw '(zvalu) (znitv) [(znits)] (zdesc)'
+)
+
+funcLine=: 3 : 0
+
+'zdesc znits zfmla'=: cuT wd'psel tab; get func row ',firstwords func
+sw '(zfmla) [(znits)] (zdesc)'
 )
 
 insertIDs=: 3 : 0
@@ -990,17 +1030,11 @@ end.
 
 '==================== [tabby] main ===================='
 0 :0
-Thursday 20 September 2018  08:46:58
+Tuesday 15 January 2019  01:54:11
 )
 
 coclass 'tabby'
 
-
-heldshift=: 	3 : '1=".sysmodifiers'
-heldcmnd=: 	3 : '2=".sysmodifiers'
-heldshiftcmnd=:	3 : '3=".sysmodifiers'
-heldalt=: 	3 : '4=".sysmodifiers'
-heldshiftalt=:	3 : '5=".sysmodifiers'
 
 pickshift=: 3 : 0
 
@@ -1064,13 +1098,10 @@ wd 'psel tab'
 wd 'set g wh _1 64'
 refreshInfo''
 t=. ,:UNSET
-wd 'set cons font ',fixfont''
-wd 'set func font ',fixfont''
+wd 'set func font "Menlo" 10'
 wd 'set panel font ',fixfont''
 wd 'set calco font ',fixfont''
 
-wd 'set cons items *',x2f t
-wd 'set func items *',x2f t
 wd 'set preci items *', o2f ": i.16
 wd 'set unico items *',CONTENT_UNICO
 wd 'set panel items *',UNSET
@@ -1139,17 +1170,49 @@ restoreFocusToInputField''
 fillconsts=: 3 : 0
 
 inst=. (".casec) pick ;:'WUUC VUUC'
-TEXT=: tabengine inst ; searchc
-wd 'psel tab; set cons items *',listboxSafe TEXT
+BOXED=. boxcons x4f TTEXT=. tabengine inst ; searchc
+wd 'psel tab'
+wd 'set cons shape ',":SHAPE=. $BOXED
+wd 'set cons protect ',": , SHAPE$ 0 1 1 1
+wd 'set cons hdr *Label Units Val Units'
+wd 'set cons data *', ; SP ,each dquote each BOXED
+wd 'set cons font ".SF NS Text" 12'
+wd 'set cons resizecol'
 )
 
 fillfuncts=: 3 : 0
 
 inst=. (".casef) pick ;:'WUUF VUUF'
-TEXT=: tabengine inst ; searchf
-wd 'psel tab; set func items *',listboxSafe TEXT
+BOXED=. boxfunc x4f TEXT=. tabengine inst ; searchf
+wd 'psel tab'
+wd 'set func shape ',":SHAPE=. $BOXED
+wd 'set func protect ',": , SHAPE$ 0 1 1
+wd 'set func hdr *Label Units Formula'
+wd 'set func data *', ; SP ,each dquote each BOXED
+wd 'set func font ".SF NS Text" 12'
+wd 'set func resizecol'
 )
 
+boxcons=: 3 : 0 "1
+
+'y zdesc'=. 2{. ']'cut y
+zdesc=. dltb zdesc -.TAB
+'y znits'=. 2{. '['cut y
+zvalu=. (i=. y i. SP){.y=. deb y-.TAB
+znitv=. }.i}.y
+zdesc; znits; zvalu; znitv
+)
+
+boxfunc=: 3 : 0 "1
+
+'y zdesc'=. 2{. ']'cut y
+zdesc=. dltb zdesc -.TAB
+'y znits'=. 2{. '['cut y
+zfmla=. deb y-.TAB
+zdesc; znits; zfmla
+)
+
+0 :0
 listboxSafe=: 3 : 0
 
 DQ,~ DQ, y rplc LF ; DQ,SP,DQ
@@ -1332,6 +1395,7 @@ interpretCalco=: 3 : 0
 
 
 
+
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
 'y0 y1'=. 2{.y
 
@@ -1388,7 +1452,6 @@ interpretQty=: 4 : 0
 
 if. isNumeric y do. tabenginex 'valu' ; x ; y return. end.
 qty=. tabengine 'UUUU' ; y
-smoutput llog 'interpretQty x y qty'
 tabenginex 'vunn' ; x ; qty
 )
 replot=: 3 : 0
@@ -1573,7 +1636,6 @@ smoutput '>>> black: sllog is: ',5!:5<'sllog'
 
 red=: 3 : 0
 usertool''
-NB. smoutput '============================='
 load '~/plotsample.ijs'
 )
 
@@ -1640,6 +1702,22 @@ if. IDE do. return. end.
 exit''
 )
 
+'==================== [tabby] platform_specific ===================='
+0 :0
+Tuesday 15 January 2019  01:50:57
+-
+Bring here all definitions suspected of being platform-specific
+)
+
+coclass 'tabby'
+
+
+heldshift=: 	3 : '1=".sysmodifiers'
+heldcmnd=: 	3 : '2=".sysmodifiers'
+heldshiftcmnd=:	3 : '3=".sysmodifiers'
+heldalt=: 	3 : '4=".sysmodifiers'
+heldshiftalt=:	3 : '5=".sysmodifiers'
+
 '==================== [tabby] start ===================='
 
 cocurrent 'tabby'
@@ -1650,9 +1728,9 @@ wd 'timer 0'
 load '~CAL/cal.ijs'
 
 tabengine=: tabengine_cal_
- sesi_z_=: smoutput
+tx_z_=: tabenginex_tabby_
 
-tabengine 'Init'
+start_cal_ '$$'
 tab_open''
 setpreci 3
 setunico 1

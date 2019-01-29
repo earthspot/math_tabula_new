@@ -11,7 +11,7 @@ load '~CAL/cal.ijs'  NB. makes UU available too
 tabengine=: tabengine_cal_  NB. replace dummy local CAL link
 tx_z_=: tabenginex_tabby_  NB. to allow e.g. CAL to update UI directly
   NB. initialize and load a t-table to show in: panel
-tabengine 'Init'  NB. start with SAMPLE t-table
+start_cal_ '$$'  NB. start with SAMPLE t-table
 tab_open''
 setpreci 3  NB. set numeric precision for value column
 setunico 1  NB. set SI conformance level for units column

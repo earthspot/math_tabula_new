@@ -168,9 +168,15 @@ tab_cappend_button=:         newc
 tab_casec_button=:           fillconsts
 tab_casef_button=:           fillfuncts
 tab_cons_button=:            newc
+ tab_cons_mark=: empty
+ tab_cons_mbldbl=:            newc
+ tab_cons_mbldown=: empty
 tab_cons_select=: empty
 tab_fappend_button=:         newf
 tab_func_button=:            newf
+ tab_func_mark=: empty
+ tab_func_mbldbl=:            newf
+ tab_func_mbldown=: empty
 tab_func_select=: empty
 tab_g_focus=: empty
 tab_g_focuslost=: empty
@@ -204,7 +210,7 @@ holdcons=: '=' ,~ ]
 newc=: 3 : 0
   NB. append new constant to t-table
   NB. cannot use ddefine here -needs current value of: cons
-cons newc y
+y newc~ consLine''
 :
 	x_tabby_=: x
 if. 0=#x-.SP do.
@@ -218,7 +224,7 @@ end.
 newf=: 3 : 0
   NB. append new function line(s) to t-table
   NB. cannot use ddefine here -needs current value of: func
-func newf y
+y newf~ funcLine''
 :
 if. 0=#x-.SP do.
   confirm '>>> No action: select a single line'
@@ -226,6 +232,18 @@ else.
   activateTabWithId 0
   _ tabenginex 'func ',x
 end.
+)
+
+consLine=: 3 : 0
+  NB. reconstitute UUC line from table, c/f boxcons [main]
+'zdesc znits znitv zvalu'=: cuT wd'psel tab; get cons row ',firstwords cons
+sw '(zvalu) (znitv) [(znits)] (zdesc)'
+)
+
+funcLine=: 3 : 0
+  NB. reconstitute UUF line from table, c/f boxfunc [main]
+'zdesc znits zfmla'=: cuT wd'psel tab; get func row ',firstwords func
+sw '(zfmla) [(znits)] (zdesc)'
 )
 
 insertIDs=: 3 : 0
