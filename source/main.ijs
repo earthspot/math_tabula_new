@@ -241,12 +241,12 @@ i.0 0
 )
 
 refreshInfo=: 3 : 0
-  NB. return CAL text to show in the Info panel
+  NB. return CAL text to show in the Info (=Notes) panel
 wd 'set info text *' , tabengine 'INFO'
 )
 
 supplyInfo=: 3 : 0
-  NB.  supply text (y) to CAL as the new Info panel contents
+  NB.  supply text (y) to CAL as the new Info (=Notes) panel contents
 tabengine 'info ',y
 setFormTitle''
 confirm sw '+++ supplyInfo: ($y) bytes registered'
