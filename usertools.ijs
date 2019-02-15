@@ -1,40 +1,37 @@
 	NB. tabby - user.ijs
 '==================== [tabby] user.ijs ===================='
 0 :0
-Friday 30 November 2018  07:44:16
+Friday 15 February 2019  19:49:58
+-
+THIS IS THE ALTERNATIVE SCRIPT loaded by: start
+USERTOOLS_z_ path specified in: header.ijs
 )
 
 coclass 'tabby'
 
-  NB. path to this script, for redefining user tools in-session
-USERSCRIPT_z_=: jpath '~Gittab/source/user.ijs'
-
 usertool=: 3 : 0
   NB. common to all user-definable tools
 ssw '+++ usertool: sysmodifiers=(sysmodifiers)'
-if. heldshift'' do. open USERSCRIPT_z_ return. end.
+if. heldshift'' do. open USERTOOLS_z_ return. end.
+if. heldcmnd'' do. ide 1 return. end.
 )
 
 black=: 3 : 0
 usertool''
-if. 'empty'-: 5!:5<'sllog' do. sllog=: sllog1=: smoutput@llog
-else. sllog=: empty
-end.
-smoutput '>>> black: sllog is: ',5!:5<'sllog'
+confirm '>>> black: not implemented'
 )
 
 red=: 3 : 0
 usertool''
-smoutput '============================='
+confirm '>>> red: not implemented'
 )
 
 green=: 3 : 0
 usertool''
-NB. sampleview''
+confirm '>>> green: not implemented'
 )
 
 blue=: 3 : 0
 usertool''
-if. heldcmnd'' do. smoutput'>>> blue: cmnd' return. end.
-smoutput '>>> blue: not implemented'
+confirm '>>> blue: not implemented'
 )

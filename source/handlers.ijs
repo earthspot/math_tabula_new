@@ -259,7 +259,7 @@ n=. 16  NB. (count) number of icons in a row
 h=. w=. 32 NB. (px) height and width of an icon
 'X Y'=. 2{.".sysdata
 z=. n* Y>h
-TOOLID=: z + <. X%w
+TOOLID=: 32 <. z + <.X%w
 fill_tools TOOLID  NB. hilite hovered tool
 confirm insertIDs 3 }. TOOLID { TOOLHINT  NB. drop just the tool id
   NB. Don't let hilite stay on forever…

@@ -6,6 +6,7 @@ cocurrent 'tabby'
 start=: 3 : 0
 traceverbs 'OFF'
 wd 'timer 0'
+load :: 0: USERTOOLS_z_
 load '~CAL/cal.ijs'  NB. makes UU available too
   NB. ...but all access to UU should be done via CAL instructions
 tabengine=: tabengine_cal_  NB. replace dummy local CAL link

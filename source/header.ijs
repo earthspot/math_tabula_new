@@ -1,5 +1,5 @@
 0 :0
-Saturday 12 January 2019  08:41:56
+Friday 15 February 2019  19:43:30
 -
 TABULA: scientific units calculator
 -simplified architecture
@@ -10,43 +10,24 @@ coclass LOC=.'tabby'
 clear LOC
 coinsert 'jgl2'	NB. use gl2 verbs to paint the window
 onload_z_=: empty
-startonload_z_=: start_tabby_
-NB. startonload_z_=: empty
+startonload_z_=: start_tabby_	NB. or: empty
 
 fixfont=: 3 : 0
   NB. the appropriate fixed-font for the platform
-if. if807'' do. 'fixfont'
-else.           '"Menlo" 14'
-end.
+NB. if. if807'' do. 'fixfont' end.
+'"Menlo" 14'
 )
 
-AABUILT=: '2019-01-12  08:51:42'
-AABUILT=: '2019-01-12  09:05:52'
-AABUILT=: '2019-01-12  09:19:15'
-AABUILT=: '2019-01-12  16:03:01'
-AABUILT=: '2019-01-13  23:56:01'
-AABUILT=: '2019-01-13  23:57:45'
-AABUILT=: '2019-01-13  23:58:19'
-AABUILT=: '2019-01-29  03:39:43'
-AABUILT=: '2019-01-29  03:41:44'
-AABUILT=: '2019-01-29  03:53:40'
-AABUILT=: '2019-01-29  03:59:10'
-AABUILT=: '2019-01-29  04:00:20'
-AABUILT=: '2019-01-29  04:04:02'
-AABUILT=: '2019-01-29  04:07:57'
-AABUILT=: '2019-01-29  04:22:07'
-AABUILT=: '2019-01-29  04:23:25'
-AABUILT=: '2019-01-29  04:29:04'
-AABUILT=: '2019-01-29  04:33:29'
-AABUILT=: '2019-01-29  04:40:14'
-AABUILT=: '2019-01-29  04:42:03'
-AABUILT=: '2019-01-29  04:48:16'
-AABUILT=: '2019-01-29  04:54:21'
-AABUILT=: '2019-01-29  05:06:42'
-AABUILT=: '2019-01-29  05:38:37'
-AABUILT=: '2019-01-29  05:47:39'
-AABUILT=: '2019-01-29  05:52:19'
-AABUILT=: '2019-01-29  05:56:38'
-AABUILT=: '2019-01-29  06:05:23'
-AABUILT=: '2019-01-29  06:12:40'
-AABUILT=: '2019-01-31  16:11:25'
+NB. FORM_POSITION=: _1     NB. upper left
+FORM_POSITION=: _2     NB. upper right
+NB. FORM_POSITION=: _3     NB. lower left
+NB. FORM_POSITION=: _4     NB. lower right
+NB. FORM_POSITION=: _5     NB. center
+
+  NB. path to the ALTERNATIVE usertools script
+  NB. for remembering user tools redefined in-session
+]USERTOOLS_z_=: jpath '~Gittab/usertools.ijs'
+
+AABUILT=: '2019-02-15  19:43:51'
+AABUILT=: '2019-02-15  19:45:26'
+AABUILT=: '2019-02-15  19:54:35'

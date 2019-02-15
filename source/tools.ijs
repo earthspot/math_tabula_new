@@ -41,4 +41,5 @@ TOOLHINT=: >cutopen 0 : 0
 29 blue      User function
 30 delit     Delete {A}
 31 merge     Merge {ABC}
+32 empty     No operation
 )

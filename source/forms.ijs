@@ -171,7 +171,10 @@ menu hlpt "Help for TABULA" "" "TABULA help" "help";
 menu hinf "Notes for this ttable" "" "ttable Notes" "info";
 menu togi "Toggle J IDE" "" "toggle IDE" "IDE";
 menupopz;
-cc g isidraw;
+bin v;
+ bin hs;
+  maxwh 511 63; minwh 511 63; cc g isidraw;
+ bin sz;
 cc tabs tab;
 tabnew T-table;
 bin h;
@@ -202,8 +205,39 @@ cc updin button;cn "Update";
 bin s1z;
 tabend;
 cc sbar static; cn "(status unset)";
+bin z;
 )
 
+0 :0
 NB. set sbar addlabel status;
 NB. set sbar addlabelp sinf1;
 NB. set sbar addlabelp sinf2;
+wd 'psel tab; pmove ',": XYWH
+form _1
+form _2
+)
+
+form=: 3 : 0
+  NB. y e. 1 2 3 4 5 -move form to screen corners or center…
+  NB. 1 2
+  NB.  5
+  NB. 3 4
+  NB. y<0		-resize the form to preferred W H
+'Ws Hs'=. 2 3{".wd'psel tab; qscreen'
+Hd=. 70  NB. height of Dock
+'X Y W H'=. ".wd'qform'
+if. y<0 do.
+  'W H'=. 536 450
+  wd 'pmove _1 _1 ',": W,H
+end.
+'X0 Y0'=. 1 23
+'X1 Y1'=. (Ws - W),(Hs - H+Hd)
+select. |y
+case. 1 do. 'X Y'=. X0,Y0
+case. 2 do. 'X Y'=. X1,Y0
+case. 3 do. 'X Y'=. X0,Y1
+case. 4 do. 'X Y'=. X1,Y1
+case. 5 do. wd 'pcenter' return.
+end.
+wd 'pmove ',": X,Y,W,H
+)

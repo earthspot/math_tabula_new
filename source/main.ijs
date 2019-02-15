@@ -1,7 +1,11 @@
 	NB. tabby - main.ijs
 '==================== [tabby] main ===================='
 0 :0
-Tuesday 15 January 2019  01:54:11
+Friday 15 February 2019  04:10:56
+-
+open '~Gitcal/source/CAL_interface.ijs'
+open '~Gituu/source/uu_interface.ijs'
+uu_interface.ijs
 )
 
 coclass 'tabby'
@@ -60,13 +64,6 @@ panel_select=: SP ,~ ":theItem
 wd 'psel tab; set panel select ',":theItem
 )
 
-fixfont=: 3 : 0
-  NB. the appropriate fixed-font for the platform
-if. if807'' do. 'fixfont'
-else.           '"Menlo" 14'
-end.
-)
-
 tab_open=: 3 : 0
   NB. serves: start
 window_close''
@@ -90,7 +87,8 @@ NB. confirm 'Click a line and perform some operation on it...'
 if. PMOVES do.
   wd :: 0: 'pmoves ' , ":XYWH  NB. activate remembering window position
 else.
-  wd 'pmove ' , ":XYWH
+NB.   wd 'pmove ' , ":XYWH
+  form FORM_POSITION
 end.
 wd 'pshow'
 fill_tools ''
@@ -418,7 +416,7 @@ case.  QT do. tabenginex 'name' ; theItem ; }.y dropfinal QT
 case. '=' do. tabenginex 'fmla' ; theItem ; }.y
 case. '[' do. tabenginex 'unit' ; theItem ; }.y dropfinal ']'
 case. '+' do. tabenginex 'addv' ; theItem ; }.y
-case. '-' do. tabenginex 'subv' ; theItem ; }.y
+NB. case. '-' do. tabenginex 'subv' ; theItem ; }.y ----NO !!!
 case. '*' do. tabenginex 'mulv' ; theItem ; }.y
 fcase.'/' do.
 case. '%' do. tabenginex 'divv' ; theItem ; }.y
@@ -440,7 +438,7 @@ isDigit=: (3 : 0) :: 0:
 
 interpretQty=: 4 : 0
   NB. treat y as a qty to go into item {x} --if compatible
-if. isNumeric y do. tabenginex 'valu' ; x ; y return. end.
+if. isNumeric y do. tabenginex 'valu' ; x ; ".y return. end.
 qty=. tabengine 'UUUU' ; y
 NB. smoutput llog 'interpretQty x y qty'
 tabenginex 'vunn' ; x ; qty

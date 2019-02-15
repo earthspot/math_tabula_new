@@ -37,7 +37,7 @@ COLOR_CLICK=: 255 100 0
 COLOR_WHITE=: 255 255 255
 COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
-DIAMETER=: 30
+DIAMETER=: 25
 DQ=: '"'
 ITEMS=: i.0  NB. cache of valid item ids after last tabengine call
 NOCONFIRM_MAX=: 20  NB. suppress: confirm for this number of calls
@@ -50,7 +50,7 @@ TIMER_HOVER=: 1000 NB. (millisecs) delay before sys_timer_z_''
 UNSET=: '<UNSET>'
 XYWH=: 1500 22 536 450
 
-  NB. create wd-caches
+  NB. create empty wd-caches in case they are referred-to in code
 calco                              =: UNSET
 calco_select                       =: '0 0'
 casec                              =: ,'0'

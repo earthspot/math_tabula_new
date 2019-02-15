@@ -1,5 +1,5 @@
 0 :0
-Saturday 12 January 2019  08:41:56
+Friday 15 February 2019  19:43:30
 -
 TABULA: scientific units calculator
 -simplified architecture
@@ -11,43 +11,19 @@ clear LOC
 coinsert 'jgl2'
 onload_z_=: empty
 startonload_z_=: start_tabby_
+
 fixfont=: 3 : 0
 
-if. if807'' do. 'fixfont'
-else.           '"Menlo" 14'
-end.
+'"Menlo" 14'
 )
+FORM_POSITION=: _2
 
-AABUILT=: '2019-01-12  08:51:42'
-AABUILT=: '2019-01-12  09:05:52'
-AABUILT=: '2019-01-12  09:19:15'
-AABUILT=: '2019-01-12  16:03:01'
-AABUILT=: '2019-01-13  23:56:01'
-AABUILT=: '2019-01-13  23:57:45'
-AABUILT=: '2019-01-13  23:58:19'
-AABUILT=: '2019-01-29  03:39:43'
-AABUILT=: '2019-01-29  03:41:44'
-AABUILT=: '2019-01-29  03:53:40'
-AABUILT=: '2019-01-29  03:59:10'
-AABUILT=: '2019-01-29  04:00:20'
-AABUILT=: '2019-01-29  04:04:02'
-AABUILT=: '2019-01-29  04:07:57'
-AABUILT=: '2019-01-29  04:22:07'
-AABUILT=: '2019-01-29  04:23:25'
-AABUILT=: '2019-01-29  04:29:04'
-AABUILT=: '2019-01-29  04:33:29'
-AABUILT=: '2019-01-29  04:40:14'
-AABUILT=: '2019-01-29  04:42:03'
-AABUILT=: '2019-01-29  04:48:16'
-AABUILT=: '2019-01-29  04:54:21'
-AABUILT=: '2019-01-29  05:06:42'
-AABUILT=: '2019-01-29  05:38:37'
-AABUILT=: '2019-01-29  05:47:39'
-AABUILT=: '2019-01-29  05:52:19'
-AABUILT=: '2019-01-29  05:56:38'
-AABUILT=: '2019-01-29  06:05:23'
-AABUILT=: '2019-01-29  06:12:40'
-AABUILT=: '2019-01-31  16:11:25'
+
+]USERTOOLS_z_=: jpath '~Gittab/usertools.ijs'
+
+AABUILT=: '2019-02-15  19:43:51'
+AABUILT=: '2019-02-15  19:45:26'
+AABUILT=: '2019-02-15  19:54:35'
 
 '==================== [tabby] constants ===================='
 
@@ -87,7 +63,7 @@ COLOR_CLICK=: 255 100 0
 COLOR_WHITE=: 255 255 255
 COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
-DIAMETER=: 30
+DIAMETER=: 25
 DQ=: '"'
 ITEMS=: i.0
 NOCONFIRM_MAX=: 20
@@ -396,7 +372,10 @@ menu hlpt "Help for TABULA" "" "TABULA help" "help";
 menu hinf "Notes for this ttable" "" "ttable Notes" "info";
 menu togi "Toggle J IDE" "" "toggle IDE" "IDE";
 menupopz;
-cc g isidraw;
+bin v;
+ bin hs;
+  maxwh 511 63; minwh 511 63; cc g isidraw;
+ bin sz;
 cc tabs tab;
 tabnew T-table;
 bin h;
@@ -427,6 +406,38 @@ cc updin button;cn "Update";
 bin s1z;
 tabend;
 cc sbar static; cn "(status unset)";
+bin z;
+)
+
+0 :0
+wd 'psel tab; pmove ',": XYWH
+form _1
+form _2
+)
+
+form=: 3 : 0
+
+
+
+
+
+'Ws Hs'=. 2 3{".wd'psel tab; qscreen'
+Hd=. 70
+'X Y W H'=. ".wd'qform'
+if. y<0 do.
+  'W H'=. 536 450
+  wd 'pmove _1 _1 ',": W,H
+end.
+'X0 Y0'=. 1 23
+'X1 Y1'=. (Ws - W),(Hs - H+Hd)
+select. |y
+case. 1 do. 'X Y'=. X0,Y0
+case. 2 do. 'X Y'=. X1,Y0
+case. 3 do. 'X Y'=. X0,Y1
+case. 4 do. 'X Y'=. X1,Y1
+case. 5 do. wd 'pcenter' return.
+end.
+wd 'pmove ',": X,Y,W,H
 )
 
 '==================== [tabby] tools ===================='
@@ -466,6 +477,7 @@ TOOLHINT=: >cutopen 0 : 0
 29 blue      User function
 30 delit     Delete {A}
 31 merge     Merge {ABC}
+32 empty     No operation
 )
 
 '==================== [tabby] handlers.ijs ===================='
@@ -692,7 +704,7 @@ n=. 16
 h=. w=. 32
 'X Y'=. 2{.".sysdata
 z=. n* Y>h
-TOOLID=: z + <. X%w
+TOOLID=: 32 <. z + <.X%w
 fill_tools TOOLID
 confirm insertIDs 3 }. TOOLID { TOOLHINT
 
@@ -1031,7 +1043,11 @@ end.
 
 '==================== [tabby] main ===================='
 0 :0
-Tuesday 15 January 2019  01:54:11
+Friday 15 February 2019  04:10:56
+-
+open '~Gitcal/source/CAL_interface.ijs'
+open '~Gituu/source/uu_interface.ijs'
+uu_interface.ijs
 )
 
 coclass 'tabby'
@@ -1084,13 +1100,6 @@ panel_select=: SP ,~ ":theItem
 wd 'psel tab; set panel select ',":theItem
 )
 
-fixfont=: 3 : 0
-
-if. if807'' do. 'fixfont'
-else.           '"Menlo" 14'
-end.
-)
-
 tab_open=: 3 : 0
 
 window_close''
@@ -1109,7 +1118,7 @@ wd 'set panel items *',UNSET
 if. PMOVES do.
   wd :: 0: 'pmoves ' , ":XYWH
 else.
-  wd 'pmove ' , ":XYWH
+  form FORM_POSITION
 end.
 wd 'pshow'
 fill_tools ''
@@ -1429,7 +1438,6 @@ case.  QT do. tabenginex 'name' ; theItem ; }.y dropfinal QT
 case. '=' do. tabenginex 'fmla' ; theItem ; }.y
 case. '[' do. tabenginex 'unit' ; theItem ; }.y dropfinal ']'
 case. '+' do. tabenginex 'addv' ; theItem ; }.y
-case. '-' do. tabenginex 'subv' ; theItem ; }.y
 case. '*' do. tabenginex 'mulv' ; theItem ; }.y
 fcase.'/' do.
 case. '%' do. tabenginex 'divv' ; theItem ; }.y
@@ -1451,7 +1459,7 @@ isDigit=: (3 : 0) :: 0:
 
 interpretQty=: 4 : 0
 
-if. isNumeric y do. tabenginex 'valu' ; x ; y return. end.
+if. isNumeric y do. tabenginex 'valu' ; x ; ".y return. end.
 qty=. tabengine 'UUUU' ; y
 tabenginex 'vunn' ; x ; qty
 )
@@ -1613,42 +1621,40 @@ smoutput >TRACEVERBS
 
 '==================== [tabby] user.ijs ===================='
 0 :0
-Saturday 12 January 2019  16:09:03
+Friday 15 February 2019  19:40:30
+-
+THIS IS THE DEFAULT DEFN OF USERTOOLS RESIDING IN /source/
+IT IS OVERRIDDEN BY AN ALTERNATIVE SCRIPT loaded by: start
+USERTOOLS_z_ path specified in: header.ijs
 )
 
 coclass 'tabby'
 
-
-USERSCRIPT_z_=: jpath '~Gittab/source/user.ijs'
-
 usertool=: 3 : 0
 
 ssw '+++ usertool: sysmodifiers=(sysmodifiers)'
-if. heldshift'' do. open USERSCRIPT_z_ return. end.
+if. heldshift'' do. open USERTOOLS_z_ return. end.
+if. heldcmnd'' do. ide 1 return. end.
 )
 
 black=: 3 : 0
 usertool''
-if. 'empty'-: 5!:5<'sllog' do. sllog=: sllog1=: smoutput@llog
-else. sllog=: empty
-end.
-smoutput '>>> black: sllog is: ',5!:5<'sllog'
+confirm '>>> black: not implemented'
 )
 
 red=: 3 : 0
 usertool''
-load '~/plotsample.ijs'
+confirm '>>> red: not implemented'
 )
 
 green=: 3 : 0
 usertool''
-tabenginex 'tran'
+confirm '>>> green: not implemented'
 )
 
 blue=: 3 : 0
 usertool''
-if. heldcmnd'' do. smoutput'>>> blue: cmnd' return. end.
-smoutput '>>> blue: not implemented'
+confirm '>>> blue: not implemented'
 )
 
 '==================== [quit] main ===================='
@@ -1726,6 +1732,7 @@ cocurrent 'tabby'
 start=: 3 : 0
 traceverbs 'OFF'
 wd 'timer 0'
+load :: 0: USERTOOLS_z_
 load '~CAL/cal.ijs'
 
 tabengine=: tabengine_cal_
