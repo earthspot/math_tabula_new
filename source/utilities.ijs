@@ -33,7 +33,7 @@ dtlf=: #~ ([: +./\. (10{a.)&~:)  NB. delete trailing LF's
 shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
 isEmpty=: 0 = [: */ $
 isNaN=: 128!:5
-isNumeric=: (3 : '-.any isNaN _.". y') :: 0:
+isNumericJ=: (3 : '-.any isNaN _.". y') :: 0:
 
 NB. numeral_i=: (4 : 0) :: _.
 NB.   NB. extracts numeral (x) from (lit|num) y

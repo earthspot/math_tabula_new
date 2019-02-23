@@ -379,7 +379,7 @@ cle=: 3 : 0
 if. heldshift'' do. setcalco'' end.
 )
 
-interpretCalco=: 3 : 0
+interpretCalco0=: 3 : 0
   NB. BETTER AS A DAISYCHAIN? <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   NB. interpret the user-input command string: y
   NB. If y is empty then ASSUME called as a wd-handler
