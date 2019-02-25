@@ -1,5 +1,5 @@
 0 :0
-Friday 22 February 2019  23:05:25
+Monday 25 February 2019  02:53:57
 -
 TABULA: scientific units calculator
 -simplified architecture
@@ -21,14 +21,8 @@ FORM_POSITION=: _2
 
 ]USERTOOLS_z_=: jpath '~Gittab/usertools.ijs'
 
-AABUILT=: '2019-02-22  23:12:25'
-AABUILT=: '2019-02-22  23:19:40'
-AABUILT=: '2019-02-22  23:22:12'
-AABUILT=: '2019-02-23  03:43:24'
-AABUILT=: '2019-02-23  03:46:26'
-AABUILT=: '2019-02-23  03:48:55'
-AABUILT=: '2019-02-23  03:52:44'
-AABUILT=: '2019-02-23  04:01:31'
+AABUILT=: '2019-02-25  05:27:47'
+AABUILT=: '2019-02-25  05:47:44'
 
 '==================== [tabby] constants ===================='
 
@@ -487,7 +481,7 @@ TOOLHINT=: >cutopen 0 : 0
 
 '==================== [tabby] main ===================='
 0 :0
-Friday 22 February 2019  23:12:22
+Monday 25 February 2019  03:09:57
 -
 replaces interpretCalco
 old interpretCalco --> interpretCalco0
@@ -499,6 +493,8 @@ coclass 'tabby'
 
 blink=: empty
 
+theItem=: 1
+
 register=: 3 : 0
 
 
@@ -509,10 +505,10 @@ interpretCalco=: 3 : 0
 
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
 msg=. ssw
-msg '+++ interpretCalco: ENTERED, y=[(y)]'
 blink 0
 VEX=: '<UNSET>'
-theItem=: line 0
+theUnit=: >tabengine 'UNIT' ; theItem=: line 0
+msg '+++ interpretCalco: theItem=(theItem) theUnit=(theUnit) y=[(y)]'
 z=. daisychain y
 msg '--- interpretCalco: EXITS, VEX=(VEX)'
 z return.
@@ -530,6 +526,7 @@ make_daisychain=: 3 : 0
 
 d=: 'calco_' nl 3
 promote 'calco_singlet'
+promote 'calco_yesno'
 promote 'calco_title'
 ]z=. (; d,each <' ::'),'calcoErr'
 daisychain=: 13 : ('(',z,')y')
@@ -580,8 +577,19 @@ assert. isNumericJ '0',y
 
 j4sci=: 3 : 0
 
-y rplc '-' ; '_' ; 'E' ; 'e'
+if. DT={.y do. y=. '0',y end.
+y rplc '-.' ; '_0.' ; '-' ; '_' ; 'E' ; 'e'
 )
+0 :0
+j4sci '1.23E5'
+j4sci '1.23E-5'
+j4sci '-1.23E-5'
+j4sci '-1.23'
+j4sci '1.23'
+j4sci '.23'
+j4sci '-.23'
+)
+
 isNumeric=: (3 : 0) :: 0:
 
 if. (isNumericJ y)and(-. 'E' e. y) do. 1 return. end.
@@ -589,9 +597,6 @@ assert. isNumericJ p=. 'e' taketo z
 assert. isNumericJ q=. 'e' takeafter z
 assert. isScalar n=. ". j4sci z
 1 return.
-)
-0 :0
-isNumeric '-.01E-.06'
 )
 
 calco_blindDecimal=: 3 : 0
@@ -615,6 +620,23 @@ case. ,'-' do. tabenginex 'negv' ; theItem return.
 case. ,'*' do. tabenginex 'sign' ; theItem return.
 fcase. ,'/' do.
 case. ,'%' do. tabenginex 'invv' ; theItem return.
+end.
+)
+
+calco_yesno=: 3 : 0
+register'calco_yesno'
+blink'white'
+assert. -. noSelection''
+select. tolower y
+fcase. 'yes' do.
+fcase. 'on' do.
+fcase. 'high' do.
+case. 'hi' do. tabenginex 'onep' ; theItem return.
+fcase. 'no' do.
+fcase. 'off' do.
+fcase. 'low' do.
+case. 'lo' do. tabenginex 'zero' ; theItem return.
+case. do. assert 0
 end.
 )
 
@@ -648,6 +670,7 @@ register'calco_qty'
 blink'white'
 assert. -. noSelection''
 qty=. tabengine 'UUUU' ; y
+smoutput llog 'calco_qty y qty'
 tabenginex 'vunn' ; theItem ; qty
 )
 
@@ -665,6 +688,11 @@ else. assert. 0 end.
 )
 
 make_daisychain''
+
+0 :0
+onload LF -.~ 0 :0
+smoutput interpretCalco '12° 15'' 04"'
+)
 
 '==================== [tabby] handlers.ijs ===================='
 0 :0
@@ -829,7 +857,7 @@ tab_xunit_button=: empty
 tab_xunit_select=: 3 : 0
 
 theItem=. line 0
-confirm tabengine 'unit'; theItem ; xunit
+confirm tabengine 'unit'; theItem ; xunit-.LF
 showTtable''
 restoreSelection''
 setcalcovalue''
@@ -1496,8 +1524,15 @@ if. 1>theItem do. setunitsEmpty'' return. end.
 ]z=. tabengine 'UCMU' ; theItem
 ]z=. ~. z ,~ tabengine 'UNIS' ; theItem
 ]z=. ~. z ,~ tabengine 'UNIT' ; theItem
+]z=. utf8 f4b z
 	z_tabby_=: z
-wd 'psel tab; set xunit items *',utf8 f4b z
+if. '*' -: {.z do.
+  wd 'psel tab; set xunit items "*" "!"'
+elseif. '!' -: {.z do.
+  wd 'psel tab; set xunit items "!" "*"'
+elseif. do.
+  wd 'psel tab; set xunit items *',z
+end.
 wd 'psel tab; set xunit select 0'
 )
 
@@ -1919,7 +1954,7 @@ start=: 3 : 0
 traceverbs 'OFF'
 wd 'timer 0'
 load :: 0: USERTOOLS_z_
-load '~CAL/cal.ijs'
+load 'math/cal'
 
 tabengine=: tabengine_cal_
 tx_z_=: tabenginex_tabby_

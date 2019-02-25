@@ -7,8 +7,8 @@ start=: 3 : 0
 traceverbs 'OFF'
 wd 'timer 0'
 load :: 0: USERTOOLS_z_
-load '~CAL/cal.ijs'  NB. makes UU available too
-  NB. ...but all access to UU should be done via CAL instructions
+load 'math/cal'  NB. (CAL loads UU)
+  NB. ...MUST DO all access to UU suite via CAL instructions
 tabengine=: tabengine_cal_  NB. replace dummy local CAL link
 tx_z_=: tabenginex_tabby_  NB. to allow e.g. CAL to update UI directly
   NB. initialize and load a t-table to show in: panel

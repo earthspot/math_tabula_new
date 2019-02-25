@@ -285,8 +285,15 @@ if. 1>theItem do. setunitsEmpty'' return. end.
 ]z=. tabengine 'UCMU' ; theItem	NB. UCOM vs UCMU
 ]z=. ~. z ,~ tabengine 'UNIS' ; theItem  NB. include equiv SI units in the list
 ]z=. ~. z ,~ tabengine 'UNIT' ; theItem  NB. include existing units in the list
+]z=. utf8 f4b z
 	z_tabby_=: z
-wd 'psel tab; set xunit items *',utf8 f4b z
+if. '*' -: {.z do.
+  wd 'psel tab; set xunit items "*" "!"'
+elseif. '!' -: {.z do.
+  wd 'psel tab; set xunit items "!" "*"'
+elseif. do.
+  wd 'psel tab; set xunit items *',z
+end.
 wd 'psel tab; set xunit select 0'
 )
 

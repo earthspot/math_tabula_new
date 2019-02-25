@@ -1,7 +1,7 @@
 	NB. tabby - calco.ijs
 '==================== [tabby] main ===================='
 0 :0
-Friday 22 February 2019  23:12:22
+Monday 25 February 2019  03:09:57
 -
 replaces interpretCalco
 old interpretCalco --> interpretCalco0
@@ -12,6 +12,8 @@ We need an extended isNumeric which accepts blind decimals and sci#s
 coclass 'tabby'
 
 blink=: empty
+
+theItem=: 1  NB. dev testing only
 
 register=: 3 : 0
   NB. for use in calco_ verbs only
@@ -24,10 +26,10 @@ interpretCalco=: 3 : 0
   NB. act on what's in the (calco) input field
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
 msg=. ssw
-msg '+++ interpretCalco: ENTERED, y=[(y)]'
 blink 0	NB. turn blink-1 OFF to start with
 VEX=: '<UNSET>'
-theItem=: line 0
+theUnit=: >tabengine 'UNIT' ; theItem=: line 0
+msg '+++ interpretCalco: theItem=(theItem) theUnit=(theUnit) y=[(y)]'
 z=. daisychain y
 msg '--- interpretCalco: EXITS, VEX=(VEX)'
 z return.
@@ -45,6 +47,7 @@ make_daisychain=: 3 : 0
   NB. NOTE: daisychained verbs are all MONADIC
 d=: 'calco_' nl 3
 promote 'calco_singlet'
+promote 'calco_yesno'
 promote 'calco_title'
 ]z=. (; d,each <' ::'),'calcoErr'
 daisychain=: 13 : ('(',z,')y')
@@ -96,9 +99,18 @@ assert. isNumericJ '0',y
 
 j4sci=: 3 : 0
   NB. convert lit sci syntax to j-scientific
-y rplc '-' ; '_' ; 'E' ; 'e'
+if. DT={.y do. y=. '0',y end.
+y rplc '-.' ; '_0.' ; '-' ; '_' ; 'E' ; 'e'
 )
-NB. …replace this with the most general conversion?
+0 :0
+j4sci '1.23E5'
+j4sci '1.23E-5'
+j4sci '-1.23E-5'
+j4sci '-1.23'
+j4sci '1.23'
+j4sci '.23'
+j4sci '-.23'
+)
 
 isNumeric=: (3 : 0) :: 0:
   NB. =1 iff isNumericJ or a valid scientific number
@@ -107,9 +119,6 @@ assert. isNumericJ p=. 'e' taketo z
 assert. isNumericJ q=. 'e' takeafter z
 assert. isScalar n=. ". j4sci z
 1 return.
-)
-0 :0
-isNumeric '-.01E-.06'
 )
 
 calco_blindDecimal=: 3 : 0
@@ -134,6 +143,24 @@ case. ,'-' do. tabenginex 'negv' ; theItem return.
 case. ,'*' do. tabenginex 'sign' ; theItem return.
 fcase. ,'/' do.
 case. ,'%' do. tabenginex 'invv' ; theItem return.
+end.
+)
+
+calco_yesno=: 3 : 0
+register'calco_yesno'
+blink'white'
+assert. -. noSelection''
+NB. msg '... calco_yesno: y=(y)'
+select. tolower y
+fcase. 'yes' do.
+fcase. 'on' do.
+fcase. 'high' do.
+case. 'hi' do. tabenginex 'onep' ; theItem return.
+fcase. 'no' do.
+fcase. 'off' do.
+fcase. 'low' do.
+case. 'lo' do. tabenginex 'zero' ; theItem return.
+case. do. assert 0
 end.
 )
 
@@ -170,7 +197,7 @@ register'calco_qty'
 blink'white'
 assert. -. noSelection''
 qty=. tabengine 'UUUU' ; y
-NB. smoutput llog 'interpretQty x y qty'
+smoutput llog 'calco_qty y qty'
 tabenginex 'vunn' ; theItem ; qty
 )
 
@@ -188,3 +215,8 @@ else. assert. 0 end.
 )
 
 make_daisychain''
+
+0 :0
+onload LF -.~ 0 :0
+smoutput interpretCalco '12° 15'' 04"'
+)

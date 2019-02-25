@@ -198,7 +198,7 @@ tab_xunit_button=: empty
 tab_xunit_select=: 3 : 0
   NB. change units using the combo box: xunit
 theItem=. line 0
-confirm tabengine 'unit'; theItem ; xunit
+confirm tabengine 'unit'; theItem ; xunit-.LF
 showTtable''
 restoreSelection''
 setcalcovalue''
