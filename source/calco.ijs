@@ -39,7 +39,8 @@ i.0 0
 interpretCalco=: 3 : 0
   NB. act on what's in the (calco) input field
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
-msg=. ssw
+msg=. empty
+NB. msg=. ssw
 blink 0	NB. turn blink-1 OFF to start with
 VEX=: '<UNSET>'
 theUnit=: >tabengine 'UNIT' ; theItem=: line 0
@@ -155,10 +156,12 @@ NB. msg '... calco_yesno: y=(y)'
 select. tolower y
 fcase. 'yes' do.
 fcase. 'on' do.
+fcase. 'true' do.
 fcase. 'high' do.
 case. 'hi' do. tabenginex 'onep' ; theItem return.
 fcase. 'no' do.
 fcase. 'off' do.
+fcase. 'false' do.
 fcase. 'low' do.
 case. 'lo' do. tabenginex 'zero' ; theItem return.
 case. do. assert 0

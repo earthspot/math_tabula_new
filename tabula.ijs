@@ -24,6 +24,8 @@ FORM_POSITION=: _2
 AABUILT=: '2019-02-25  05:27:47'
 AABUILT=: '2019-02-25  05:47:44'
 AABUILT=: '2019-02-25  13:04:29'
+AABUILT=: '2019-02-25  13:15:18'
+AABUILT=: '2019-02-25  13:17:37'
 
 '==================== [tabby] constants ===================='
 
@@ -519,7 +521,7 @@ i.0 0
 interpretCalco=: 3 : 0
 
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
-msg=. ssw
+msg=. empty
 blink 0
 VEX=: '<UNSET>'
 theUnit=: >tabengine 'UNIT' ; theItem=: line 0
@@ -632,10 +634,12 @@ assert. -. noSelection''
 select. tolower y
 fcase. 'yes' do.
 fcase. 'on' do.
+fcase. 'true' do.
 fcase. 'high' do.
 case. 'hi' do. tabenginex 'onep' ; theItem return.
 fcase. 'no' do.
 fcase. 'off' do.
+fcase. 'false' do.
 fcase. 'low' do.
 case. 'lo' do. tabenginex 'zero' ; theItem return.
 case. do. assert 0
