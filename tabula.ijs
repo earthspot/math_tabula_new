@@ -23,6 +23,7 @@ FORM_POSITION=: _2
 
 AABUILT=: '2019-02-25  05:27:47'
 AABUILT=: '2019-02-25  05:47:44'
+AABUILT=: '2019-02-25  13:04:29'
 
 '==================== [tabby] constants ===================='
 
@@ -501,6 +502,20 @@ register=: 3 : 0
 VEX=: y
 )
 
+make_daisychain=: 3 : 0
+
+
+d=: 'calco_' nl 3
+promote 'calco_singlet'
+promote 'calco_yesno'
+promote 'calco_title'
+promote 'calco_sample'
+]z=. (; d,each <' ::'),'calcoErr'
+daisychain=: 13 : ('(',z,')y')
+smoutput crr'daisychain'
+i.0 0
+)
+
 interpretCalco=: 3 : 0
 
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
@@ -519,19 +534,6 @@ noSelection=: 3 : 'theItem<0'
 promote=: 3 : 0
 
 d=: ~. d ,~ boxopen y
-)
-
-make_daisychain=: 3 : 0
-
-
-d=: 'calco_' nl 3
-promote 'calco_singlet'
-promote 'calco_yesno'
-promote 'calco_title'
-]z=. (; d,each <' ::'),'calcoErr'
-daisychain=: 13 : ('(',z,')y')
-smoutput crr'daisychain'
-i.0 0
 )
 
 calcoErr=: 3 : 0

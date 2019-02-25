@@ -22,6 +22,20 @@ NB. ssw '+++ register: (y)'
 VEX=: y
 )
 
+make_daisychain=: 3 : 0
+  NB. makes the daisychain for: interpretCalco
+  NB. NOTE: daisychained verbs are all MONADIC
+d=: 'calco_' nl 3
+promote 'calco_singlet'
+promote 'calco_yesno'
+promote 'calco_title'
+promote 'calco_sample'
+]z=. (; d,each <' ::'),'calcoErr'
+daisychain=: 13 : ('(',z,')y')
+smoutput crr'daisychain'
+i.0 0
+)
+
 interpretCalco=: 3 : 0
   NB. act on what's in the (calco) input field
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
@@ -40,19 +54,6 @@ noSelection=: 3 : 'theItem<0'
 promote=: 3 : 0
   NB. assume y is an element of global: z
 d=: ~. d ,~ boxopen y
-)
-
-make_daisychain=: 3 : 0
-  NB. makes the daisychain for: interpretCalco
-  NB. NOTE: daisychained verbs are all MONADIC
-d=: 'calco_' nl 3
-promote 'calco_singlet'
-promote 'calco_yesno'
-promote 'calco_title'
-]z=. (; d,each <' ::'),'calcoErr'
-daisychain=: 13 : ('(',z,')y')
-smoutput crr'daisychain'
-i.0 0
 )
 
 calcoErr=: 3 : 0
