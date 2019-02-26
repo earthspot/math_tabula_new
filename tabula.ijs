@@ -26,6 +26,8 @@ AABUILT=: '2019-02-25  05:47:44'
 AABUILT=: '2019-02-25  13:04:29'
 AABUILT=: '2019-02-25  13:15:18'
 AABUILT=: '2019-02-25  13:17:37'
+AABUILT=: '2019-02-26  07:44:43'
+AABUILT=: '2019-02-26  07:59:11'
 
 '==================== [tabby] constants ===================='
 
@@ -65,6 +67,7 @@ COLOR_CLICK=: 255 100 0
 COLOR_WHITE=: 255 255 255
 COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
+DG=: '°'
 DIAMETER=: 25
 DQ=: '"'
 ITEMS=: i.0
@@ -556,11 +559,36 @@ end.
 assert. 0
 )
 
-0 :0
-calco_general=: 3 : 0
-register'calco_general'
+calco_deg=: 3 : 0
+register'calco_deg'
 blink'white'
-msg '... calco_general: y=(y)'
+assert. -. noSelection''
+assert. theUnit -: 'deg'
+tabenginex 'valu' ; theItem ; ". y rplc 'deg' ; '' ; DG ; ''
+)
+
+calco_dms=: 3 : 0
+register'calco_dms'
+blink'white'
+assert. -. noSelection''
+assert. theUnit -: 'dms'
+tabenginex 'valu' ; theItem ; chaldean cut_dms y
+)
+
+chaldean=: 3 : 0
+
+'d m s'=. y
+d+(m%60)+s%3600
+)
+
+cut_dms=: 3 : 0
+
+z=. y -. SP,DQ
+d=. ". DG taketo z
+z=. DG takeafter z
+m=. ". QT taketo z
+s=. ". QT takeafter z
+d;m;s
 )
 
 calco_number=: 3 : 0

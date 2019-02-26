@@ -72,15 +72,41 @@ if. SIC>0 do. infinity=. '∞' else. infinity=. 'infinity' end.
 if. y=__ do. '-',infinity return.
 elseif. y=_ do. infinity return.
 end.
-assert. 0  NB. force error if has not already return.ed
+assert. 0  NB. force error if it gets to here
 )
 
-0 :0
-calco_general=: 3 : 0
-register'calco_general'
+calco_deg=: 3 : 0
+register'calco_deg'
+NB. smoutput llog 'calco_deg y'
 blink'white'
-NB. assert. 0 	NB. FOR THE PRESENT: DOES NOTHING <<<<<<<<<<<<<<<<<<
-msg '... calco_general: y=(y)'
+assert. -. noSelection''
+assert. theUnit -: 'deg'
+tabenginex 'valu' ; theItem ; ". y rplc 'deg' ; '' ; DG ; ''
+)
+
+calco_dms=: 3 : 0
+register'calco_dms'
+NB. smoutput llog 'calco_dms y'
+blink'white'
+assert. -. noSelection''
+assert. theUnit -: 'dms'
+tabenginex 'valu' ; theItem ; chaldean cut_dms y
+)
+
+chaldean=: 3 : 0
+  NB. chaldean fraction --> decimal fraction
+'d m s'=. y
+d+(m%60)+s%3600
+)
+
+cut_dms=: 3 : 0
+  NB. cut eg: '57° 17'' 44"' --> 57;17;44
+z=. y -. SP,DQ
+d=. ". DG taketo z
+z=. DG takeafter z
+m=. ". QT taketo z
+s=. ". QT takeafter z
+d;m;s
 )
 
 calco_number=: 3 : 0

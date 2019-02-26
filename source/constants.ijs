@@ -37,6 +37,7 @@ COLOR_CLICK=: 255 100 0
 COLOR_WHITE=: 255 255 255
 COLOR_CLICK=: COLOR_WHITE
 DESELECT=: 1
+DG=: '°'
 DIAMETER=: 25
 DQ=: '"'
 ITEMS=: i.0  NB. cache of valid item ids after last tabengine call
