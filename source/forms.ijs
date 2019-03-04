@@ -1,7 +1,7 @@
  	NB. tabby - forms.ijs
 '==================== [tabby] forms ===================='
 0 :0
-Saturday 12 January 2019  08:51:20
+Monday 4 March 2019  13:52:38
 )
 
 coclass 'tabby'
@@ -10,13 +10,15 @@ TABU=: 0 : 0
 pc tab;pn Tabby;
 menupop "File";
 menu newtt "&New" "Ctrl+N" "Start a new ttable" "new";
-menu opens "Open Sample" "Ctrl+Shift+O" "Open a sample ttable" "sample";
 menu opent "&Open..." "Ctrl+O" "Open a ttable from user library" "open...";
 menu appet "&Append..." "" "Append a ttable from user library" "append...";
 menu savex "&Save" "Ctrl+S" "Save current ttable under existing name" "savex";
-menu saves "Save As Sample" "" "Save current ttable as default sample" "saves";
-menu savet "Save As Title" "" "Save current ttable under title shown" "savet";
 menu savea "Save As..." "" "Save current ttable under new name" "save as...";
+menu savet "Save As Title" "" "Save current ttable under title shown" "savet";
+menusep;
+menu opens "Open SAMPLE" "Ctrl+Shift+O" "Open SAMPLE ttable" "sample";
+menu openn "Open Sample 0-9" "" "Open a numbered sample ttable" "sample";
+menu saves "Save As Sample" "" "Save current ttable as default sample" "saves";
 menu delsa "Delete Saved Sample" "" "Delete saved default sample" "delete sample";
 menusep;
 menu stept "Plot 0 to (value)" "" "plot values" "plot";

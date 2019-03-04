@@ -14,17 +14,27 @@ open 'math/tabula'		NB. existing release
 additems_like	>0 selected lines, ignores shift
 set1u_like	1 selected line, restores selection
 add1u_like	set1u_like but puts v=1 in CAL instruction
-setv0_like	set1u_like but ignores shift
+child_like	set1u_like but ignores shift
 subitems_like	2 selected lines, order significant
 )
 
 coclass 'tabby'
 
-childlike=: setv0_like  NB. template of choice for menu clicks
+
+child_like=: 4 : 0
+  NB. template of choice for menu clicks
+tabengine x ; theItem=. line 0
+confirm tabengine'MSSG'
+showTtable''
+restoreSelection''
+updatevaluebar''
+restoreFocusToInputField''
+)
 
 NB. Handlers for menu: File
 
 tab_newtt_button=: newtt
+tab_openn_button=: openssn
 tab_opens_button=: openss
 tab_opent_button=: 'open'&opentt
 tab_appet_button=: 'appe'&opentt
@@ -48,7 +58,7 @@ tab_redo_button=:  tabenginex bind 'Redo'
 NB. tab_copal_button=: copal
 NB. tab_label_button=: label
 NB. tab_formu_button=: formu
-tab_erasf_button=: 'orph'&childlike
+tab_erasf_button=: 'orph'&child_like
 tab_siunt_button=: siunt
 tab_movet_button=: 'movt'&movtb
 tab_moveu_button=: 'movu'&movud
@@ -74,85 +84,85 @@ tab_infor_button=: clicktab bind 3
 
 NB. Handlers for menu: Value
 
-tab_Vzero_button=: 'zero'&childlike
-tab_Vonep_button=: 'onep'&childlike
-tab_Vonen_button=: 'onen'&childlike
-tab_Vabsv_button=: 'absv'&childlike
-tab_Vdblv_button=: 'dblv'&childlike
-tab_Vhlvv_button=: 'hlvv'&childlike
-tab_Vintv_button=: 'intv'&childlike
-tab_Vinvv_button=: 'invv'&childlike
-tab_Vnegv_button=: 'negv'&childlike
-tab_Vsqtv_button=: 'sqtv'&childlike
-tab_Vsqrv_button=: 'sqrv'&childlike
-tab_Vcbtv_button=: 'cbtv'&childlike
-tab_Vcubv_button=: 'cubv'&childlike
-tab_Vexpv_button=: 'expv'&childlike
-tab_Vextv_button=: 'extv'&childlike
-tab_Vetwv_button=: 'etwv'&childlike
-tab_Vlnnv_button=: 'lnnv'&childlike
-tab_Vltnv_button=: 'ltnv'&childlike
-tab_Vltwv_button=: 'ltwv'&childlike
-tab_Vpimv_button=: 'pimv'&childlike
-tab_Vptmv_button=: 'ptmv'&childlike
-tab_Vpidv_button=: 'pidv'&childlike
-tab_Vptdv_button=: 'ptdv'&childlike
+tab_Vzero_button=: 'zero'&child_like
+tab_Vonep_button=: 'onep'&child_like
+tab_Vonen_button=: 'onen'&child_like
+tab_Vabsv_button=: 'absv'&child_like
+tab_Vdblv_button=: 'dblv'&child_like
+tab_Vhlvv_button=: 'hlvv'&child_like
+tab_Vintv_button=: 'intv'&child_like
+tab_Vinvv_button=: 'invv'&child_like
+tab_Vnegv_button=: 'negv'&child_like
+tab_Vsqtv_button=: 'sqtv'&child_like
+tab_Vsqrv_button=: 'sqrv'&child_like
+tab_Vcbtv_button=: 'cbtv'&child_like
+tab_Vcubv_button=: 'cubv'&child_like
+tab_Vexpv_button=: 'expv'&child_like
+tab_Vextv_button=: 'extv'&child_like
+tab_Vetwv_button=: 'etwv'&child_like
+tab_Vlnnv_button=: 'lnnv'&child_like
+tab_Vltnv_button=: 'ltnv'&child_like
+tab_Vltwv_button=: 'ltwv'&child_like
+tab_Vpimv_button=: 'pimv'&child_like
+tab_Vptmv_button=: 'ptmv'&child_like
+tab_Vpidv_button=: 'pidv'&child_like
+tab_Vptdv_button=: 'ptdv'&child_like
 
 NB. Handlers for menu: Scale
 
-tab_Vunsc_button=: 'unsc'&childlike
-tab_Vstpu_button=: 'stpu'&childlike
-tab_Vstpd_button=: 'stpd'&childlike
-tab_Vdeci_button=: 'deci'&childlike
-tab_Vcent_button=: 'cent'&childlike
-tab_Vmill_button=: 'mill'&childlike
-tab_Vmicr_button=: 'micr'&childlike
-tab_Vnano_button=: 'nano'&childlike
-tab_Vpico_button=: 'pico'&childlike
-tab_Vfemt_button=: 'femt'&childlike
-tab_Vatto_button=: 'atto'&childlike
-tab_Vzept_button=: 'zept'&childlike
-tab_Vyoct_button=: 'yoct'&childlike
-tab_Vdeca_button=: 'deca'&childlike
-tab_Vhect_button=: 'hect'&childlike
-tab_Vkilo_button=: 'kilo'&childlike
-tab_Vmega_button=: 'mega'&childlike
-tab_Vgiga_button=: 'giga'&childlike
-tab_Vtera_button=: 'tera'&childlike
-tab_Vpeta_button=: 'peta'&childlike
-tab_Vexaa_button=: 'exaa'&childlike
-tab_Vzett_button=: 'zett'&childlike
-tab_Vyott_button=: 'yott'&childlike
+tab_Vunsc_button=: 'unsc'&child_like
+tab_Vstpu_button=: 'stpu'&child_like
+tab_Vstpd_button=: 'stpd'&child_like
+tab_Vdeci_button=: 'deci'&child_like
+tab_Vcent_button=: 'cent'&child_like
+tab_Vmill_button=: 'mill'&child_like
+tab_Vmicr_button=: 'micr'&child_like
+tab_Vnano_button=: 'nano'&child_like
+tab_Vpico_button=: 'pico'&child_like
+tab_Vfemt_button=: 'femt'&child_like
+tab_Vatto_button=: 'atto'&child_like
+tab_Vzept_button=: 'zept'&child_like
+tab_Vyoct_button=: 'yoct'&child_like
+tab_Vdeca_button=: 'deca'&child_like
+tab_Vhect_button=: 'hect'&child_like
+tab_Vkilo_button=: 'kilo'&child_like
+tab_Vmega_button=: 'mega'&child_like
+tab_Vgiga_button=: 'giga'&child_like
+tab_Vtera_button=: 'tera'&child_like
+tab_Vpeta_button=: 'peta'&child_like
+tab_Vexaa_button=: 'exaa'&child_like
+tab_Vzett_button=: 'zett'&child_like
+tab_Vyott_button=: 'yott'&child_like
 
 NB. Handlers for menu: Function
 
-tab_Lequl_button=: 'equl'&childlike
-tab_Labsl_button=: 'absl'&childlike
-tab_Ldbll_button=: 'dbll'&childlike
-tab_Lhlvl_button=: 'hlvl'&childlike
-tab_Lintl_button=: 'intl'&childlike
-tab_Linvl_button=: 'invl'&childlike
-tab_Lnegl_button=: 'negl'&childlike
-tab_Lsqtl_button=: 'sqtl'&childlike
-tab_Lsqrl_button=: 'sqrl'&childlike
-tab_Lcbtl_button=: 'cbtl'&childlike
-tab_Lcubl_button=: 'cubl'&childlike
-tab_Lexpl_button=: 'expl'&childlike
-tab_Lextl_button=: 'extl'&childlike
-tab_Letwl_button=: 'etwl'&childlike
-tab_Llnnl_button=: 'lnnl'&childlike
-tab_Lltnl_button=: 'ltnl'&childlike
-tab_Lltwl_button=: 'ltwl'&childlike
-tab_Lpiml_button=: 'piml'&childlike
-tab_Lptml_button=: 'ptml'&childlike
-tab_Lpidl_button=: 'pidl'&childlike
-tab_Lptdl_button=: 'ptdl'&childlike
-tab_Lt1ml_button=: 't1ml'&childlike
-tab_Lt2ml_button=: 't2ml'&childlike
-tab_Lt3ml_button=: 't3ml'&childlike
-tab_Lt1dl_button=: 't1dl'&childlike
-tab_Lt2dl_button=: 't2dl'&childlike
-tab_Lt3dl_button=: 't3dl'&childlike
+tab_Lequl_button=: 'equl'&child_like
+tab_Labsl_button=: 'absl'&child_like
+tab_Ldbll_button=: 'dbll'&child_like
+tab_Lhlvl_button=: 'hlvl'&child_like
+tab_Lintl_button=: 'intl'&child_like
+tab_Linvl_button=: 'invl'&child_like
+tab_Lnegl_button=: 'negl'&child_like
+tab_Lsqtl_button=: 'sqtl'&child_like
+tab_Lsqrl_button=: 'sqrl'&child_like
+tab_Lcbtl_button=: 'cbtl'&child_like
+tab_Lcubl_button=: 'cubl'&child_like
+tab_Lexpl_button=: 'expl'&child_like
+tab_Lextl_button=: 'extl'&child_like
+tab_Letwl_button=: 'etwl'&child_like
+tab_Llnnl_button=: 'lnnl'&child_like
+tab_Lltnl_button=: 'ltnl'&child_like
+tab_Lltwl_button=: 'ltwl'&child_like
+tab_Lpiml_button=: 'piml'&child_like
+tab_Lptml_button=: 'ptml'&child_like
+tab_Lpidl_button=: 'pidl'&child_like
+tab_Lptdl_button=: 'ptdl'&child_like
+tab_Lt1ml_button=: 't1ml'&child_like
+tab_Lt2ml_button=: 't2ml'&child_like
+tab_Lt3ml_button=: 't3ml'&child_like
+tab_Lt1dl_button=: 't1dl'&child_like
+tab_Lt2dl_button=: 't2dl'&child_like
+tab_Lt3dl_button=: 't3dl'&child_like
 
 NB. Handlers for menu: Help
 
@@ -452,8 +462,9 @@ iedit=: 3 : 0
 if. heldshift'' do. formu'' else. label'' end.
 )
 
-setv0=: setv0_like=: 'zero' ddefine
-  NB. Set value to 0
+setv0=: 'zero' ddefine
+  NB. Set value to 0 ⇧ execute: tabenginex 'trav'
+if. heldshift'' do. tabenginex 'trav' return. end.
 tabengine x ; theItem=. line 0
 confirm tabengine'MSSG'
 showTtable''
@@ -462,7 +473,7 @@ updatevaluebar''
 restoreFocusToInputField''
 )
 
-siunt=: 'cvsi'&setv0_like
+siunt=: 'cvsi'&child_like
 
 set1u=: set1u_like=: 'onep onen' ddefine
   NB. Set value to 1 / Set value to -1

@@ -10,7 +10,7 @@ cocurrent 'tabby'
 
 TOOLHINT=: >cutopen 0 : 0
 0  newtt     New empty ttable
-1  opent     Open SAMPLE ⇧ Open ttable… ⌘ ttbrowse
+1  opent     Open SAMPLE ⇧ Open ttable… ⌘ Open SAMPLEn ⇧⌘ ttbrowse
 2  savts     Save ttable as SAMPLE ⇧ Save ttable as Title
 3  copal     Copy entire ttable
 4  undoredo  Undo ⇧ Redo ⌘ Animated Undo<-->Redo
@@ -30,7 +30,7 @@ TOOLHINT=: >cutopen 0 : 0
 18 hold      Toggle Hold on {A} ⇧ Toggle Transient Hold on {A}
 19 siunt     Convert {A} to SI Units
 20 iedit     Edit name of {A} ⇧ Edit formula of {A}
-21 setv0     Set {A} to 0
+21 setv0     Set {A} to 0 ⇧ Animation Step
 22 set1u     Set {A} to 1 ⇧ Set {A} to -1
 23 add1u     Add 1 to {A} ⇧ Subtract 1 from {A}
 24 addpc     Add 1% to {A} ⇧ Subtract 1% from {A}

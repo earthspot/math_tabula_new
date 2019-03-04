@@ -19,7 +19,9 @@ if. heldcmnd'' do. ide 1 return. end.
 
 black=: 3 : 0
 usertool''
-confirm '>>> black: not implemented'
+if. heldnone'' do.
+  confirm '>>> black: not implemented'
+end.
 )
 
 red=: 3 : 0

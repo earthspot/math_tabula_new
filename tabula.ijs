@@ -28,6 +28,12 @@ AABUILT=: '2019-02-25  13:15:18'
 AABUILT=: '2019-02-25  13:17:37'
 AABUILT=: '2019-02-26  07:44:43'
 AABUILT=: '2019-02-26  07:59:11'
+AABUILT=: '2019-03-04  12:51:41'
+AABUILT=: '2019-03-04  13:00:57'
+AABUILT=: '2019-03-04  13:20:59'
+AABUILT=: '2019-03-04  13:22:12'
+AABUILT=: '2019-03-04  15:47:29'
+AABUILT=: '2019-03-04  15:53:43'
 
 '==================== [tabby] constants ===================='
 
@@ -207,7 +213,7 @@ onload 'imgview temp ''toucan.jpg'''
 
 '==================== [tabby] forms ===================='
 0 :0
-Saturday 12 January 2019  08:51:20
+Monday 4 March 2019  13:52:38
 )
 
 coclass 'tabby'
@@ -216,13 +222,15 @@ TABU=: 0 : 0
 pc tab;pn Tabby;
 menupop "File";
 menu newtt "&New" "Ctrl+N" "Start a new ttable" "new";
-menu opens "Open Sample" "Ctrl+Shift+O" "Open a sample ttable" "sample";
 menu opent "&Open..." "Ctrl+O" "Open a ttable from user library" "open...";
 menu appet "&Append..." "" "Append a ttable from user library" "append...";
 menu savex "&Save" "Ctrl+S" "Save current ttable under existing name" "savex";
-menu saves "Save As Sample" "" "Save current ttable as default sample" "saves";
-menu savet "Save As Title" "" "Save current ttable under title shown" "savet";
 menu savea "Save As..." "" "Save current ttable under new name" "save as...";
+menu savet "Save As Title" "" "Save current ttable under title shown" "savet";
+menusep;
+menu opens "Open SAMPLE" "Ctrl+Shift+O" "Open SAMPLE ttable" "sample";
+menu openn "Open Sample 0-9" "" "Open a numbered sample ttable" "sample";
+menu saves "Save As Sample" "" "Save current ttable as default sample" "saves";
 menu delsa "Delete Saved Sample" "" "Delete saved default sample" "delete sample";
 menusep;
 menu stept "Plot 0 to (value)" "" "plot values" "plot";
@@ -451,7 +459,7 @@ cocurrent 'tabby'
 
 TOOLHINT=: >cutopen 0 : 0
 0  newtt     New empty ttable
-1  opent     Open SAMPLE ⇧ Open ttable… ⌘ ttbrowse
+1  opent     Open SAMPLE ⇧ Open ttable… ⌘ Open SAMPLEn ⇧⌘ ttbrowse
 2  savts     Save ttable as SAMPLE ⇧ Save ttable as Title
 3  copal     Copy entire ttable
 4  undoredo  Undo ⇧ Redo ⌘ Animated Undo<-->Redo
@@ -471,7 +479,7 @@ TOOLHINT=: >cutopen 0 : 0
 18 hold      Toggle Hold on {A} ⇧ Toggle Transient Hold on {A}
 19 siunt     Convert {A} to SI Units
 20 iedit     Edit name of {A} ⇧ Edit formula of {A}
-21 setv0     Set {A} to 0
+21 setv0     Set {A} to 0 ⇧ Animation Step
 22 set1u     Set {A} to 1 ⇧ Set {A} to -1
 23 add1u     Add 1 to {A} ⇧ Subtract 1 from {A}
 24 addpc     Add 1% to {A} ⇧ Subtract 1% from {A}
@@ -743,14 +751,24 @@ open 'math/tabula'
 additems_like	>0 selected lines, ignores shift
 set1u_like	1 selected line, restores selection
 add1u_like	set1u_like but puts v=1 in CAL instruction
-setv0_like	set1u_like but ignores shift
+child_like	set1u_like but ignores shift
 subitems_like	2 selected lines, order significant
 )
 
 coclass 'tabby'
 
-childlike=: setv0_like
+
+child_like=: 4 : 0
+
+tabengine x ; theItem=. line 0
+confirm tabengine'MSSG'
+showTtable''
+restoreSelection''
+updatevaluebar''
+restoreFocusToInputField''
+)
 tab_newtt_button=: newtt
+tab_openn_button=: openssn
 tab_opens_button=: openss
 tab_opent_button=: 'open'&opentt
 tab_appet_button=: 'appe'&opentt
@@ -762,7 +780,7 @@ tab_print_button=: notimp
 tab_quit_button=:  quit
 tab_undo_button=:  tabenginex bind 'Undo'
 tab_redo_button=:  tabenginex bind 'Redo'
-tab_erasf_button=: 'orph'&childlike
+tab_erasf_button=: 'orph'&child_like
 tab_siunt_button=: siunt
 tab_movet_button=: 'movt'&movtb
 tab_moveu_button=: 'movu'&movud
@@ -779,79 +797,79 @@ tab_ttabl_button=: clicktab bind 0
 tab_conss_button=: clicktab bind 1
 tab_funcs_button=: clicktab bind 2
 tab_infor_button=: clicktab bind 3
-tab_Vzero_button=: 'zero'&childlike
-tab_Vonep_button=: 'onep'&childlike
-tab_Vonen_button=: 'onen'&childlike
-tab_Vabsv_button=: 'absv'&childlike
-tab_Vdblv_button=: 'dblv'&childlike
-tab_Vhlvv_button=: 'hlvv'&childlike
-tab_Vintv_button=: 'intv'&childlike
-tab_Vinvv_button=: 'invv'&childlike
-tab_Vnegv_button=: 'negv'&childlike
-tab_Vsqtv_button=: 'sqtv'&childlike
-tab_Vsqrv_button=: 'sqrv'&childlike
-tab_Vcbtv_button=: 'cbtv'&childlike
-tab_Vcubv_button=: 'cubv'&childlike
-tab_Vexpv_button=: 'expv'&childlike
-tab_Vextv_button=: 'extv'&childlike
-tab_Vetwv_button=: 'etwv'&childlike
-tab_Vlnnv_button=: 'lnnv'&childlike
-tab_Vltnv_button=: 'ltnv'&childlike
-tab_Vltwv_button=: 'ltwv'&childlike
-tab_Vpimv_button=: 'pimv'&childlike
-tab_Vptmv_button=: 'ptmv'&childlike
-tab_Vpidv_button=: 'pidv'&childlike
-tab_Vptdv_button=: 'ptdv'&childlike
-tab_Vunsc_button=: 'unsc'&childlike
-tab_Vstpu_button=: 'stpu'&childlike
-tab_Vstpd_button=: 'stpd'&childlike
-tab_Vdeci_button=: 'deci'&childlike
-tab_Vcent_button=: 'cent'&childlike
-tab_Vmill_button=: 'mill'&childlike
-tab_Vmicr_button=: 'micr'&childlike
-tab_Vnano_button=: 'nano'&childlike
-tab_Vpico_button=: 'pico'&childlike
-tab_Vfemt_button=: 'femt'&childlike
-tab_Vatto_button=: 'atto'&childlike
-tab_Vzept_button=: 'zept'&childlike
-tab_Vyoct_button=: 'yoct'&childlike
-tab_Vdeca_button=: 'deca'&childlike
-tab_Vhect_button=: 'hect'&childlike
-tab_Vkilo_button=: 'kilo'&childlike
-tab_Vmega_button=: 'mega'&childlike
-tab_Vgiga_button=: 'giga'&childlike
-tab_Vtera_button=: 'tera'&childlike
-tab_Vpeta_button=: 'peta'&childlike
-tab_Vexaa_button=: 'exaa'&childlike
-tab_Vzett_button=: 'zett'&childlike
-tab_Vyott_button=: 'yott'&childlike
-tab_Lequl_button=: 'equl'&childlike
-tab_Labsl_button=: 'absl'&childlike
-tab_Ldbll_button=: 'dbll'&childlike
-tab_Lhlvl_button=: 'hlvl'&childlike
-tab_Lintl_button=: 'intl'&childlike
-tab_Linvl_button=: 'invl'&childlike
-tab_Lnegl_button=: 'negl'&childlike
-tab_Lsqtl_button=: 'sqtl'&childlike
-tab_Lsqrl_button=: 'sqrl'&childlike
-tab_Lcbtl_button=: 'cbtl'&childlike
-tab_Lcubl_button=: 'cubl'&childlike
-tab_Lexpl_button=: 'expl'&childlike
-tab_Lextl_button=: 'extl'&childlike
-tab_Letwl_button=: 'etwl'&childlike
-tab_Llnnl_button=: 'lnnl'&childlike
-tab_Lltnl_button=: 'ltnl'&childlike
-tab_Lltwl_button=: 'ltwl'&childlike
-tab_Lpiml_button=: 'piml'&childlike
-tab_Lptml_button=: 'ptml'&childlike
-tab_Lpidl_button=: 'pidl'&childlike
-tab_Lptdl_button=: 'ptdl'&childlike
-tab_Lt1ml_button=: 't1ml'&childlike
-tab_Lt2ml_button=: 't2ml'&childlike
-tab_Lt3ml_button=: 't3ml'&childlike
-tab_Lt1dl_button=: 't1dl'&childlike
-tab_Lt2dl_button=: 't2dl'&childlike
-tab_Lt3dl_button=: 't3dl'&childlike
+tab_Vzero_button=: 'zero'&child_like
+tab_Vonep_button=: 'onep'&child_like
+tab_Vonen_button=: 'onen'&child_like
+tab_Vabsv_button=: 'absv'&child_like
+tab_Vdblv_button=: 'dblv'&child_like
+tab_Vhlvv_button=: 'hlvv'&child_like
+tab_Vintv_button=: 'intv'&child_like
+tab_Vinvv_button=: 'invv'&child_like
+tab_Vnegv_button=: 'negv'&child_like
+tab_Vsqtv_button=: 'sqtv'&child_like
+tab_Vsqrv_button=: 'sqrv'&child_like
+tab_Vcbtv_button=: 'cbtv'&child_like
+tab_Vcubv_button=: 'cubv'&child_like
+tab_Vexpv_button=: 'expv'&child_like
+tab_Vextv_button=: 'extv'&child_like
+tab_Vetwv_button=: 'etwv'&child_like
+tab_Vlnnv_button=: 'lnnv'&child_like
+tab_Vltnv_button=: 'ltnv'&child_like
+tab_Vltwv_button=: 'ltwv'&child_like
+tab_Vpimv_button=: 'pimv'&child_like
+tab_Vptmv_button=: 'ptmv'&child_like
+tab_Vpidv_button=: 'pidv'&child_like
+tab_Vptdv_button=: 'ptdv'&child_like
+tab_Vunsc_button=: 'unsc'&child_like
+tab_Vstpu_button=: 'stpu'&child_like
+tab_Vstpd_button=: 'stpd'&child_like
+tab_Vdeci_button=: 'deci'&child_like
+tab_Vcent_button=: 'cent'&child_like
+tab_Vmill_button=: 'mill'&child_like
+tab_Vmicr_button=: 'micr'&child_like
+tab_Vnano_button=: 'nano'&child_like
+tab_Vpico_button=: 'pico'&child_like
+tab_Vfemt_button=: 'femt'&child_like
+tab_Vatto_button=: 'atto'&child_like
+tab_Vzept_button=: 'zept'&child_like
+tab_Vyoct_button=: 'yoct'&child_like
+tab_Vdeca_button=: 'deca'&child_like
+tab_Vhect_button=: 'hect'&child_like
+tab_Vkilo_button=: 'kilo'&child_like
+tab_Vmega_button=: 'mega'&child_like
+tab_Vgiga_button=: 'giga'&child_like
+tab_Vtera_button=: 'tera'&child_like
+tab_Vpeta_button=: 'peta'&child_like
+tab_Vexaa_button=: 'exaa'&child_like
+tab_Vzett_button=: 'zett'&child_like
+tab_Vyott_button=: 'yott'&child_like
+tab_Lequl_button=: 'equl'&child_like
+tab_Labsl_button=: 'absl'&child_like
+tab_Ldbll_button=: 'dbll'&child_like
+tab_Lhlvl_button=: 'hlvl'&child_like
+tab_Lintl_button=: 'intl'&child_like
+tab_Linvl_button=: 'invl'&child_like
+tab_Lnegl_button=: 'negl'&child_like
+tab_Lsqtl_button=: 'sqtl'&child_like
+tab_Lsqrl_button=: 'sqrl'&child_like
+tab_Lcbtl_button=: 'cbtl'&child_like
+tab_Lcubl_button=: 'cubl'&child_like
+tab_Lexpl_button=: 'expl'&child_like
+tab_Lextl_button=: 'extl'&child_like
+tab_Letwl_button=: 'etwl'&child_like
+tab_Llnnl_button=: 'lnnl'&child_like
+tab_Lltnl_button=: 'ltnl'&child_like
+tab_Lltwl_button=: 'ltwl'&child_like
+tab_Lpiml_button=: 'piml'&child_like
+tab_Lptml_button=: 'ptml'&child_like
+tab_Lpidl_button=: 'pidl'&child_like
+tab_Lptdl_button=: 'ptdl'&child_like
+tab_Lt1ml_button=: 't1ml'&child_like
+tab_Lt2ml_button=: 't2ml'&child_like
+tab_Lt3ml_button=: 't3ml'&child_like
+tab_Lt1dl_button=: 't1dl'&child_like
+tab_Lt2dl_button=: 't2dl'&child_like
+tab_Lt3dl_button=: 't3dl'&child_like
 tab_hinf_button=: showttinf
 tab_togi_button=: ide
 tab_calco_button=:           interpretCalco
@@ -1138,8 +1156,9 @@ iedit=: 3 : 0
 if. heldshift'' do. formu'' else. label'' end.
 )
 
-setv0=: setv0_like=: 'zero' ddefine
+setv0=: 'zero' ddefine
 
+if. heldshift'' do. tabenginex 'trav' return. end.
 tabengine x ; theItem=. line 0
 confirm tabengine'MSSG'
 showTtable''
@@ -1148,7 +1167,7 @@ updatevaluebar''
 restoreFocusToInputField''
 )
 
-siunt=: 'cvsi'&setv0_like
+siunt=: 'cvsi'&child_like
 
 set1u=: set1u_like=: 'onep onen' ddefine
 
@@ -1217,6 +1236,47 @@ CONTAINS IN-LINE ERROR/CONFIRMATION MESSAGES
 
 coclass 'tabby'
 
+SAMPFORM=: 0 : 0
+pc ssn;pn Samples;
+cc samps listbox;
+pshow;
+)
+
+SAMPLES=: 0 : 0
+0  angle sine and cosine
+1  Church Clock
+2  Asteroid Impact
+3  Pseudogravity by rotation
+4  inversion test
+5  Cost of alcohol
+6  temperature scales
+7  indicator flag
+8  untitled
+9  untitled
+)
+
+openssn=: 3 : 0
+
+if. -. preload'' do. return. end.
+ssn_close''
+wd SAMPFORM
+wd 'set samps items *',SAMPLES
+)
+
+ssn_default=: 3 : 0
+ssw '>>> tab_default: handler needed: (syschild) for: (sysevent)'
+)
+
+ssn_close=: 3 : 0
+wd :: empty 'psel ssn; pclose;'
+)
+
+ssn_samps_select=: 3 : 0
+n=. 1{.samps
+ssw '+++ ssn_samps_select n=(n)'
+ssn_close''
+openss ".n
+)
 
 openss=: 3 : 0
 
@@ -1271,8 +1331,11 @@ restoreFocusToInputField''
 
 opent=: 3 : 0
 
-if. heldcmnd'' do. start_ttb_'' return. end.
-if. heldshift'' do. opentt'' else. openss'' end.
+if. heldshiftcmnd'' do. start_ttb_''
+elseif. heldshift'' do. opentt''
+elseif. heldcmnd''  do. openssn''
+elseif.             do. openss''
+end.
 )
 
 savea=: 3 : 0
@@ -1894,7 +1957,7 @@ if. heldcmnd'' do. ide 1 return. end.
 
 black=: 3 : 0
 usertool''
-confirm '>>> black: not implemented'
+if. heldnone'' do. tabenginex 'trav' end.
 )
 
 red=: 3 : 0
@@ -1974,6 +2037,7 @@ Bring here all definitions suspected of being platform-specific
 coclass 'tabby'
 
 
+heldnone=: 	3 : '0=".sysmodifiers'
 heldshift=: 	3 : '1=".sysmodifiers'
 heldcmnd=: 	3 : '2=".sysmodifiers'
 heldshiftcmnd=:	3 : '3=".sysmodifiers'

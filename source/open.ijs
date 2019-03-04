@@ -9,19 +9,47 @@ CONTAINS IN-LINE ERROR/CONFIRMATION MESSAGES
 
 coclass 'tabby'
 
-	NB. REPLACED BY: preload
-NB. hasChanged=: 3 : 0
-NB.   NB. avoid losing changes
-NB. if. (tabengine 'DIRT') and -.heldalt'' do.
-NB.   prompt=. 'Save current ttable?'
-NB.   ask=. 'Ttable: ',tabengine 'TITL'
-NB.   ask=. ask,LF,'has unsaved structural changes.'
-NB.   ask=. ask,LF,'OK to continue (and lose the changes)?'
-NB.   if. wdquery prompt;ask do.
-NB.     confirm '>>> New/load ttable -cancelled'
-NB.     1 return.end.end.
-NB. 0 return.
-NB. )
+SAMPFORM=: 0 : 0
+pc ssn;pn Samples;
+cc samps listbox;
+pshow;
+)
+
+SAMPLES=: 0 : 0
+0  angle sine and cosine
+1  Church Clock
+2  Asteroid Impact
+3  Pseudogravity by rotation
+4  inversion test
+5  Cost of alcohol
+6  temperature scales
+7  indicator flag
+8  untitled
+9  untitled
+)
+
+openssn=: 3 : 0
+  NB. show form to open SAMPLE*
+if. -. preload'' do. return. end.
+ssn_close''
+wd SAMPFORM
+wd 'set samps items *',SAMPLES
+)
+
+ssn_default=: 3 : 0
+ssw '>>> tab_default: handler needed: (syschild) for: (sysevent)'
+)
+
+ssn_close=: 3 : 0
+wd :: empty 'psel ssn; pclose;'
+)
+
+ssn_samps_select=: 3 : 0
+n=. 1{.samps
+ssw '+++ ssn_samps_select n=(n)'
+ssn_close''
+openss ".n
+)
 
 openss=: 3 : 0
   NB. open SAMPLE*
@@ -77,8 +105,11 @@ restoreFocusToInputField''
 
 opent=: 3 : 0
   NB. toolbar sub-handler
-if. heldcmnd'' do. start_ttb_'' return. end.  NB. launch: ttbrowse
-if. heldshift'' do. opentt'' else. openss'' end.
+if. heldshiftcmnd'' do. start_ttb_''	NB. launch: ttbrowse
+elseif. heldshift'' do. opentt''	NB. open selected t-table
+elseif. heldcmnd''  do. openssn''	NB. open SAMPLEn selection palette
+elseif.             do. openss''	NB. open SAMPLE
+end.
 )
 
 savea=: 3 : 0
