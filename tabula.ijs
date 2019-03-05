@@ -34,6 +34,8 @@ AABUILT=: '2019-03-04  13:20:59'
 AABUILT=: '2019-03-04  13:22:12'
 AABUILT=: '2019-03-04  15:47:29'
 AABUILT=: '2019-03-04  15:53:43'
+AABUILT=: '2019-03-05  04:27:07'
+AABUILT=: '2019-03-05  04:53:42'
 
 '==================== [tabby] constants ===================='
 
@@ -484,7 +486,7 @@ TOOLHINT=: >cutopen 0 : 0
 23 add1u     Add 1 to {A} ⇧ Subtract 1 from {A}
 24 addpc     Add 1% to {A} ⇧ Subtract 1% from {A}
 25 by2pi     {A} times PI ⇧ {A} times 2*PI
-26 black     User function
+26 anima     Animate ⇧ Start animation
 27 red       User function
 28 green     User function
 29 blue      User function
@@ -1040,7 +1042,6 @@ if. -. preload'' do. return. end.
 tabengine 'newt'
 confirm tabengine'MSSG'
 showTtable''
-setFormTitle''
 setunitsEmpty''
 setcalco ''
 restoreFocusToInputField''
@@ -1198,6 +1199,11 @@ activateTabWithId 3
 (refreshInfo shift updateInfo)''
 )
 
+anima=: 3 : 0
+
+tabenginex pickshift ;:'trav tra0'
+)
+
 '==================== [tabby] flip.ijs ===================='
 0 :0
 Friday 30 November 2018  09:27:43
@@ -1284,7 +1290,6 @@ if. -. preload'' do. return. end.
 if. 0=#y do. y=. '$$' end.
 tabengine'open ',":y
 showTtable''
-setFormTitle''
 setSelection 1
 tab_panel_select''
 restoreFocusToInputField''
@@ -1323,7 +1328,6 @@ if. 0=#path do. confirm sw '>>> (x) ...cancelled' return. end.
 TPTT=: pathof path
 confirm tabengine inst,SP,path
 showTtable''
-setFormTitle''
 setSelection 1
 tab_panel_select''
 restoreFocusToInputField''
@@ -1375,6 +1379,7 @@ t=. tabengine'CTBU'
 if. LF e. t do. wd 'psel tab; set panel items *',t
 else.           wd 'psel tab; set panel items ',dquote t
 end.
+refreshInfo''
 setFormTitle''
 ITEMS=: tabengine'ITMS'
 )
@@ -1957,7 +1962,9 @@ if. heldcmnd'' do. ide 1 return. end.
 
 black=: 3 : 0
 usertool''
-if. heldnone'' do. tabenginex 'trav' end.
+if. heldnone'' do.
+  confirm '>>> black: not implemented'
+end.
 )
 
 red=: 3 : 0
@@ -2029,7 +2036,7 @@ exit''
 
 '==================== [tabby] platform_specific ===================='
 0 :0
-Tuesday 15 January 2019  01:50:57
+Monday 4 March 2019  16:00:44
 -
 Bring here all definitions suspected of being platform-specific
 )

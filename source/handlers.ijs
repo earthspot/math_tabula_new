@@ -343,7 +343,7 @@ if. -. preload'' do. return. end.
 tabengine 'newt'
 confirm tabengine'MSSG'
 showTtable''
-setFormTitle''
+NB. setFormTitle''  NB. done in showTtable
 setunitsEmpty''
 setcalco '' NB. tabengine 'TITU'
 restoreFocusToInputField''
@@ -463,8 +463,7 @@ if. heldshift'' do. formu'' else. label'' end.
 )
 
 setv0=: 'zero' ddefine
-  NB. Set value to 0 ⇧ execute: tabenginex 'trav'
-if. heldshift'' do. tabenginex 'trav' return. end.
+  NB. Set value to 0
 tabengine x ; theItem=. line 0
 confirm tabengine'MSSG'
 showTtable''
@@ -502,4 +501,9 @@ showttinf=: 3 : 0
   NB. Show t-table info / edit t-table info
 activateTabWithId 3
 (refreshInfo shift updateInfo)''
+)
+
+anima=: 3 : 0
+  NB. animate ⇧ start animation
+tabenginex pickshift ;:'trav tra0'
 )

@@ -35,7 +35,7 @@ TOOLHINT=: >cutopen 0 : 0
 23 add1u     Add 1 to {A} ⇧ Subtract 1 from {A}
 24 addpc     Add 1% to {A} ⇧ Subtract 1% from {A}
 25 by2pi     {A} times PI ⇧ {A} times 2*PI
-26 black     User function
+26 anima     Animate ⇧ Start animation
 27 red       User function
 28 green     User function
 29 blue      User function

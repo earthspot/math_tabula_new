@@ -28,6 +28,7 @@ t=. tabengine'CTBU'
 if. LF e. t do. wd 'psel tab; set panel items *',t
 else.           wd 'psel tab; set panel items ',dquote t
 end.
+refreshInfo''
 setFormTitle''
 ITEMS=: tabengine'ITMS'
 )
