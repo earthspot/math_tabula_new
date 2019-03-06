@@ -369,9 +369,9 @@ tabenginex=: '' ddefine
 ]mmm=. ,tabengine y
 NB. ssw '... tabengine''y'' returned: [(mmm)]'
 mssg=. tabengine'MSSG'
-confirm mssg
 NB. ssw '... tabengine''MSSG'' returned: (mssg)'
 showTtable''
+confirm mssg
 if. 0=#x     do. restoreSelection''  NB. (selects {1} by default)
 elseif. x=_1 do. clearSelection''
 elseif.      do. setSelection x      NB. select {x}, or last line if x=_

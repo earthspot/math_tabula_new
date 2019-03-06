@@ -9,10 +9,10 @@ NB. In this case a handler will exist: tab_newtt_button
 cocurrent 'tabby'
 
 TOOLHINT=: >cutopen 0 : 0
-0  newtt     New empty ttable
-1  opent     Open SAMPLE ⇧ Open ttable… ⌘ Open SAMPLEn ⇧⌘ ttbrowse
-2  savts     Save ttable as SAMPLE ⇧ Save ttable as Title
-3  copal     Copy entire ttable
+0  newtt     New empty t-table ⇧ Revert changes to t-table
+1  opent     Open SAMPLE ⇧ Open t-table… ⌘ Open SAMPLEn ⇧⌘ ttbrowse
+2  savts     Save t-table as SAMPLE ⇧ Save t-table as Title
+3  copal     Copy entire t-table
 4  undoredo  Undo ⇧ Redo ⌘ Animated Undo<-->Redo
 5  additems  Add {ABC}
 6  subitems  {A} minus {B} ⇧ {B} minus {A}
@@ -26,7 +26,7 @@ TOOLHINT=: >cutopen 0 : 0
 14 newsl     New line
 15 equal     New line = {A}
 16 hlpt      Help for TABULA ⇧ Help for CAL
-17 showttinf Show ttable info ⇧ edit ttable info
+17 showttinf Show t-table info ⇧ edit t-table info
 18 hold      Toggle Hold on {A} ⇧ Toggle Transient Hold on {A}
 19 siunt     Convert {A} to SI Units
 20 iedit     Edit name of {A} ⇧ Edit formula of {A}

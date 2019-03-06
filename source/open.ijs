@@ -57,7 +57,6 @@ if. -. preload'' do. return. end.
 if. 0=#y do. y=. '$$' end.
 tabengine'open ',":y
 showTtable''
-NB. setFormTitle''  NB. done in showTtable
 setSelection 1
 tab_panel_select''
 restoreFocusToInputField''
@@ -97,7 +96,6 @@ if. 0=#path do. confirm sw '>>> (x) ...cancelled' return. end.
 TPTT=: pathof path  NB. change ONLY the local copy
 confirm tabengine inst,SP,path
 showTtable''
-NB. setFormTitle''  NB. done in showTtable
 setSelection 1
 tab_panel_select''
 restoreFocusToInputField''

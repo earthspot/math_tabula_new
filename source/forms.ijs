@@ -1,7 +1,7 @@
  	NB. tabby - forms.ijs
 '==================== [tabby] forms ===================='
 0 :0
-Monday 4 March 2019  13:52:38
+Wednesday 6 March 2019  09:22:44
 )
 
 coclass 'tabby'
@@ -9,16 +9,16 @@ coclass 'tabby'
 TABU=: 0 : 0
 pc tab;pn Tabby;
 menupop "File";
-menu newtt "&New" "Ctrl+N" "Start a new ttable" "new";
-menu opent "&Open..." "Ctrl+O" "Open a ttable from user library" "open...";
-menu appet "&Append..." "" "Append a ttable from user library" "append...";
-menu savex "&Save" "Ctrl+S" "Save current ttable under existing name" "savex";
-menu savea "Save As..." "" "Save current ttable under new name" "save as...";
-menu savet "Save As Title" "" "Save current ttable under title shown" "savet";
+menu newtt "&New" "Ctrl+N" "Start a new t-table" "new";
+menu opent "&Open..." "Ctrl+O" "Open a t-table from user library" "open...";
+menu appet "&Append..." "" "Append a t-table from user library" "append...";
+menu savex "&Save" "Ctrl+S" "Save current t-table under existing name" "savex";
+menu savea "Save As..." "" "Save current t-table under new name" "save as...";
+menu savet "Save As Title" "" "Save current t-table under title shown" "savet";
 menusep;
-menu opens "Open SAMPLE" "Ctrl+Shift+O" "Open SAMPLE ttable" "sample";
-menu openn "Open Sample 0-9" "" "Open a numbered sample ttable" "sample";
-menu saves "Save As Sample" "" "Save current ttable as default sample" "saves";
+menu opens "Open SAMPLE" "Ctrl+Shift+O" "Open SAMPLE t-table" "sample";
+menu openn "Open Sample 0-9" "" "Open a numbered sample t-table" "sample";
+menu saves "Save As Sample" "" "Save current t-table as default sample" "saves";
 menu delsa "Delete Saved Sample" "" "Delete saved default sample" "delete sample";
 menusep;
 menu stept "Plot 0 to (value)" "" "plot values" "plot";
@@ -29,9 +29,10 @@ menu plotb "Bar Chart" "" "Specify plot: bar" "bar";
 menu plotp "Pie Chart" "" "Specify plot: pie" "pie";
 menu plots "Surface Chart" "" "Specify plot: surface" "surface";
 menusep;
-menu close "Close" "" "Close current ttable" "close ttable";
+menu close "Close" "" "Close current t-table" "close t-table";
+menu revtt "&Revert changes" "" "Revert changes to t-table" "revert";
 menusep;
-menu print "Print" "" "Print current ttable" "print ttable";
+menu print "Print" "" "Print current t-table" "print t-table";
 menusep;
 menu quit "&Quit" "Ctrl+Shift+Q" "Quit TABULA" "quit";
 menupopz;
@@ -56,8 +57,8 @@ menu merge "Merge lines" "Ctrl+M" "Merge lines..." "merge";
 menu delit "Delete Line" "" "Delete this line" "delete";
 menu dupit "Duplicate Line" "Ctrl+D" "Duplicate this line" "dup";
 menusep;
-menu updex "Update Exchange Rates" "" "Update currency exchange rates for this ttable" "upd-exch";
-menu updin "Update Notes" "" "Update Notes for this ttable" "upd-inf";
+menu updex "Update Exchange Rates" "" "Update currency exchange rates for this t-table" "upd-exch";
+menu updin "Update Notes" "" "Update Notes for this t-table" "upd-inf";
 rem menusep;
 rem menu stup "Startup with TABULA" "" "Fix startup" "stup";
 menupopz;
@@ -70,7 +71,7 @@ menusep;
 menu hidel "Hide Line(s)" "" "Hide selected lines" "hide";
 menu unhid "Unhide All Lines" "" "Unhide all hidden lines" "unhide";
 menusep;
-menu ttabl "Show Ttable" "Ctrl+T" "Show ttable display" "ttable";
+menu ttabl "Show Ttable" "Ctrl+T" "Show t-table display" "t-table";
 menu conss "Show Constants List" "" "Show consts tab" "consts";
 menu funcs "Show Functions List" "" "Show functs tab" "functs";
 menu infor "Show Ttable Notes" "Ctrl+I" "Show Notes tab" "info";
@@ -170,7 +171,7 @@ menu Lt3dl "By-1000 Line" "" "Append line divided by 1000" "/1000";
 menupopz;
 menupop "Help";
 menu hlpt "Help for TABULA" "" "TABULA help" "help";
-menu hinf "Notes for this ttable" "" "ttable Notes" "info";
+menu hinf "Notes for this t-table" "" "t-table Notes" "info";
 menu togi "Toggle J IDE" "" "toggle IDE" "IDE";
 menupopz;
 bin v;

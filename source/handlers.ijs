@@ -340,14 +340,16 @@ NB. toolbar pseudo-handlers...
 
 newtt=: 3 : 0
 if. -. preload'' do. return. end.
+if. heldshift'' do. revtt'' return. end.
 tabengine 'newt'
 confirm tabengine'MSSG'
 showTtable''
-NB. setFormTitle''  NB. done in showTtable
 setunitsEmpty''
 setcalco '' NB. tabengine 'TITU'
 restoreFocusToInputField''
 )
+
+revtt=: tabenginex bind 'Revt'
 
 copal=: 3 : 0
   NB. Copy entire ttable
