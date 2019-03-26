@@ -40,10 +40,21 @@ AABUILT=: '2019-03-06  09:22:50'
 AABUILT=: '2019-03-06  09:33:08'
 AABUILT=: '2019-03-06  10:01:17'
 AABUILT=: '2019-03-06  10:02:51'
+AABUILT=: '2019-03-26  01:52:52'
+AABUILT=: '2019-03-26  02:00:02'
+AABUILT=: '2019-03-26  02:54:21'
+AABUILT=: '2019-03-26  02:57:56'
+AABUILT=: '2019-03-26  03:02:01'
+AABUILT=: '2019-03-26  04:37:08'
 
 '==================== [tabby] constants ===================='
 
 cocurrent 'tabby'
+
+ABOUT=: 0 : 0
+TABULA: scientific calculator
+-works with SI units.
+)
 
 sysmodifiers=: ,'0'
 
@@ -713,6 +724,27 @@ case. '^' do. tabenginex 'rtov' ; theItem ; }.y
 case. do. assert 0
 end.
 )
+
+calco_do=: 3 : 0
+register'calco_do'
+
+blink'white'
+assert. 1<#y
+select. {.y
+case.  SC do. 'tabby' doinloc }.y
+case.  CO do. 'cal' doinloc }.y
+case.  CM do. 'uu' doinloc }.y
+case.  '$'do. tabenginex }.y
+case.  '\'do. putsb ": tabengine }.y
+case. do. assert 0
+end.
+)
+
+doinloc=: 4 : 0
+
+lo=. <":x
+putsb ,>do__lo y
+)
 calco_qty=: 3 : 0
 register'calco_qty'
 
@@ -1195,7 +1227,9 @@ merge=: 'merg'&subitems_like
 
 hlpt=: 3 : 0
 
-if. heldshift'' do. textview HELP_cal_ , CAL_cal_
+if. heldshift'' do.
+  textview HELP_cal_ , CAL_cal_
+  tabengine 'dash'
 else. textview HELP
 end.
 )
@@ -1588,7 +1622,7 @@ i.0 0
 
 refreshInfo=: 3 : 0
 
-wd 'set info text *' , tabengine 'INFO'
+wd 'psel tab; set info text *' , tabengine 'INFO'
 )
 
 supplyInfo=: 3 : 0

@@ -3,6 +3,11 @@
 
 cocurrent 'tabby'
 
+ABOUT=: 0 : 0
+TABULA: scientific calculator
+-works with SI units.
+)
+
 sysmodifiers=: ,'0'
 	NB. >>> ought we init ALL (wd) 'sys' caches?
 

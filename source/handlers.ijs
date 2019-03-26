@@ -494,7 +494,9 @@ merge=: 'merg'&subitems_like  NB. Merge selected lines
 
 hlpt=: 3 : 0
   NB. Help for TABULA
-if. heldshift'' do. textview HELP_cal_ , CAL_cal_
+if. heldshift'' do.
+  textview HELP_cal_ , CAL_cal_
+  tabengine 'dash'
 else. textview HELP
 end.
 )

@@ -241,7 +241,7 @@ i.0 0
 
 refreshInfo=: 3 : 0
   NB. return CAL text to show in the Info (=Notes) panel
-wd 'set info text *' , tabengine 'INFO'
+wd 'psel tab; set info text *' , tabengine 'INFO'
 )
 
 supplyInfo=: 3 : 0

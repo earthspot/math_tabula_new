@@ -219,7 +219,28 @@ case. do. assert 0
 end.
 )
 
-NB. REWRITE…
+calco_do=: 3 : 0
+register'calco_do'
+  NB. handle ALL lines prefixed by CO or SC -- J-code to execute
+blink'white'
+assert. 1<#y  NB. Must not be a single char…
+select. {.y
+case.  SC do. 'tabby' doinloc }.y
+case.  CO do. 'cal' doinloc }.y
+case.  CM do. 'uu' doinloc }.y
+case.  '$'do. tabenginex }.y
+case.  '\'do. putsb ": tabengine }.y
+case. do. assert 0
+end.
+)
+
+doinloc=: 4 : 0
+  NB. do J-phrase: y in locale: x
+lo=. <":x
+putsb ,>do__lo y
+)
+
+NB. REWRITE to reject non-quantities…
 
 calco_qty=: 3 : 0
 register'calco_qty'
