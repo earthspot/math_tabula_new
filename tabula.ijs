@@ -46,6 +46,7 @@ AABUILT=: '2019-03-26  02:54:21'
 AABUILT=: '2019-03-26  02:57:56'
 AABUILT=: '2019-03-26  03:02:01'
 AABUILT=: '2019-03-26  04:37:08'
+AABUILT=: '2019-03-29  13:33:03'
 
 '==================== [tabby] constants ===================='
 
@@ -550,7 +551,6 @@ i.0 0
 interpretCalco=: 3 : 0
 
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
-msg=. empty
 blink 0
 VEX=: '<UNSET>'
 theUnit=: >tabengine 'UNIT' ; theItem=: line 0
@@ -568,7 +568,6 @@ d=: ~. d ,~ boxopen y
 )
 
 calcoErr=: 3 : 0
-msg=. ssw
 msg '>>> calcoErr: none chime: y=[(y)]'
 sw'(y) [???]'
 )
@@ -777,7 +776,7 @@ smoutput interpretCalco '12° 15'' 04"'
 
 '==================== [tabby] handlers.ijs ===================='
 0 :0
-Wednesday 19 September 2018  00:05:15
+Friday 29 March 2019  13:26:53
 -
 ===Latest Built Files:
 open '~Gituu/uu.ijs'
@@ -1867,120 +1866,22 @@ plots=: 3 : 0
 
 tabengine 'plos' ; panel_select
 )
-'==================== [tabby] traceverbs ===================='
+pushme=: empty
+popme=: empty
 
-cocurrent 'tabby'
-
-0 :0
-Tuesday 16 October 2018  01:04:55
--
-Discretionary silencing of unwanted msg and sllog calls.
-Small footprint when facility switched off.
--
-THIS SOURCE FILE IS COMMON TO ALL TABULA ADDONS.
-Check the dates for most recent version.
--
-Traceable verbs must…
- -use msg and/or sllog to output trace messages
- -call pushme on entry
- -call popme on exit (and before all return.s)
-Verb pushme pushes name of running verb onto the ME-list.
-Verb popme (called on exit) pops it.
-LATEST_ONLY silences all except the top of the ME-list
-Correct use of pushme/popme suppresses surplus msg calls.
-(See verb: uniform for example of correct usage.)
-)
-
-TRACEVERBS=: 0$a:
-LATEST_ONLY=: 1
-ME=: ''
-
-msg=: empty
-sesstrace=: empty
-sllog=: empty
-
-pushme=: 1 ddefine
-
-ME=: ~. ME ,~ ;:y
-if. x do. msg '+++ (y): ENTERED' end.
-i.0 0
-)
-
-popme=: 1 ddefine
-
-if. x do. msg '--- (y): EXITS' end.
-ME=: ME -. ;:y
-i.0 0
-)
-
-make_msg=: 1 ddefine
+trace=: 3 : 0
 
 
 
-
-ME=: ''
-talks=. x
-select. y
-case. 0 do.
-  sesstrace=: empty
+if. y do.
+  msg=: smoutput&sw
+  sllog=: smoutput&llog
+else.
   msg=: empty
   sllog=: empty
-  if. talks do. smoutput '--- make_msg: msg is OFF',LF end.
-case. 1 do.
-  sesstrace=: sesstrace1
-  msg=: sesstrace&sw
-  sllog=: sesstrace&llog
-  if. talks do. smoutput '+++ make_msg: msg is via TRACEVERBS',LF end.
-case. 2 do.
-  sesstrace=: smoutput
-  msg=: sesstrace&sw
-  sllog=: sesstrace&llog
-  if. talks do. smoutput '+++ make_msg: msg is ON',LF end.
 end.
+smoutput '+++ trace ',":y
 i.0 0
-)
-
-sesstrace1=: 3 : 'if. traced ME do. smoutput y else. i.0 0 end.'
-
-traced=: 3 : 0
-
-
-
-
-
-
-z=. boxopen y
-if. LATEST_ONLY do. z=. {. z end.
-any z e. a: default 'TRACEVERBS'
-)
-
-traceverbs=: 3 : 0
-
-
-
-
-
-
-
-
-
-
-z=.''
-mm1=. make_msg bind 1
-select. {.y
-case. 'O' do. make_msg (y-:'ON')
-case. 'A' do. make_msg 2
-case. ' ' do. z=. TRACEVERBS  
-case. 0   do. z=. TRACEVERBS=: 0$a:
-case. 1   do. mm1 z=. TRACEVERBS=: ;: 'xx'
-case. 2   do. mm1 z=. TRACEVERBS=: ;: 'xx xxx'
-case. 3   do. mm1 z=. TRACEVERBS=: ;: 'xx xxx xxxx'
-case. '+' do. mm1 z=. TRACEVERBS=: ~. TRACEVERBS ,~ ;: y-.'+'
-case. '-' do. mm1 z=. TRACEVERBS=: TRACEVERBS -. ;: y-.'-'
-case.     do. mm1 z=. TRACEVERBS=: ~. ;: y
-end.
-smoutput '+++ traceverbs: #traced=',":#z
-smoutput >TRACEVERBS
 )
 
 '==================== [tabby] user.ijs ===================='
@@ -2052,13 +1953,13 @@ preload=: 3 : 0
 
 if. tabengine'DIRT' do.
   par=. 'Save current t-table?'
-  msg=. 'The t-table: ', tabengine'TITL'	
-  msg=. msg,LF, '-has significant unsaved changes'	
-  msg=. msg,LF, '-which will be lost if you continue.' 	
-  msg=. msg,LF,LF, '(To rescue this t-table, press No)'	
-  msg=. msg,LF,LF,LF, 'OK to continue?'	
-  if. wdquery par;msg do.
-    confirm '>>> User cancelled: New/Load t-table'		
+  mg=. 'The t-table: ', tabengine'TITL'	
+  mg=. mg,LF, '-has significant unsaved changes'	
+  mg=. mg,LF, '-which will be lost if you continue.' 	
+  mg=. mg,LF,LF, '(To rescue this t-table, press No)'	
+  mg=. mg,LF,LF,LF, 'OK to continue?'	
+  if. wdquery par;mg do.
+    confirm '>>> User cancelled: New/Load t-table'	
     0 return.
   end.
 end.
@@ -2097,7 +1998,7 @@ heldshiftalt=:	3 : '5=".sysmodifiers'
 cocurrent 'tabby'
 
 start=: 3 : 0
-traceverbs 'OFF'
+trace 0
 wd 'timer 0'
 load :: 0: USERTOOLS_z_
 load 'math/cal'

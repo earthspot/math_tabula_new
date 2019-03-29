@@ -494,3 +494,22 @@ plots=: 3 : 0
   NB. handler: Surface Chart
 tabengine 'plos' ; panel_select
 )
+
+NB. =========== trace ========================
+pushme=: empty	NB. legacy
+popme=: empty	NB. legacy
+
+trace=: 3 : 0
+  NB. enable/disable tracing verbs: msg, sllog
+  NB. y== boolean
+  NB. copied from: [cal] dashboard.ijs
+if. y do.
+  msg=: smoutput&sw
+  sllog=: smoutput&llog
+else.
+  msg=: empty
+  sllog=: empty
+end.
+smoutput '+++ trace ',":y
+i.0 0
+)

@@ -30,13 +30,13 @@ preload=: 3 : 0
 NB. smoutput '+++ preload: called'
 if. tabengine'DIRT' do.
   par=. 'Save current t-table?'
-  msg=. 'The t-table: ', tabengine'TITL'	
-  msg=. msg,LF, '-has significant unsaved changes'	
-  msg=. msg,LF, '-which will be lost if you continue.' 	
-  msg=. msg,LF,LF, '(To rescue this t-table, press No)'	
-  msg=. msg,LF,LF,LF, 'OK to continue?'	
-  if. wdquery par;msg do.
-    confirm '>>> User cancelled: New/Load t-table'		
+  mg=. 'The t-table: ', tabengine'TITL'	
+  mg=. mg,LF, '-has significant unsaved changes'	
+  mg=. mg,LF, '-which will be lost if you continue.' 	
+  mg=. mg,LF,LF, '(To rescue this t-table, press No)'	
+  mg=. mg,LF,LF,LF, 'OK to continue?'	
+  if. wdquery par;mg do.
+    confirm '>>> User cancelled: New/Load t-table'	
     0 return.
   end.
 end.

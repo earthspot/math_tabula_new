@@ -4,7 +4,7 @@
 cocurrent 'tabby'
 
 start=: 3 : 0
-traceverbs 'OFF'
+trace 0
 wd 'timer 0'
 load :: 0: USERTOOLS_z_
 load 'math/cal'  NB. (CAL loads UU)

@@ -8,7 +8,6 @@ handlers.ijs
 flip.ijs
 open.ijs
 main.ijs
-traceverbs.ijs
 usertools.ijs
 quit.ijs
 platform_specific.ijs

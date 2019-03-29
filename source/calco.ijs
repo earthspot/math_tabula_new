@@ -39,8 +39,6 @@ i.0 0
 interpretCalco=: 3 : 0
   NB. act on what's in the (calco) input field
 if. 0=#y do. y=. dltb calco else. y=. dltb y end.
-msg=. empty
-NB. msg=. ssw
 blink 0	NB. turn blink-1 OFF to start with
 VEX=: '<UNSET>'
 theUnit=: >tabengine 'UNIT' ; theItem=: line 0
@@ -58,7 +56,6 @@ d=: ~. d ,~ boxopen y
 )
 
 calcoErr=: 3 : 0
-msg=. ssw
 msg '>>> calcoErr: none chime: y=[(y)]'
 sw'(y) [???]'
 )
