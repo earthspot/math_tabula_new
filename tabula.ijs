@@ -47,6 +47,7 @@ AABUILT=: '2019-03-26  02:57:56'
 AABUILT=: '2019-03-26  03:02:01'
 AABUILT=: '2019-03-26  04:37:08'
 AABUILT=: '2019-03-29  13:33:03'
+AABUILT=: '2019-03-30  20:15:33'
 
 '==================== [tabby] constants ===================='
 
@@ -617,12 +618,28 @@ d;m;s
 )
 
 calco_number=: 3 : 0
-register'calco_jnumber'
+register'calco_number'
 
 blink'white'
 assert. -. noSelection''
 assert. isNumeric y
 tabenginex 'valu' ; theItem ; ". j4sci y
+)
+
+calco_force=: 3 : 0
+register'calco_force'
+
+blink'white'
+assert. -. noSelection''
+assert. '[' e. y
+assert. 0< # un=. dltb ']'taketo '['takeafter y
+assert. 0< # nn=. dltb '['taketo y
+assert. isNumeric nn
+r=. tabengine 'unit' ; theItem ; un
+if. -.isErrorMessage r do.
+  tabenginex 'valu' ; theItem ; ". j4sci nn
+else. confirm r
+end.
 )
 
 isNumeric0J=: (3 : 0) :: 0:

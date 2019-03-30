@@ -1,7 +1,7 @@
 	NB. tabby - calco.ijs
 '==================== [tabby] main ===================='
 0 :0
-Monday 25 February 2019  03:09:57
+Saturday 30 March 2019  20:22:29
 -
 replaces interpretCalco
 old interpretCalco --> interpretCalco0
@@ -107,12 +107,28 @@ d;m;s
 )
 
 calco_number=: 3 : 0
-register'calco_jnumber'
+register'calco_number'
   NB. handle a valid numeral (not just j-valid)
 blink'white'
 assert. -. noSelection''
 assert. isNumeric y  NB. the most general
 tabenginex 'valu' ; theItem ; ". j4sci y
+)
+
+calco_force=: 3 : 0
+register'calco_force'
+  NB. force the given qty, e.g: '11 [km]'
+blink'white'
+assert. -. noSelection''
+assert. '[' e. y
+assert. 0< # un=. dltb ']'taketo '['takeafter y  NB. [forced] units
+assert. 0< # nn=. dltb '['taketo y  NB. preceding numeral
+assert. isNumeric nn
+r=. tabengine 'unit' ; theItem ; un
+if. -.isErrorMessage r do.
+  tabenginex 'valu' ; theItem ; ". j4sci nn
+else. confirm r
+end.
 )
 
 isNumeric0J=: (3 : 0) :: 0:
