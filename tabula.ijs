@@ -48,6 +48,7 @@ AABUILT=: '2019-03-26  03:02:01'
 AABUILT=: '2019-03-26  04:37:08'
 AABUILT=: '2019-03-29  13:33:03'
 AABUILT=: '2019-03-30  20:15:33'
+AABUILT=: '2019-03-31  03:46:27'
 
 '==================== [tabby] constants ===================='
 
@@ -473,6 +474,111 @@ end.
 wd 'pmove ',": X,Y,W,H
 )
 
+'==================== [tabby] graphic ===================='
+0 :0
+Sunday 31 March 2019  00:45:26
+-
+wd'psel tre; qform'
+-
+NODES -a list of points at which {1} {2} … drawn
+tre-draw should draw the quantities & names
+click -sets the line selection
+-
+We need a scrollbar
+Set node spacing wider to make a smallish t-table still need scrolling
+Change arrow color when hovering in its col.
+Draw orange-circle around the line number {1} {2} …
+click to change the line number itself.
+tre_hover_off -should redraw without the orange circle.
+Click on value -superimpose a roving field to change it.
+)
+
+coclass 'tabby'
+
+TREEPOS=: 1380 500 530 550
+
+TREE=: 0 : 0
+pc tre;pn T-Table Tree;
+cc g isidraw;
+cc sbar static; cn "(status unset)";
+)
+
+tre_close=: 3 : 'wd :: 0: ''psel tre; pclose;'''
+
+tre_open=: 3 : 0
+
+tre_close''
+wd TREE
+wd 'pmove ',": TREEPOS
+wd 'pshow'
+redraw''
+)
+
+tre_sbar=: 3 : 0
+
+wd 'psel tre; set sbar text *',":,y
+)
+
+circle=: 4 : 0
+
+clicked=. x
+ring=. clicked pick COLOR_HOVER ; COLOR_CLICK
+glsel 'g'
+glpen PEN_WIDTH [glrgb ring
+xy=. y
+wh=. 2#DIAMETER
+radius=. <.DIAMETER%2
+glellipse (xy - radius) , wh
+)
+tre_g_mbldown=: 3 : 0
+
+
+	ssw '+++ tre_g_mbldown y=(y) NODEID=(NODEID) NODE=(NODE)'
+1 redraw NODEID
+)
+
+tre_g_mblup=: 3 : 0
+
+
+if. -. NODEID e. i.32 do.
+  smoutput '>>> tre_g_mblup: BAD NODEID: ',":NODEID
+  return.
+end.
+NODE=: 'CLICKED',":NODEID
+	ssw '+++ tre_g_mblup y=(y) NODEID=(NODEID) NODE=(NODE)'
+)
+
+tre_g_mmove=: 3 : 0
+n=. 16
+h=. w=. 32
+'X Y'=. 2{.".sysdata
+z=. n* Y>h
+NODEID=: 32 <. z + <.X%w
+redraw NODEID
+
+sys_timer_z_=: tre_hover_off_tabby_
+wd'timer ',":TIMER_HOVER
+)
+
+tre_hover_off=: 3 : 0
+wd 'timer 0'
+	ssw '+++ tre_hover_off y=(y)'
+)
+
+redraw=: 0 ddefine
+
+
+tre_sbar sw 'x=(x) y=(y) X=(X) Y=(Y) NODEID=(NODEID) NODE=(NODE)'
+wd 'psel tre'
+glclear''
+glsel 'g'
+x circle 336 16
+glpaint''
+)
+
+
+onload 'tre_open NIL'
+
 '==================== [tabby] tools ===================='
 
 cocurrent 'tabby'
@@ -513,9 +619,9 @@ TOOLHINT=: >cutopen 0 : 0
 32 empty     No operation
 )
 
-'==================== [tabby] main ===================='
+'==================== [tabby] calco ===================='
 0 :0
-Monday 25 February 2019  03:09:57
+Saturday 30 March 2019  20:22:29
 -
 replaces interpretCalco
 old interpretCalco --> interpretCalco0
@@ -2024,6 +2130,7 @@ tabengine=: tabengine_cal_
 tx_z_=: tabenginex_tabby_
 
 start_cal_ '$$'
+tre_open''
 tab_open''
 setpreci 3
 setunico 1
