@@ -1,11 +1,11 @@
 0 :0
-Monday 25 February 2019  02:53:57
+Tuesday 2 April 2019  17:37:29
 -
 TABULA: scientific units calculator
 -simplified architecture
 )
 
-clear 'tabby'	NB. >>>>> DELETE THIS LINE IN RELEASED ADDON
+NB. clear 'tabby'	NB. >>>>> DELETE THIS LINE IN RELEASED ADDON
 coclass LOC=.'tabby'
 clear LOC
 coinsert 'jgl2'	NB. use gl2 verbs to paint the window
@@ -23,6 +23,8 @@ FORM_POSITION=: _2     NB. upper right
 NB. FORM_POSITION=: _3     NB. lower left
 NB. FORM_POSITION=: _4     NB. lower right
 NB. FORM_POSITION=: _5     NB. center
+
+PNG=: jpath '~Gittab/tabula-toolbar.png'
 
   NB. path to the ALTERNATIVE usertools script
   NB. for remembering user tools redefined in-session
@@ -56,3 +58,12 @@ AABUILT=: '2019-03-26  04:37:08'
 AABUILT=: '2019-03-29  13:33:03'
 AABUILT=: '2019-03-30  20:15:33'
 AABUILT=: '2019-03-31  03:46:27'
+AABUILT=: '2019-04-02  16:40:28'
+AABUILT=: '2019-04-02  16:53:04'
+AABUILT=: '2019-04-02  16:55:43'
+AABUILT=: '2019-04-02  17:06:19'
+AABUILT=: '2019-04-02  17:12:45'
+AABUILT=: '2019-04-02  17:14:47'
+AABUILT=: '2019-04-02  17:35:59'
+AABUILT=: '2019-04-02  18:16:43'
+AABUILT=: '2019-04-02  18:17:57'

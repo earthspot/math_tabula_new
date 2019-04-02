@@ -10,6 +10,8 @@ NB. DITTO THEN RUN:		fnF9
 
 smoutput '--- TABBY build: started'
 
+date_z_=: 6!:0 bind 'YYYY-MM-DD  hh:mm:ss'
+
 NOW=: date''
 HEADERFILE_z_=: '~Gittab/source/header.ijs'
 BUILTFILE_z_=: 1!:1 <jpath'~Gittab/builtfile'	NB. '~Gittab/tabula.ijs'

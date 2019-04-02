@@ -1,11 +1,9 @@
 0 :0
-Monday 25 February 2019  02:53:57
+Tuesday 2 April 2019  17:37:29
 -
 TABULA: scientific units calculator
 -simplified architecture
 )
-
-clear 'tabby'
 coclass LOC=.'tabby'
 clear LOC
 coinsert 'jgl2'
@@ -17,6 +15,8 @@ fixfont=: 3 : 0
 '"Menlo" 14'
 )
 FORM_POSITION=: _2
+PNG=: jpath '~Gittab/tabula-toolbar.png'
+
 
 
 ]USERTOOLS_z_=: jpath '~Gittab/usertools.ijs'
@@ -49,6 +49,15 @@ AABUILT=: '2019-03-26  04:37:08'
 AABUILT=: '2019-03-29  13:33:03'
 AABUILT=: '2019-03-30  20:15:33'
 AABUILT=: '2019-03-31  03:46:27'
+AABUILT=: '2019-04-02  16:40:28'
+AABUILT=: '2019-04-02  16:53:04'
+AABUILT=: '2019-04-02  16:55:43'
+AABUILT=: '2019-04-02  17:06:19'
+AABUILT=: '2019-04-02  17:12:45'
+AABUILT=: '2019-04-02  17:14:47'
+AABUILT=: '2019-04-02  17:35:59'
+AABUILT=: '2019-04-02  18:16:43'
+AABUILT=: '2019-04-02  18:17:57'
 
 '==================== [tabby] constants ===================='
 
@@ -100,7 +109,7 @@ ITEMS=: i.0
 NOCONFIRM_MAX=: 20
 PEN_WIDTH=: 3
 PMOVES=: 0
-PNG=: temp 'tabula-toolbar.png'
+QT=: ''''
 SL=: '/'
 TABNDX=: 0
 TIMER_HOVER=: 1000
@@ -230,6 +239,92 @@ onload 'test_numeral_i 0'
 
 onload 'imgview temp ''breakback.jpg'''
 onload 'imgview temp ''toucan.jpg'''
+
+'==================== [tabby] handy4tab ===================='
+cocurrent 'z'
+
+DIRIAC=: 0 : 0
+>>> The 'diriac' verb & its 'temp' options:
+  0 diriac ''
+  3 diriac ''
+ _6 diriac ''
+  0 diriac '~user/*.ijs'
+  1 diriac '~user/*.ijs'
+  2 diriac '~proj/gl*.ijs'
+)
+
+and=: *.
+any=: +./
+brace=: 1 |. '}{' , ":
+brack=: 1 |. '][' , ":
+cr=: [: 5!:5 boxopen
+crr=: > , '=: ' , cr
+cuT=: <;._2
+ddefine=: 1 : 'm&$: : (4 : 0)'
+
+default=: 0&$: :(4 : 0)
+
+
+
+
+
+
+if. 0<: 4!:0 <y do. y~ return. end.
+(y)=:x
+)
+
+diriac=: 0&$: :(4 : 0)
+
+
+
+
+
+how=. 30
+if. y-:'?' do. sst how elseif. y-:'??' do. ot how end.
+if. 0=#y do. y=. '~temp/*.ijs' end.
+if. x<0 do. x {. sortd ~. 3 diriac y return. end.
+z=. {."1 (1!:0 jpath y)
+if. x-:0 do. z return. end.
+fo=. [: > [: {. DT cut ]
+z=. fo each z
+if. x-:1 do. z return. end.
+fprefix=. '*' -.~ ([: >: '/' i:~ ]) }. ] {.~ '.' i.~ ]
+
+n=. #fprefix y
+z=. n }. each z
+if. x-:2 do. z return. end.
+
+sort ~. ,> 0 ".each z -.each < a. -. '1234567890'
+)
+
+dtlf=: #~ ([: +./\. (10{a.)&~:)
+edit=: [: open [: , [: > whichscript_z_
+fw=: firstwords=: (' ' taketo ])"1
+ijs=: '.ijs'&extx
+isBool=: isBools *. isScalar
+isEmpty=: 0 = [: */ $
+tmp=: [: jpath '~temp/' , ijs@":
+lasttemp=: 3 : 'tmp >./3 diriac tmp ''*'''
+llog=: (1 { ":)@(,@([: ] ;: ,. [: ".&.> ;:))
+log=: [: ": ;: ,. [: ".&.> ;:
+max=: $:/ :>.
+min=: $:/ :<.
+o2f=: 3 : 'LF(I. y=SP)}y'
+or=: +.
+pathof=: ] {.~ [: >: '/' i:~ ]
+pc=: '%' ,~ [: ": [: <. 0.5 + 100 * 88350 %~ ]
+sllog=: smoutput@llog
+sortd=: \:~ :\:
+sq=: *: :[:
+sqrt=: %: :[:
+square=: *: :[:
+st=: [: 1!:1 [: < tmp
+sst=: smoutput@st
+ssw=: smoutput&sw
+sw=: ] rplc [: , (paren&.> ,. ":&".&.>)&smresolve
+temp=: lasttemp`tmp@.(*@#@])
+to=: [ + [: i. [: >: -~
+x2f=: }.@((<10{a.) ;@,. ])@([: (#~ ([: +./\. ' '&~:))&.> <"1)
 
 '==================== [tabby] forms ===================='
 0 :0
@@ -476,11 +571,12 @@ wd 'pmove ',": X,Y,W,H
 
 '==================== [tabby] graphic ===================='
 0 :0
-Sunday 31 March 2019  00:45:26
+Monday 1 April 2019  05:15:01
 -
-wd'psel tre; qform'
+  wd'psel tre; qform'
+  sminfo_z_=: wdinfo_z_=: echo_z_
 -
-NODES -a list of points at which {1} {2} … drawn
+PTS -a list of points at which {1} {2} … drawn
 tre-draw should draw the quantities & names
 click -sets the line selection
 -
@@ -490,10 +586,22 @@ Change arrow color when hovering in its col.
 Draw orange-circle around the line number {1} {2} …
 click to change the line number itself.
 tre_hover_off -should redraw without the orange circle.
-Click on value -superimpose a roving field to change it.
+Click on value -superimpose a roving edit to change it.
+Allow multi selections
+Move selection OR line up/down with toolbar and arrows
+Allow drag'n'drop.
+Write out a pdf of screen
 )
 
-coclass 'tabby'
+clear 'tree'
+coclass LOC=.'tree'
+clear LOC
+coinsert 'jgl2'
+
+PTS=: 100j50 100j100 100j150 100j200 100j250
+
+NODEID=: 1
+NODE=: ''
 
 TREEPOS=: 1380 500 530 550
 
@@ -503,18 +611,29 @@ cc g isidraw;
 cc sbar static; cn "(status unset)";
 )
 
-tre_close=: 3 : 'wd :: 0: ''psel tre; pclose;'''
+window_close=: 3 : 'wd :: 0: ''psel tre; pclose;'''
 
-tre_open=: 3 : 0
+start=: 3 : 0
 
-tre_close''
+TIMER_HOVER=: 1000
+PEN_WIDTH=: 3
+COLOR_HOVER=: 255 200 0
+COLOR_CLICK=: 255 100 0
+COLOR_WHITE=: 255 255 255
+MAX_DISTANCE=: 15
+MAX_DISTANCE=: 100
+FONT=: 'Arial Unicode MS'
+'FONTSIZE GCOUNT GWIDTH GDROP DIAMETER CENTER'=: 18 24 20 18 18 6j12
+sysevent=: ''
+window_close''
 wd TREE
 wd 'pmove ',": TREEPOS
 wd 'pshow'
-redraw''
+glclear''
 )
 
-tre_sbar=: 3 : 0
+
+putsb=: 3 : 0
 
 wd 'psel tre; set sbar text *',":,y
 )
@@ -525,7 +644,7 @@ clicked=. x
 ring=. clicked pick COLOR_HOVER ; COLOR_CLICK
 glsel 'g'
 glpen PEN_WIDTH [glrgb ring
-xy=. y
+xy=. +.y
 wh=. 2#DIAMETER
 radius=. <.DIAMETER%2
 glellipse (xy - radius) , wh
@@ -539,45 +658,77 @@ tre_g_mbldown=: 3 : 0
 
 tre_g_mblup=: 3 : 0
 
-
-if. -. NODEID e. i.32 do.
-  smoutput '>>> tre_g_mblup: BAD NODEID: ',":NODEID
-  return.
-end.
 NODE=: 'CLICKED',":NODEID
 	ssw '+++ tre_g_mblup y=(y) NODEID=(NODEID) NODE=(NODE)'
 )
 
-tre_g_mmove=: 3 : 0
-n=. 16
-h=. w=. 32
-'X Y'=. 2{.".sysdata
-z=. n* Y>h
-NODEID=: 32 <. z + <.X%w
-redraw NODEID
+tre_g_mmove=: hover
 
-sys_timer_z_=: tre_hover_off_tabby_
+hover=: 3 : 0
+'X Y'=: 2{.".sysdata
+PT=: X j. Y
+icp=: closest pjmouse''
+if. _=icp do. signal '(no tool selected)' return. end.
+signal 2 pick icp{CNB
+redraw icp
+
+sys_timer_z_=: hover_off_nut_
 wd'timer ',":TIMER_HOVER
 )
 
+signal=: empty
+
+
 tre_hover_off=: 3 : 0
 wd 'timer 0'
-	ssw '+++ tre_hover_off y=(y)'
+	ssw '+++ tre_hover_off: X=(X) Y=(Y)'
 )
 
 redraw=: 0 ddefine
 
 
-tre_sbar sw 'x=(x) y=(y) X=(X) Y=(Y) NODEID=(NODEID) NODE=(NODE)'
+putsb sw 'x=(x) y=(y) X=(X) Y=(Y) PT=(PT) icp=(icp) NODEID=(NODEID) NODE=(NODE)'
 wd 'psel tre'
 glclear''
 glsel 'g'
-x circle 336 16
+x circle icp{PTS
 glpaint''
 )
 
+closest=: 3 : 0
 
-onload 'tre_open NIL'
+z=. |PTS-y
+ld=. <./z
+if. ld>MAX_DISTANCE do. _ return. end.
+i=. z i. ld
+)
+
+
+sysndata=:   3 : 'y{ 12{. 0&".sysdata' "0
+ptmouse=: sysndata bind 0 1
+pjmouse=: 3 : 'j./ ptmouse y'
+formxy=:  sysndata bind 2 3
+bnleft=:  sysndata bind 4
+bnmid=:   sysndata bind 5
+dnctrl=:  sysndata bind 6
+dnshift=: sysndata bind 7
+
+
+
+bnright=: sysndata bind 8
+
+nwheel=:  sysndata bind 11
+
+clickleft=: 3 : 0
+Handler 'clickleft'
+icp=: closest pjmouse''
+if. _=icp do. signal '(no tool selected)' return. end.
+i.0 0
+)
+
+
+
+onload 'start_tree_ NIL'
 
 '==================== [tabby] tools ===================='
 
@@ -2130,7 +2281,7 @@ tabengine=: tabengine_cal_
 tx_z_=: tabenginex_tabby_
 
 start_cal_ '$$'
-tre_open''
+start_tree_''
 tab_open''
 setpreci 3
 setunico 1
