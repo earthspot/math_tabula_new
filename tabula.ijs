@@ -21,43 +21,7 @@ PNG=: jpath '~Gittab/tabula-toolbar.png'
 
 ]USERTOOLS_z_=: jpath '~Gittab/usertools.ijs'
 
-AABUILT=: '2019-02-25  05:27:47'
-AABUILT=: '2019-02-25  05:47:44'
-AABUILT=: '2019-02-25  13:04:29'
-AABUILT=: '2019-02-25  13:15:18'
-AABUILT=: '2019-02-25  13:17:37'
-AABUILT=: '2019-02-26  07:44:43'
-AABUILT=: '2019-02-26  07:59:11'
-AABUILT=: '2019-03-04  12:51:41'
-AABUILT=: '2019-03-04  13:00:57'
-AABUILT=: '2019-03-04  13:20:59'
-AABUILT=: '2019-03-04  13:22:12'
-AABUILT=: '2019-03-04  15:47:29'
-AABUILT=: '2019-03-04  15:53:43'
-AABUILT=: '2019-03-05  04:27:07'
-AABUILT=: '2019-03-05  04:53:42'
-AABUILT=: '2019-03-06  09:22:50'
-AABUILT=: '2019-03-06  09:33:08'
-AABUILT=: '2019-03-06  10:01:17'
-AABUILT=: '2019-03-06  10:02:51'
-AABUILT=: '2019-03-26  01:52:52'
-AABUILT=: '2019-03-26  02:00:02'
-AABUILT=: '2019-03-26  02:54:21'
-AABUILT=: '2019-03-26  02:57:56'
-AABUILT=: '2019-03-26  03:02:01'
-AABUILT=: '2019-03-26  04:37:08'
-AABUILT=: '2019-03-29  13:33:03'
-AABUILT=: '2019-03-30  20:15:33'
-AABUILT=: '2019-03-31  03:46:27'
-AABUILT=: '2019-04-02  16:40:28'
-AABUILT=: '2019-04-02  16:53:04'
-AABUILT=: '2019-04-02  16:55:43'
-AABUILT=: '2019-04-02  17:06:19'
-AABUILT=: '2019-04-02  17:12:45'
-AABUILT=: '2019-04-02  17:14:47'
-AABUILT=: '2019-04-02  17:35:59'
-AABUILT=: '2019-04-02  18:16:43'
-AABUILT=: '2019-04-02  18:17:57'
+AABUILT=: '2019-04-03  12:54:29'
 
 '==================== [tabby] constants ===================='
 
@@ -97,6 +61,9 @@ Help for TABULA (when getting started)…
 )
 
 BS=: '\'
+CM=: ','
+CO=: ':'
+DT=: '.'
 COLOR_HOVER=: 255 200 0
 COLOR_CLICK=: 255 100 0
 COLOR_WHITE=: 255 255 255
@@ -105,11 +72,13 @@ DESELECT=: 1
 DG=: '°'
 DIAMETER=: 25
 DQ=: '"'
+IDE=: 1
 ITEMS=: i.0
 NOCONFIRM_MAX=: 20
 PEN_WIDTH=: 3
 PMOVES=: 0
 QT=: ''''
+SC=: ';'
 SL=: '/'
 TABNDX=: 0
 TIMER_HOVER=: 1000
@@ -243,16 +212,6 @@ onload 'imgview temp ''toucan.jpg'''
 '==================== [tabby] handy4tab ===================='
 cocurrent 'z'
 
-DIRIAC=: 0 : 0
->>> The 'diriac' verb & its 'temp' options:
-  0 diriac ''
-  3 diriac ''
- _6 diriac ''
-  0 diriac '~user/*.ijs'
-  1 diriac '~user/*.ijs'
-  2 diriac '~proj/gl*.ijs'
-)
-
 and=: *.
 any=: +./
 brace=: 1 |. '}{' , ":
@@ -279,7 +238,7 @@ diriac=: 0&$: :(4 : 0)
 
 
 
-how=. 30
+sortd=. \:~ :\:
 if. y-:'?' do. sst how elseif. y-:'??' do. ot how end.
 if. 0=#y do. y=. '~temp/*.ijs' end.
 if. x<0 do. x {. sortd ~. 3 diriac y return. end.
@@ -297,12 +256,33 @@ if. x-:2 do. z return. end.
 sort ~. ,> 0 ".each z -.each < a. -. '1234567890'
 )
 
+platform=: 3 : 0
+
+if. y-: 1 do. z=. 'IFJHS';'IFQT'
+else. z=. 'IF' nl_z_ 0
+end.
+('=:',~"1 >z),. ": vv ". ','sfy z
+)
+
+
+
+
+s=. 3 3 2$1 0 0 0 0 0 2 1 2 1 2 1 2 0 0 3 2 0
+m=. < '(' ; ')'
+smresolve=: ((0;s;m) ;: ucp)"1
+sw=: ] rplc [: , (paren&.> ,. ":&".&.>)&smresolve
+ssw=: smoutput&sw
+
 dtlf=: #~ ([: +./\. (10{a.)&~:)
 edit=: [: open [: , [: > whichscript_z_
+extx=: (0 < [: # ]) # ] , [ #~ [: -. '.' e. ]
+fname=: ([: >: '/' i:~ ]) }. ] {.~ '.' i:~ ]
 fw=: firstwords=: (' ' taketo ])"1
 ijs=: '.ijs'&extx
 isBool=: isBools *. isScalar
+isBools=: [: all 0 1 e.~ ]
 isEmpty=: 0 = [: */ $
+isScalar=: [: {. 0 = [: $ $
 tmp=: [: jpath '~temp/' , ijs@":
 lasttemp=: 3 : 'tmp >./3 diriac tmp ''*'''
 llog=: (1 { ":)@(,@([: ] ;: ,. [: ".&.> ;:))
@@ -311,6 +291,8 @@ max=: $:/ :>.
 min=: $:/ :<.
 o2f=: 3 : 'LF(I. y=SP)}y'
 or=: +.
+ot=: empty
+paren=: 1 |. ')(' , ":
 pathof=: ] {.~ [: >: '/' i:~ ]
 pc=: '%' ,~ [: ": [: <. 0.5 + 100 * 88350 %~ ]
 sllog=: smoutput@llog
@@ -320,8 +302,6 @@ sqrt=: %: :[:
 square=: *: :[:
 st=: [: 1!:1 [: < tmp
 sst=: smoutput@st
-ssw=: smoutput&sw
-sw=: ] rplc [: , (paren&.> ,. ":&".&.>)&smresolve
 temp=: lasttemp`tmp@.(*@#@])
 to=: [ + [: i. [: >: -~
 x2f=: }.@((<10{a.) ;@,. ])@([: (#~ ([: +./\. ' '&~:))&.> <"1)
