@@ -89,7 +89,6 @@ foo a3 ; first2nums list3
 foo a3 ; first2nums list1
 )
 
-onload 'test_numeral_i 0'
-
-onload 'imgview temp ''breakback.jpg'''
-onload 'imgview temp ''toucan.jpg'''
+NB. onload 'test_numeral_i 0'
+NB. onload 'imgview temp ''breakback.jpg'''
+NB. onload 'imgview temp ''toucan.jpg'''

@@ -25,6 +25,9 @@ AABUILT=: '2019-04-03  12:54:29'
 AABUILT=: '2019-04-04  09:22:51'
 AABUILT=: '2019-04-05  05:08:59'
 AABUILT=: '2019-04-05  05:40:05'
+AABUILT=: '2019-04-05  16:36:46'
+AABUILT=: '2019-04-05  16:42:20'
+AABUILT=: '2019-04-05  19:27:17'
 
 '==================== [tabby] constants ===================='
 
@@ -206,11 +209,6 @@ foo DN ; secondnum '_55.12 xx'
 foo a3 ; first2nums list3
 foo a3 ; first2nums list1
 )
-
-onload 'test_numeral_i 0'
-
-onload 'imgview temp ''breakback.jpg'''
-onload 'imgview temp ''toucan.jpg'''
 
 '==================== [tabby] handy4tab ===================='
 cocurrent 'z'
@@ -808,7 +806,6 @@ promote 'calco_title'
 promote 'calco_sample'
 ]z=. (; d,each <' ::'),'calcoErr'
 daisychain=: 13 : ('(',z,')y')
-smoutput crr'daisychain'
 i.0 0
 )
 
@@ -1068,16 +1065,33 @@ open 'math/tabula'
 ===Templates for handlers:
 additems_like	>0 selected lines, ignores shift
 set1u_like	1 selected line, restores selection
-add1u_like	set1u_like but puts v=1 in CAL instruction
 child_like	set1u_like but ignores shift
 subitems_like	2 selected lines, order significant
 )
 
 coclass 'tabby'
 
+selected=: 3 : 0
+
+b=. y= # 0-.~ ".panel_select
+if. -.b do. confirm sw '>>> must select precisely (y) line',(1<{.y)#'s'
+else. confirm ''
+end.
+b return.
+)
+
+selectedAtLeast=: 3 : 0
+
+b=. y<: # 0-.~ ".panel_select
+if. -.b do. confirm sw '>>> must select (y) or more lines'
+else. confirm ''
+end.
+b return.
+)
 
 child_like=: 4 : 0
 
+if. -.selected 1 do. return. end.
 tabengine x ; theItem=. line 0
 confirm tabengine'MSSG'
 showTtable''
@@ -1386,6 +1400,7 @@ tabenginex pickshift 2$ ;:x
 
 additems=: additems_like=: 'plus' ddefine
 
+if. -.selectedAtLeast 1 do. return. end.
 tabengine x ; panel_select
 confirm tabengine'MSSG'
 showTtable''
@@ -1398,6 +1413,7 @@ mulitems=: 'mult'&additems_like
 
 subitems=: subitems_like=: 'minu' ddefine
 
+if. -.selected 2 do. return. end.
 if. heldshift'' do. tabengine x ; line 1 0
 else.               tabengine x ; line 0 1
 end.
@@ -1450,7 +1466,7 @@ updatevaluebar''
 restoreFocusToInputField''
 )
 
-equal=: 'equl'&additems_like
+equal=: 'equl'&child_like
 delit=: 'dele'&additems_like
 
 delsa=: 3 : 0
@@ -1490,6 +1506,7 @@ siunt=: 'cvsi'&child_like
 
 set1u=: set1u_like=: 'onep onen' ddefine
 
+if. -.selected 1 do. return. end.
 inst=. pickshift 2$ ;:x
 tabengine inst ; theItem=. line 0
 confirm tabengine'MSSG'
@@ -1873,8 +1890,15 @@ decrementToZero=: 0 >. [: <: default
 isErrorMessage=: [: +./ '>>>' E. ,
 
 confirm=: 3 : 0
+
+
+
+
 NOCONFIRM=: decrementToZero'NOCONFIRM'
-if. isErrorMessage y do.
+if. 0=#y do.
+  putsb ''
+  NOCONFIRM=: 0
+elseif. isErrorMessage y do.
   wd'beep'
   putsb y
   NOCONFIRM=: NOCONFIRM_MAX
@@ -2160,7 +2184,6 @@ else.
   msg=: empty
   sllog=: empty
 end.
-smoutput '+++ trace ',":y
 i.0 0
 )
 
@@ -2287,7 +2310,6 @@ tabengine=: tabengine_cal_
 tx_z_=: tabenginex_tabby_
 
 start_cal_ '$$'
-start_tree_''
 tab_open''
 setpreci 3
 setunico 1

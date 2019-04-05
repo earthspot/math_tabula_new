@@ -32,7 +32,7 @@ promote 'calco_title'
 promote 'calco_sample'
 ]z=. (; d,each <' ::'),'calcoErr'
 daisychain=: 13 : ('(',z,')y')
-smoutput crr'daisychain'
+NB. smoutput crr'daisychain'
 i.0 0
 )
 

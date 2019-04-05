@@ -212,9 +212,15 @@ decrementToZero=: 0 >. [: <: default
 isErrorMessage=: [: +./ '>>>' E. ,
 
 confirm=: 3 : 0
-NB. smoutput '+++ confirm: ',y NB. TOO MUCH OUTPUT
+  NB. output is protected for (NOCONFIRM_MAX) subsequent calls
+  NB. …this stabilizes the toolbar.
+  NB. y--'' -clears output immediately, de-protects.
+  NB. recognises an error message (y) --> beeps, protects.
 NOCONFIRM=: decrementToZero'NOCONFIRM'
-if. isErrorMessage y do.
+if. 0=#y do.
+  putsb ''
+  NOCONFIRM=: 0
+elseif. isErrorMessage y do.
   wd'beep'
   putsb y
   NOCONFIRM=: NOCONFIRM_MAX
@@ -510,6 +516,6 @@ else.
   msg=: empty
   sllog=: empty
 end.
-smoutput '+++ trace ',":y
+NB. smoutput '+++ trace ',":y
 i.0 0
 )

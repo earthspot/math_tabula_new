@@ -13,16 +13,33 @@ open 'math/tabula'		NB. existing release
 ===Templates for handlers:
 additems_like	>0 selected lines, ignores shift
 set1u_like	1 selected line, restores selection
-add1u_like	set1u_like but puts v=1 in CAL instruction
 child_like	set1u_like but ignores shift
 subitems_like	2 selected lines, order significant
 )
 
 coclass 'tabby'
 
+selected=: 3 : 0
+  NB. enforce selection of precisely y lines
+b=. y= # 0-.~ ".panel_select
+if. -.b do. confirm sw '>>> must select precisely (y) line',(1<{.y)#'s'
+else. confirm ''
+end.
+b return.
+)
+
+selectedAtLeast=: 3 : 0
+  NB. enforce selection of y lines or more
+b=. y<: # 0-.~ ".panel_select
+if. -.b do. confirm sw '>>> must select (y) or more lines'
+else. confirm ''
+end.
+b return.
+)
 
 child_like=: 4 : 0
   NB. template of choice for menu clicks
+if. -.selected 1 do. return. end.
 tabengine x ; theItem=. line 0
 confirm tabengine'MSSG'
 showTtable''
@@ -371,6 +388,7 @@ tabenginex pickshift 2$ ;:x
 
 additems=: additems_like=: 'plus' ddefine
   NB. Add all selected items
+if. -.selectedAtLeast 1 do. return. end.
 tabengine x ; panel_select
 confirm tabengine'MSSG'
 showTtable''
@@ -383,6 +401,7 @@ mulitems=: 'mult'&additems_like  NB. Multiply all selected items
 
 subitems=: subitems_like=: 'minu' ddefine
   NB. item 1 - 2 / item 2 - 1
+if. -.selected 2 do. return. end.
 if. heldshift'' do. tabengine x ; line 1 0
 else.               tabengine x ; line 0 1
 end.
@@ -437,7 +456,7 @@ updatevaluebar''
 restoreFocusToInputField''
 )
 
-equal=: 'equl'&additems_like  NB. New line = selected line
+equal=: 'equl'&child_like  NB. New line = selected line
 delit=: 'dele'&additems_like  NB. Delete selected lines
 
 delsa=: 3 : 0
@@ -478,6 +497,7 @@ siunt=: 'cvsi'&child_like
 
 set1u=: set1u_like=: 'onep onen' ddefine
   NB. Set value to 1 / Set value to -1
+if. -.selected 1 do. return. end.
 inst=. pickshift 2$ ;:x
 tabengine inst ; theItem=. line 0
 confirm tabengine'MSSG'
