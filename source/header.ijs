@@ -31,3 +31,6 @@ PNG=: jpath '~Gittab/tabula-toolbar.png'
 ]USERTOOLS_z_=: jpath '~Gittab/usertools.ijs'
 
 AABUILT=: '2019-04-03  12:54:29'
+AABUILT=: '2019-04-04  09:22:51'
+AABUILT=: '2019-04-05  05:08:59'
+AABUILT=: '2019-04-05  05:40:05'

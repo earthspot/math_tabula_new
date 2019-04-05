@@ -1,13 +1,23 @@
 	NB. tabby - graphic.ijs
 '==================== [tabby] graphic ===================='
 0 :0
-Monday 1 April 2019  05:15:01
+Thursday 4 April 2019  09:11:06
+-
+TO DO
+circle - draw it round item number
+animate a mouseclick
+draw a selection bar
+fetch boxed array of current t-table, plus arrows
+add scrollbar, displace the image
+write caption
+draw arrows
+(CENTER not used)
 -
   wd'psel tre; qform'
   sminfo_z_=: wdinfo_z_=: echo_z_
 -
 PTS -a list of points at which {1} {2} … drawn
-tre-draw should draw the quantities & names
+redraw should draw the quantities & names
 click -sets the line selection
 -
 We need a scrollbar
@@ -28,6 +38,7 @@ coclass LOC=.'tree'
 clear LOC
 coinsert 'jgl2'	NB. use gl2 verbs to paint the window
 
+ITEMS=: 1 + i.5
 PTS=: 100j50 100j100 100j150 100j200 100j250
 
 NODEID=: 1
@@ -52,11 +63,11 @@ COLOR_CLICK=: 255 100 0	NB. color of click spot
 COLOR_WHITE=: 255 255 255	NB. color of (invisible) circumference
 MAX_DISTANCE=: 15		NB. used by verb: closest (13 seems critical)
 MAX_DISTANCE=: 100		NB. used by verb: closest (13 seems critical)
-FONT=: 'Arial Unicode MS'	NB. best-looking glyphs
+NB. FONT=: 'Arial Unicode MS'	NB. best-looking glyphs
 NB. FONT=: 'APL385 Unicode'	NB. solid-looking APL glyphs
 NB.FONT=: 'Andale Mono'	NB. squared-off glyphs
-NB.FONT=: 'Menlo'
-'FONTSIZE GCOUNT GWIDTH GDROP DIAMETER CENTER'=: 18 24 20 18 18 6j12
+FONT=: 'Menlo'
+'FONTSIZE GCOUNT GWIDTH GDROP DIAMETER CENTER DISP'=: 14 24 20 18 36 6j12 _12j_7
 NB. PTLS=: ptls''		NB. topleft points for tool glyphs
 NB. PTS=: PTLS + CENTER	NB. est displacement to visual center
 NB. WTS=: (#PTS)#1		NB. dummy weights (for now)
@@ -66,7 +77,8 @@ wd TREE
 NB. wd 'set g wh _1 64'
 wd 'pmove ',": TREEPOS
 wd 'pshow'
-glclear''
+icp=: _1  NB. outside range of: items
+redraw''
 )
 
 
@@ -95,6 +107,8 @@ NB. tre_g_focus=: empty
 NB. tre_g_focuslost=: empty
 NB. tre_g_mbldbl=: empty	NB. DOUBLECLICK on toolbar
 NB. tre_g_resize=: empty
+
+tre_close=: window_close
 
 tre_g_mbldown=: 3 : 0
   NB. mouseDown on toolbar
@@ -127,23 +141,10 @@ wd'timer ',":TIMER_HOVER
 
 signal=: empty
 
-
 tre_hover_off=: 3 : 0
 wd 'timer 0'
 	ssw '+++ tre_hover_off: X=(X) Y=(Y)'
 NB. redraw''  NB. redraw with no hilite
-)
-
-redraw=: 0 ddefine
-  NB. redraws t-table tree, hilites hotspot id= y
-  NB. (bool) x makes choice between 2 circle colors
-NB. 	ssw '... redraw x=(x) y=(y)'
-putsb sw 'x=(x) y=(y) X=(X) Y=(Y) PT=(PT) icp=(icp) NODEID=(NODEID) NODE=(NODE)'
-wd 'psel tre'
-glclear''
-glsel 'g'
-x circle icp{PTS
-glpaint''
 )
 
 closest=: 3 : 0
@@ -179,6 +180,28 @@ NB. 1 fill_tools icp		NB. hilite (clicked)
 i.0 0
 )
 
+redraw=: 0 ddefine
+  NB. redraws t-table tree, hilites hotspot id= y
+  NB. (bool) x makes choice between 2 circle colors
+NB. 	ssw '... redraw x=(x) y=(y)'
+CTB=: tabengine_cal_'CTBB'
+putsb sw 'x=(x) y=(y) X=(X) Y=(Y) PT=(PT) icp=(icp) NODEID=(NODEID) NODE=(NODE)'
+wd 'psel tre'
+blank=. COLOR_WHITE
+spot=. x pick COLOR_HOVER ; COLOR_CLICK
+glsel 'g'
+glclear''
+if. icp e. ITEMS-1 do. x circle icp{PTS end.
+glfont sw '"(FONT)" (FONTSIZE)'
+glrgb blank
+glpen 1
+glbrush'' [glrgb spot  NB. next ellipse filled with spot color
+for_i. i.#PTS do.
+  gltextxy +. DISP + i{PTS
+  gltext brace i+1
+end.
+glpaint''
+)
 
 
 onload 'start_tree_ NIL'

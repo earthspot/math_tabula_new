@@ -22,6 +22,9 @@ PNG=: jpath '~Gittab/tabula-toolbar.png'
 ]USERTOOLS_z_=: jpath '~Gittab/usertools.ijs'
 
 AABUILT=: '2019-04-03  12:54:29'
+AABUILT=: '2019-04-04  09:22:51'
+AABUILT=: '2019-04-05  05:08:59'
+AABUILT=: '2019-04-05  05:40:05'
 
 '==================== [tabby] constants ===================='
 
@@ -551,13 +554,23 @@ wd 'pmove ',": X,Y,W,H
 
 '==================== [tabby] graphic ===================='
 0 :0
-Monday 1 April 2019  05:15:01
+Thursday 4 April 2019  09:11:06
+-
+TO DO
+circle - draw it round item number
+animate a mouseclick
+draw a selection bar
+fetch boxed array of current t-table, plus arrows
+add scrollbar, displace the image
+write caption
+draw arrows
+(CENTER not used)
 -
   wd'psel tre; qform'
   sminfo_z_=: wdinfo_z_=: echo_z_
 -
 PTS -a list of points at which {1} {2} … drawn
-tre-draw should draw the quantities & names
+redraw should draw the quantities & names
 click -sets the line selection
 -
 We need a scrollbar
@@ -578,6 +591,7 @@ coclass LOC=.'tree'
 clear LOC
 coinsert 'jgl2'
 
+ITEMS=: 1 + i.5
 PTS=: 100j50 100j100 100j150 100j200 100j250
 
 NODEID=: 1
@@ -602,14 +616,15 @@ COLOR_CLICK=: 255 100 0
 COLOR_WHITE=: 255 255 255
 MAX_DISTANCE=: 15
 MAX_DISTANCE=: 100
-FONT=: 'Arial Unicode MS'
-'FONTSIZE GCOUNT GWIDTH GDROP DIAMETER CENTER'=: 18 24 20 18 18 6j12
+FONT=: 'Menlo'
+'FONTSIZE GCOUNT GWIDTH GDROP DIAMETER CENTER DISP'=: 14 24 20 18 36 6j12 _12j_7
 sysevent=: ''
 window_close''
 wd TREE
 wd 'pmove ',": TREEPOS
 wd 'pshow'
-glclear''
+icp=: _1
+redraw''
 )
 
 
@@ -629,6 +644,8 @@ wh=. 2#DIAMETER
 radius=. <.DIAMETER%2
 glellipse (xy - radius) , wh
 )
+tre_close=: window_close
+
 tre_g_mbldown=: 3 : 0
 
 
@@ -658,21 +675,9 @@ wd'timer ',":TIMER_HOVER
 
 signal=: empty
 
-
 tre_hover_off=: 3 : 0
 wd 'timer 0'
 	ssw '+++ tre_hover_off: X=(X) Y=(Y)'
-)
-
-redraw=: 0 ddefine
-
-
-putsb sw 'x=(x) y=(y) X=(X) Y=(Y) PT=(PT) icp=(icp) NODEID=(NODEID) NODE=(NODE)'
-wd 'psel tre'
-glclear''
-glsel 'g'
-x circle icp{PTS
-glpaint''
 )
 
 closest=: 3 : 0
@@ -706,6 +711,27 @@ if. _=icp do. signal '(no tool selected)' return. end.
 i.0 0
 )
 
+redraw=: 0 ddefine
+
+
+CTB=: tabengine_cal_'CTBB'
+putsb sw 'x=(x) y=(y) X=(X) Y=(Y) PT=(PT) icp=(icp) NODEID=(NODEID) NODE=(NODE)'
+wd 'psel tre'
+blank=. COLOR_WHITE
+spot=. x pick COLOR_HOVER ; COLOR_CLICK
+glsel 'g'
+glclear''
+if. icp e. ITEMS-1 do. x circle icp{PTS end.
+glfont sw '"(FONT)" (FONTSIZE)'
+glrgb blank
+glpen 1
+glbrush'' [glrgb spot
+for_i. i.#PTS do.
+  gltextxy +. DISP + i{PTS
+  gltext brace i+1
+end.
+glpaint''
+)
 
 
 onload 'start_tree_ NIL'
