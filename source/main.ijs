@@ -135,7 +135,9 @@ ssw '>>> set_ucase: dummy placeholder, y=(y)'
 
 putsb=: 3 : 0
   NB. show (string/num) y in statusbar
-wd 'psel tab; set sbar text *',":,y
+z=. ": ,y
+if. 70<#z do. z=. '…',~ 69{.z end.
+wd 'psel tab; set sbar text *',z
 )
 
 clicktab=: 3 : 0

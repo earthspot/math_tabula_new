@@ -28,6 +28,10 @@ AABUILT=: '2019-04-05  05:40:05'
 AABUILT=: '2019-04-05  16:36:46'
 AABUILT=: '2019-04-05  16:42:20'
 AABUILT=: '2019-04-05  19:27:17'
+AABUILT=: '2019-04-06  04:58:33'
+AABUILT=: '2019-04-06  05:02:23'
+AABUILT=: '2019-04-06  05:04:14'
+AABUILT=: '2019-04-06  05:42:11'
 
 '==================== [tabby] constants ===================='
 
@@ -625,10 +629,11 @@ icp=: _1
 redraw''
 )
 
-
 putsb=: 3 : 0
 
-wd 'psel tre; set sbar text *',":,y
+z=. ": ,y
+if. 70<#z do. z=. '…',~ 69{.z end.
+wd 'psel tre; set sbar text *',z
 )
 
 circle=: 4 : 0
@@ -782,6 +787,8 @@ replaces interpretCalco
 old interpretCalco --> interpretCalco0
 -
 We need an extended isNumeric which accepts blind decimals and sci#s
+-
+  sminfo_z_=: wdinfo_z_=: echo_z_
 )
 
 coclass 'tabby'
@@ -804,6 +811,7 @@ promote 'calco_singlet'
 promote 'calco_yesno'
 promote 'calco_title'
 promote 'calco_sample'
+demote 'calco_eval'
 ]z=. (; d,each <' ::'),'calcoErr'
 daisychain=: 13 : ('(',z,')y')
 i.0 0
@@ -828,7 +836,13 @@ promote=: 3 : 0
 d=: ~. d ,~ boxopen y
 )
 
+demote=: 3 : 0
+
+d=: ~. d , boxopen y
+)
+
 calcoErr=: 3 : 0
+register'calcoErr'
 msg '>>> calcoErr: none chime: y=[(y)]'
 sw'(y) [???]'
 )
@@ -884,6 +898,15 @@ blink'white'
 assert. -. noSelection''
 assert. isNumeric y
 tabenginex 'valu' ; theItem ; ". j4sci y
+)
+
+calco_eval=: 3 : 0
+register'calco_eval'
+
+blink'white'
+assert. -. noSelection''
+assert. isNum z=. rat {. ". y
+tabenginex 'valu' ; theItem ; z
 )
 
 calco_force=: 3 : 0
@@ -1021,13 +1044,19 @@ doinloc=: 4 : 0
 lo=. <":x
 putsb ,>do__lo y
 )
+
 calco_qty=: 3 : 0
 register'calco_qty'
 
+
 blink'white'
 assert. -. noSelection''
+assert. SP e. y=. deb y
+'va un'=. SP cut y
+assert. isNumeric va=. dltb va
+assert. isunits=. 0~: {: tabengine 'CONV' ; dltb un
 qty=. tabengine 'UUUU' ; y
-smoutput llog 'calco_qty y qty'
+smoutput llog 'calco_qty y va un isunits qty'
 tabenginex 'vunn' ; theItem ; qty
 )
 
@@ -1814,7 +1843,9 @@ ssw '>>> set_ucase: dummy placeholder, y=(y)'
 
 putsb=: 3 : 0
 
-wd 'psel tab; set sbar text *',":,y
+z=. ": ,y
+if. 70<#z do. z=. '…',~ 69{.z end.
+wd 'psel tab; set sbar text *',z
 )
 
 clicktab=: 3 : 0

@@ -81,10 +81,11 @@ icp=: _1  NB. outside range of: items
 redraw''
 )
 
-
 putsb=: 3 : 0
   NB. show (string/num) y in statusbar
-wd 'psel tre; set sbar text *',":,y
+z=. ": ,y
+if. 70<#z do. z=. '…',~ 69{.z end.
+wd 'psel tre; set sbar text *',z
 )
 
 circle=: 4 : 0
