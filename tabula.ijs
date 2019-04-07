@@ -32,6 +32,7 @@ AABUILT=: '2019-04-06  04:58:33'
 AABUILT=: '2019-04-06  05:02:23'
 AABUILT=: '2019-04-06  05:04:14'
 AABUILT=: '2019-04-06  05:42:11'
+AABUILT=: '2019-04-06  17:51:48'
 
 '==================== [tabby] constants ===================='
 
@@ -904,6 +905,7 @@ calco_eval=: 3 : 0
 register'calco_eval'
 
 blink'white'
+y=. y rplc '4π' ; ' PI4 ' ; '2π' ; ' PI2 ' ; 'π' ; ' PI '
 assert. -. noSelection''
 assert. isNum z=. rat {. ". y
 tabenginex 'valu' ; theItem ; z

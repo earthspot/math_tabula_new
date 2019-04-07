@@ -106,7 +106,7 @@ d+(m%60)+s%3600
 )
 
 cut_dms=: 3 : 0
-  NB. cut eg: '57° 17'' 44"' --> 57;17;44
+  NB. cut eg: 57° 17' 44" --> 57;17;44
 z=. y -. SP,DQ
 d=. ". DG taketo z
 z=. DG takeafter z
@@ -126,8 +126,9 @@ tabenginex 'valu' ; theItem ; ". j4sci y
 
 calco_eval=: 3 : 0
 register'calco_eval'
-  NB. handle a valid J-phrase
+  NB. handle a valid J-phrase to compute a new value
 blink'white'
+y=. y rplc '4π' ; ' PI4 ' ; '2π' ; ' PI2 ' ; 'π' ; ' PI '
 assert. -. noSelection''
 assert. isNum z=. rat {. ". y  NB. the most general
 tabenginex 'valu' ; theItem ; z
