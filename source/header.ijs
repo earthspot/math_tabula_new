@@ -1,14 +1,16 @@
+	NB. tabby - header.ijs
+'==================== [tabby] header ===================='
 0 :0
-Tuesday 2 April 2019  17:37:29
+Wednesday 10 April 2019  06:57:29
 -
 TABULA: scientific units calculator
 -simplified architecture
 )
 
-NB. clear 'tabby'	NB. >>>>> DELETE THIS LINE IN RELEASED ADDON
 coclass LOC=.'tabby'
-clear LOC
 coinsert 'jgl2'	NB. use gl2 verbs to paint the window
+
+CREATOR=: ;(4!:4<'zx'){4!:3''[zx=.''
 onload_z_=: empty
 startonload_z_=: start_tabby_	NB. or: empty
 
@@ -18,27 +20,19 @@ NB. if. if807'' do. 'fixfont' end.
 '"Menlo" 14'
 )
 
-NB. FORM_POSITION=: _1     NB. upper left
-FORM_POSITION=: _2     NB. upper right
+FORM_POSITION=: _1     NB. upper left
+NB. FORM_POSITION=: _2     NB. upper right
 NB. FORM_POSITION=: _3     NB. lower left
 NB. FORM_POSITION=: _4     NB. lower right
 NB. FORM_POSITION=: _5     NB. center
 
-PNG=: jpath '~Gittab/tabula-toolbar.png'
+PNG=: CREATOR rplc 'tabula.ijs' ; 'tabula-toolbar.png'
 
   NB. path to the ALTERNATIVE usertools script
   NB. for remembering user tools redefined in-session
-]USERTOOLS_z_=: jpath '~Gittab/usertools.ijs'
+]USERTOOLS_z_=: CREATOR rplc 'tabula.ijs' ; 'usertools.ijs'
 
-AABUILT=: '2019-04-03  12:54:29'
-AABUILT=: '2019-04-04  09:22:51'
-AABUILT=: '2019-04-05  05:08:59'
-AABUILT=: '2019-04-05  05:40:05'
-AABUILT=: '2019-04-05  16:36:46'
-AABUILT=: '2019-04-05  16:42:20'
-AABUILT=: '2019-04-05  19:27:17'
-AABUILT=: '2019-04-06  04:58:33'
-AABUILT=: '2019-04-06  05:02:23'
-AABUILT=: '2019-04-06  05:04:14'
-AABUILT=: '2019-04-06  05:42:11'
-AABUILT=: '2019-04-06  17:51:48'
+AABUILT=: '2019-04-10  06:54:36'
+AABUILT=: '2019-04-10  06:57:34'
+AABUILT=: '2019-04-10  06:58:41'
+AABUILT=: '2019-04-10  06:59:34'

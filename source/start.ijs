@@ -9,6 +9,8 @@ wd 'timer 0'
 load :: 0: USERTOOLS_z_
 load 'math/cal'  NB. (CAL loads UU)
   NB. ...MUST DO all access to UU suite via CAL instructions
+load CREATOR rplc 'tabula.ijs' ; 'manifest.ijs'
+erase'CAPTION FILES DESCRIPTION RELEASE FOLDER LABCATEGORY PLATFORMS'
 tabengine=: tabengine_cal_  NB. replace dummy local CAL link
 tx_z_=: tabenginex_tabby_  NB. to allow e.g. CAL to update UI directly
   NB. initialize and load a t-table to show in: panel

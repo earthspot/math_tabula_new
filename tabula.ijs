@@ -1,12 +1,16 @@
+
+'==================== [tabby] header ===================='
 0 :0
-Tuesday 2 April 2019  17:37:29
+Wednesday 10 April 2019  06:57:29
 -
 TABULA: scientific units calculator
 -simplified architecture
 )
+
 coclass LOC=.'tabby'
-clear LOC
 coinsert 'jgl2'
+
+CREATOR=: ;(4!:4<'zx'){4!:3''[zx=.''
 onload_z_=: empty
 startonload_z_=: start_tabby_
 
@@ -14,25 +18,18 @@ fixfont=: 3 : 0
 
 '"Menlo" 14'
 )
-FORM_POSITION=: _2
-PNG=: jpath '~Gittab/tabula-toolbar.png'
+
+FORM_POSITION=: _1
+PNG=: CREATOR rplc 'tabula.ijs' ; 'tabula-toolbar.png'
 
 
 
-]USERTOOLS_z_=: jpath '~Gittab/usertools.ijs'
+]USERTOOLS_z_=: CREATOR rplc 'tabula.ijs' ; 'usertools.ijs'
 
-AABUILT=: '2019-04-03  12:54:29'
-AABUILT=: '2019-04-04  09:22:51'
-AABUILT=: '2019-04-05  05:08:59'
-AABUILT=: '2019-04-05  05:40:05'
-AABUILT=: '2019-04-05  16:36:46'
-AABUILT=: '2019-04-05  16:42:20'
-AABUILT=: '2019-04-05  19:27:17'
-AABUILT=: '2019-04-06  04:58:33'
-AABUILT=: '2019-04-06  05:02:23'
-AABUILT=: '2019-04-06  05:04:14'
-AABUILT=: '2019-04-06  05:42:11'
-AABUILT=: '2019-04-06  17:51:48'
+AABUILT=: '2019-04-10  06:54:36'
+AABUILT=: '2019-04-10  06:57:34'
+AABUILT=: '2019-04-10  06:58:41'
+AABUILT=: '2019-04-10  06:59:34'
 
 '==================== [tabby] constants ===================='
 
@@ -2339,6 +2336,8 @@ wd 'timer 0'
 load :: 0: USERTOOLS_z_
 load 'math/cal'
 
+load CREATOR rplc 'tabula.ijs' ; 'manifest.ijs'
+erase'CAPTION FILES DESCRIPTION RELEASE FOLDER LABCATEGORY PLATFORMS'
 tabengine=: tabengine_cal_
 tx_z_=: tabenginex_tabby_
 
