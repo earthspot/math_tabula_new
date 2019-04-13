@@ -8,10 +8,7 @@ TABULA: scientific calculator
 -works with SI units.
 )
 
-sysmodifiers=: ,'0'
-	NB. >>> ought we init ALL (wd) 'sys' caches?
-
-  NB. SI conformance level combobox
+  NB. Fill SI conformance level combobox (unico) - does not change
 CONTENT_UNICO=: }: 0 : 0
  m/kg/s^2
  m/(kg s²)
@@ -53,7 +50,6 @@ ITEMS=: i.0  NB. cache of valid item ids after last tabengine call
 NOCONFIRM_MAX=: 20  NB. suppress: confirm for this number of calls
 PEN_WIDTH=: 3
 PMOVES=: 0  NB. =1 to use new: 'pmoves' wd-feature (j807 onwards)
-NB. PNG=: temp 'tabula-toolbar.png' --moved to header.ijs
 QT=: ''''
 SC=: ';'
 SL=: '/'
@@ -93,7 +89,7 @@ syshwndp                           =: UNSET
 syslastfocus                       =: UNSET
 syslocalec                         =: UNSET
 syslocalep                         =: UNSET
-sysmodifiers                       =: UNSET
+sysmodifiers                       =: ,'0'
 sysparent                          =: UNSET
 systype                            =: UNSET
 tabs                               =: UNSET

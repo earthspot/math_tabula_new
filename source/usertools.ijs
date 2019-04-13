@@ -1,11 +1,11 @@
 	NB. tabby - user.ijs
 '==================== [tabby] user.ijs ===================='
 0 :0
-Friday 15 February 2019  19:40:30
+Wednesday 10 April 2019  23:57:49
 -
 THIS IS THE DEFAULT DEFN OF USERTOOLS RESIDING IN /source/
 IT IS OVERRIDDEN BY AN ALTERNATIVE SCRIPT loaded by: start
-USERTOOLS_z_ path specified in: header.ijs
+USERTOOLS is a path global created by: start
 )
 
 coclass 'tabby'
@@ -13,7 +13,7 @@ coclass 'tabby'
 usertool=: 3 : 0
   NB. common to all user-definable tools
 ssw '+++ usertool: sysmodifiers=(sysmodifiers)'
-if. heldshift'' do. open USERTOOLS_z_ return. end.
+if. heldshift'' do. open :: 0: USERTOOLS return. end.
 if. heldcmnd'' do. ide 1 return. end.
 )
 

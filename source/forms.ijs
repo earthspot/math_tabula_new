@@ -1,10 +1,17 @@
  	NB. tabby - forms.ijs
 '==================== [tabby] forms ===================='
 0 :0
-Wednesday 6 March 2019  09:22:44
+Wednesday 10 April 2019  23:48:43
 )
 
 coclass 'tabby'
+
+  NB. form position,size factory setting: (may get overridden)
+NB. FORM_POSITION=: _1     NB. upper left
+NB. FORM_POSITION=: _2     NB. upper right
+NB. FORM_POSITION=: _3     NB. lower left
+NB. FORM_POSITION=: _4     NB. lower right
+FORM_POSITION=: _5     NB. center
 
 TABU=: 0 : 0
 pc tab;pn Tabby;
@@ -221,7 +228,7 @@ form _2
 )
 
 form=: 3 : 0
-  NB. y e. 1 2 3 4 5 -move form to screen corners or center…
+  NB. (|y) e. 1 2 3 4 5 -move form to screen corners or center…
   NB. 1 2
   NB.  5
   NB. 3 4
@@ -243,4 +250,35 @@ case. 4 do. 'X Y'=. X1,Y1
 case. 5 do. wd 'pcenter' return.
 end.
 wd 'pmove ',": X,Y,W,H
+)
+
+
+tab_open=: 3 : 0
+  NB. serves: start
+window_close''
+wd TABU
+wd 'psel tab'
+wd 'set g wh _1 64'
+refreshInfo''
+t=. ,:UNSET
+NB. wd 'set cons font ',fixfont''
+NB. wd 'set func font ',fixfont''
+wd 'set func font "Menlo" 10'
+wd 'set panel font ',fixfont''
+wd 'set calco font ',fixfont''
+  NB. DONT set fixfont'' for preci or unico -too narrow
+NB. wd 'set cons items *',x2f t
+NB. wd 'set func items *',x2f t
+wd 'set preci items *', o2f ": i.16
+wd 'set unico items *',CONTENT_UNICO
+wd 'set panel items *',UNSET
+NB. confirm 'Click a line and perform some operation on it...'
+if. PMOVES do.
+  wd :: 0: 'pmoves ' , ":XYWH  NB. activate remembering window position
+else.
+NB.   wd 'pmove ' , ":XYWH
+  form FORM_POSITION
+end.
+wd 'pshow'
+fill_tools ''
 )

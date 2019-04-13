@@ -1,12 +1,10 @@
 	NB. tabby - calco.ijs
 '==================== [tabby] calco ===================='
 0 :0
-Saturday 30 March 2019  20:22:29
+Wednesday 10 April 2019  23:49:45
 -
 replaces interpretCalco
 old interpretCalco --> interpretCalco0
--
-We need an extended isNumeric which accepts blind decimals and sci#s
 -
   sminfo_z_=: wdinfo_z_=: echo_z_
 )

@@ -29,6 +29,7 @@ if. -. NSAMPLE e. i.8 do. NSAMPLE=: 0 end.
 jpgview '$',":NSAMPLE
 )
 
+createDirIfAbsent=: [: 1!:5 ::0: <
 dtlf=: #~ ([: +./\. (10{a.)&~:)  NB. delete trailing LF's
 shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
 isEmpty=: 0 = [: */ $

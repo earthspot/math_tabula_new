@@ -1,35 +1,24 @@
-
-'==================== [tabby] header ===================='
 0 :0
-Wednesday 10 April 2019  06:57:29
+Saturday 13 April 2019  03:38:25
 -
 TABULA: scientific units calculator
 -simplified architecture
 )
 
-coclass LOC=.'tabby'
+coclass 'tabby'
 coinsert 'jgl2'
 
 CREATOR=: ;(4!:4<'zx'){4!:3''[zx=.''
 onload_z_=: empty
 startonload_z_=: start_tabby_
 
-fixfont=: 3 : 0
-
-'"Menlo" 14'
-)
-
-FORM_POSITION=: _1
-PNG=: CREATOR rplc 'tabula.ijs' ; 'tabula-toolbar.png'
-
-
-
-]USERTOOLS_z_=: CREATOR rplc 'tabula.ijs' ; 'usertools.ijs'
-
-AABUILT=: '2019-04-10  06:54:36'
-AABUILT=: '2019-04-10  06:57:34'
-AABUILT=: '2019-04-10  06:58:41'
-AABUILT=: '2019-04-10  06:59:34'
+AABUILT=: '2019-04-13  05:36:46'
+AABUILT=: '2019-04-13  05:50:10'
+AABUILT=: '2019-04-13  05:55:33'
+AABUILT=: '2019-04-13  06:07:18'
+AABUILT=: '2019-04-13  06:09:37'
+AABUILT=: '2019-04-13  06:25:43'
+AABUILT=: '2019-04-13  18:21:56'
 
 '==================== [tabby] constants ===================='
 
@@ -39,9 +28,6 @@ ABOUT=: 0 : 0
 TABULA: scientific calculator
 -works with SI units.
 )
-
-sysmodifiers=: ,'0'
-
 
 
 CONTENT_UNICO=: }: 0 : 0
@@ -124,7 +110,7 @@ syshwndp                           =: UNSET
 syslastfocus                       =: UNSET
 syslocalec                         =: UNSET
 syslocalep                         =: UNSET
-sysmodifiers                       =: UNSET
+sysmodifiers                       =: ,'0'
 sysparent                          =: UNSET
 systype                            =: UNSET
 tabs                               =: UNSET
@@ -163,6 +149,7 @@ if. -. NSAMPLE e. i.8 do. NSAMPLE=: 0 end.
 jpgview '$',":NSAMPLE
 )
 
+createDirIfAbsent=: [: 1!:5 ::0: <
 dtlf=: #~ ([: +./\. (10{a.)&~:)
 shift=: 2 : 'if. 1=".sysmodifiers do. v y else. u y end.'
 isEmpty=: 0 = [: */ $
@@ -294,10 +281,19 @@ max=: $:/ :>.
 min=: $:/ :<.
 o2f=: 3 : 'LF(I. y=SP)}y'
 or=: +.
-ot=: empty
 paren=: 1 |. ')(' , ":
 pathof=: ] {.~ [: >: '/' i:~ ]
 pc=: '%' ,~ [: ": [: <. 0.5 + 100 * 88350 %~ ]
+
+sl=: 4 : 0
+
+
+SL=. '/'
+if. SL={:x do. x=. }:x end.
+if. SL={.y do. x=. }.y end.
+x,SL,y
+)
+
 sllog=: smoutput@llog
 sortd=: \:~ :\:
 sq=: *: :[:
@@ -311,10 +307,13 @@ x2f=: }.@((<10{a.) ;@,. ])@([: (#~ ([: +./\. ' '&~:))&.> <"1)
 
 '==================== [tabby] forms ===================='
 0 :0
-Wednesday 6 March 2019  09:22:44
+Wednesday 10 April 2019  23:48:43
 )
 
 coclass 'tabby'
+
+
+FORM_POSITION=: _5
 
 TABU=: 0 : 0
 pc tab;pn Tabby;
@@ -552,6 +551,31 @@ end.
 wd 'pmove ',": X,Y,W,H
 )
 
+
+tab_open=: 3 : 0
+
+window_close''
+wd TABU
+wd 'psel tab'
+wd 'set g wh _1 64'
+refreshInfo''
+t=. ,:UNSET
+wd 'set func font "Menlo" 10'
+wd 'set panel font ',fixfont''
+wd 'set calco font ',fixfont''
+
+wd 'set preci items *', o2f ": i.16
+wd 'set unico items *',CONTENT_UNICO
+wd 'set panel items *',UNSET
+if. PMOVES do.
+  wd :: 0: 'pmoves ' , ":XYWH
+else.
+  form FORM_POSITION
+end.
+wd 'pshow'
+fill_tools ''
+)
+
 '==================== [tabby] graphic ===================='
 0 :0
 Thursday 4 April 2019  09:11:06
@@ -779,12 +803,10 @@ TOOLHINT=: >cutopen 0 : 0
 
 '==================== [tabby] calco ===================='
 0 :0
-Saturday 30 March 2019  20:22:29
+Wednesday 10 April 2019  23:49:45
 -
 replaces interpretCalco
 old interpretCalco --> interpretCalco0
--
-We need an extended isNumeric which accepts blind decimals and sci#s
 -
   sminfo_z_=: wdinfo_z_=: echo_z_
 )
@@ -1781,30 +1803,6 @@ panel_select=: SP ,~ ":theItem
 wd 'psel tab; set panel select ',":theItem
 )
 
-tab_open=: 3 : 0
-
-window_close''
-wd TABU
-wd 'psel tab'
-wd 'set g wh _1 64'
-refreshInfo''
-t=. ,:UNSET
-wd 'set func font "Menlo" 10'
-wd 'set panel font ',fixfont''
-wd 'set calco font ',fixfont''
-
-wd 'set preci items *', o2f ": i.16
-wd 'set unico items *',CONTENT_UNICO
-wd 'set panel items *',UNSET
-if. PMOVES do.
-  wd :: 0: 'pmoves ' , ":XYWH
-else.
-  form FORM_POSITION
-end.
-wd 'pshow'
-fill_tools ''
-)
-
 window_close=: 3 : 0
 wd :: 0: 'psel tab; pclose;'
 )
@@ -2219,11 +2217,11 @@ i.0 0
 
 '==================== [tabby] user.ijs ===================='
 0 :0
-Friday 15 February 2019  19:40:30
+Wednesday 10 April 2019  23:57:49
 -
 THIS IS THE DEFAULT DEFN OF USERTOOLS RESIDING IN /source/
 IT IS OVERRIDDEN BY AN ALTERNATIVE SCRIPT loaded by: start
-USERTOOLS_z_ path specified in: header.ijs
+USERTOOLS is a path global created by: start
 )
 
 coclass 'tabby'
@@ -2231,7 +2229,7 @@ coclass 'tabby'
 usertool=: 3 : 0
 
 ssw '+++ usertool: sysmodifiers=(sysmodifiers)'
-if. heldshift'' do. open USERTOOLS_z_ return. end.
+if. heldshift'' do. open :: 0: USERTOOLS return. end.
 if. heldcmnd'' do. ide 1 return. end.
 )
 
@@ -2330,18 +2328,28 @@ heldshiftalt=:	3 : '5=".sysmodifiers'
 
 cocurrent 'tabby'
 
+VERSION=: '0.0.0'
+
 start=: 3 : 0
 trace 0
 wd 'timer 0'
-load :: 0: USERTOOLS_z_
-load 'math/cal'
 
-load CREATOR rplc 'tabula.ijs' ; 'manifest.ijs'
+try.	load (pathof CREATOR) sl 'tpathdev.ijs'
+catch.	load (pathof CREATOR) sl 'tpath.ijs'
+end.
+load TPMT sl 'manifest.ijs'
+
 erase'CAPTION FILES DESCRIPTION RELEASE FOLDER LABCATEGORY PLATFORMS'
+
+load TPCA sl 'cal.ijs'
+
+load :: 0: TPAT sl 'patch.ijs'
+load :: 0: USERTOOLS=: TPUT sl 'usertools.ijs'
 tabengine=: tabengine_cal_
 tx_z_=: tabenginex_tabby_
 
 start_cal_ '$$'
+PNG=: TPNG sl 'tabula-toolbar.png'
 tab_open''
 setpreci 3
 setunico 1

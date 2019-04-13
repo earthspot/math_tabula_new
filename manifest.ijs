@@ -1,5 +1,5 @@
 NB. tabula manifest
-NB. Tuesday 2 April 2019  02:12:43
+NB. IAC Saturday 13 April 2019  19:04:25
 
 CAPTION=: 'TABULA - scientific calculator'
 
@@ -7,8 +7,10 @@ VERSION=: '2.1.00'
 
 FILES=: 0 : 0
 manifest.ijs
+patch.ijs
 tabula.ijs
 tabula-toolbar.png
+tpathjal.ijs
 usertools.ijs
 )
 
@@ -22,6 +24,7 @@ FOLDER=: 'math/tabula'
 
 DEPENDS=: 0 : 0
 math/cal
+math/uu
 )
 
 LABCATEGORY=: 'Math'

@@ -3,19 +3,29 @@
 
 cocurrent 'tabby'
 
+VERSION=: '0.0.0'  NB. overridden by manifest.ijs
+
 start=: 3 : 0
 trace 0
 wd 'timer 0'
-load :: 0: USERTOOLS_z_
-load 'math/cal'  NB. (CAL loads UU)
-  NB. ...MUST DO all access to UU suite via CAL instructions
-load CREATOR rplc 'tabula.ijs' ; 'manifest.ijs'
+  NB. Create the TP*_z_ nouns
+try.	load (pathof CREATOR) sl 'tpathdev.ijs'
+catch.	load (pathof CREATOR) sl 'tpath.ijs'
+end.
+load TPMT sl 'manifest.ijs'  NB. to get VERSION
+  NB. erase unwanted globals loaded by manifest
 erase'CAPTION FILES DESCRIPTION RELEASE FOLDER LABCATEGORY PLATFORMS'
-tabengine=: tabengine_cal_  NB. replace dummy local CAL link
+  NB. load class CAL
+load TPCA sl 'cal.ijs'
+  NB. load patch to override TABULA or CAL factory settings
+load :: 0: TPAT sl 'patch.ijs'
+load :: 0: USERTOOLS=: TPUT sl 'usertools.ijs'
+tabengine=: tabengine_cal_  NB. override local placeholder
 tx_z_=: tabenginex_tabby_  NB. to allow e.g. CAL to update UI directly
   NB. initialize and load a t-table to show in: panel
 start_cal_ '$$'  NB. start with SAMPLE t-table
 NB. start_tree_''  NB. open the tree window
+PNG=: TPNG sl 'tabula-toolbar.png'
 tab_open''
 setpreci 3  NB. set numeric precision for value column
 setunico 1  NB. set SI conformance level for units column
@@ -24,4 +34,4 @@ updatevaluebar''
 restoreFocusToInputField''
 )
 
-startonload''  NB. switchable in _z_
+startonload''  NB. assigned in header.ijs

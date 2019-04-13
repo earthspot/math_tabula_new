@@ -84,10 +84,19 @@ max=: $:/ :>.
 min=: $:/ :<.
 o2f=: 3 : 'LF(I. y=SP)}y'
 or=: +.
-ot=: empty  NB. just squared-off!
 paren=: 1 |. ')(' , ":
 pathof=: ] {.~ [: >: '/' i:~ ]
 pc=: '%' ,~ [: ": [: <. 0.5 + 100 * 88350 %~ ]
+
+sl=: 4 : 0
+  NB. RELIABLE path catenator
+  NB. IAC Thursday 30 August 2018  16:42:51
+SL=. '/'
+if. SL={:x do. x=. }:x end.
+if. SL={.y do. x=. }.y end.
+x,SL,y
+)
+
 sllog=: smoutput@llog
 sortd=: \:~ :\:
 sq=: *: :[:
