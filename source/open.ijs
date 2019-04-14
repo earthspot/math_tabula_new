@@ -1,7 +1,7 @@
 	NB. tabby - open.ijs
 '==================== [tabby] open.ijs ===================='
 0 :0
-Tuesday 18 September 2018  09:17:14
+Sunday 14 April 2019  04:42:20
 -
 CONTAINS IN-LINE ERROR/CONFIRMATION MESSAGES
 --replace if MESSAGE table provided in due course.
@@ -82,18 +82,17 @@ wd 'psel tab; pn ',title
 opentt=: 'open' ddefine
   NB. x=='open' - open selected t-table
   NB. x=='append' - append selected t-table
-  NB. TPTT is cache to remember last used folder
 if. (x-:'open') do.
   if. -.preload'' do. return. end.
 end.
-TPTT=: 'TPTT' default~ tabengine 'TPTT'
+NB. TPTT=: 'TPTT' default~ tabengine 'TPTT'  ---NO! dont reset TTPT
 inst=. 4{.x
 invalplot''
 title=. sw 'Choose a ttable to (x)…'
   NB. not used by Mac version of jqt??
 path=. launder wd sw 'mb open "(title)" *',TPTT
 if. 0=#path do. confirm sw '>>> (x) ...cancelled' return. end.
-TPTT=: pathof path  NB. change ONLY the local copy
+NB. TPTT=: pathof path  NB. change ONLY the local copy
 confirm tabengine inst,SP,path
 showTtable''
 setSelection 1
@@ -112,8 +111,7 @@ end.
 
 savea=: 3 : 0
   NB. Save As...
-  NB. TPTT is cache to remember last used folder
-TPTT=: 'TPTT' default~ tabengine 'TPTT'
+NB. TPTT=: 'TPTT' default~ tabengine 'TPTT'  ---NO! dont reset TTPT
 title=. 'Save ttable as…'
 nom=. wd sw 'mb save "(title)" *',TPTT
 if. 0=#nom do.

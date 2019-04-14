@@ -1,8 +1,10 @@
 NB. tabula patch file
 PATCH=: 0 :0
-Thursday 11 April 2019  00:20:06
+Sunday 14 April 2019  04:09:32
 )
 
-FORM_POSITION=: _2     NB. upper left
+FORM_POSITION=: _2     NB. upper right
 
 fixfont=: ] bind '"Menlo" 14'  NB. j-version, platform-dependent font
+
+NB. originalsin_uu_''
