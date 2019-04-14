@@ -1,32 +1,31 @@
-NB. tabula manifest
-NB. IAC Saturday 13 April 2019  19:04:25
+NB. math/tabula manifest
+NB. IAC Sunday 14 April 2019  08:27:44
 
 CAPTION=: 'TABULA - scientific calculator'
 
 VERSION=: '2.1.00'
+
+DEPENDS=: 0 : 0
+math/cal
+)
 
 FILES=: 0 : 0
 manifest.ijs
 patch.ijs
 tabula.ijs
 tabula-toolbar.png
-tpathjal.ijs
 usertools.ijs
 )
 
 DESCRIPTION=: 0 : 0
-TABULA is a backfitting scientific calculator with many built-in physical constants, which knows about units of measurement.
+TABULA is a backfitting scientific calculator.
+It has many built-in physical constants and knows about units of measurement.
 )
 
-RELEASE=: ''
+RELEASE=: 'j805 j807'
 
 FOLDER=: 'math/tabula'
 
-DEPENDS=: 0 : 0
-math/cal
-math/uu
-)
-
 LABCATEGORY=: 'Math'
 
-PLATFORMS=: ''
+PLATFORMS=: 'darwin macOS OSX'
