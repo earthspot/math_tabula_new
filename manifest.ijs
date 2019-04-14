@@ -1,5 +1,4 @@
 NB. math/tabula manifest
-NB. IAC Sunday 14 April 2019  08:27:44
 
 CAPTION=: 'TABULA - scientific calculator'
 
@@ -22,10 +21,8 @@ TABULA is a backfitting scientific calculator.
 It has many built-in physical constants and knows about units of measurement.
 )
 
-RELEASE=: 'j805 j807'
+RELEASE=: 'j805'
 
 FOLDER=: 'math/tabula'
 
 LABCATEGORY=: 'Math'
-
-PLATFORMS=: 'darwin macOS OSX'

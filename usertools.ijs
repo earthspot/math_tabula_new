@@ -12,7 +12,7 @@ coclass 'tabby'
 usertool=: 3 : 0
   NB. common to all user-definable tools
 ssw '+++ usertool: sysmodifiers=(sysmodifiers)'
-if. heldshift'' do. open USERTOOLS_z_ return. end.
+if. heldshift'' do. open :: 0: USERTOOLS return. end.
 if. heldcmnd'' do. ide 1 return. end.
 )
 
