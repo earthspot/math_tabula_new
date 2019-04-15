@@ -1,5 +1,5 @@
 0 :0
-Saturday 13 April 2019  03:38:25
+Monday 15 April 2019  02:45:41
 -
 TABULA: scientific units calculator
 -simplified architecture
@@ -12,13 +12,8 @@ CREATOR=: ;(4!:4<'zx'){4!:3''[zx=.''
 onload_z_=: empty
 startonload_z_=: start_tabby_
 
-AABUILT=: '2019-04-13  05:36:46'
-AABUILT=: '2019-04-13  05:50:10'
-AABUILT=: '2019-04-13  05:55:33'
-AABUILT=: '2019-04-13  06:07:18'
-AABUILT=: '2019-04-13  06:09:37'
-AABUILT=: '2019-04-13  06:25:43'
-AABUILT=: '2019-04-13  18:21:56'
+AABUILT=: '2019-04-15  03:12:49'
+AABUILT=: '2019-04-15  03:18:20'
 
 '==================== [tabby] constants ===================='
 
@@ -1621,7 +1616,7 @@ end.
 
 '==================== [tabby] open.ijs ===================='
 0 :0
-Tuesday 18 September 2018  09:17:14
+Sunday 14 April 2019  04:42:20
 -
 CONTAINS IN-LINE ERROR/CONFIRMATION MESSAGES
 --replace if MESSAGE table provided in due course.
@@ -1701,18 +1696,15 @@ wd 'psel tab; pn ',title
 opentt=: 'open' ddefine
 
 
-
 if. (x-:'open') do.
   if. -.preload'' do. return. end.
 end.
-TPTT=: 'TPTT' default~ tabengine 'TPTT'
 inst=. 4{.x
 invalplot''
 title=. sw 'Choose a ttable to (x)…'
 
 path=. launder wd sw 'mb open "(title)" *',TPTT
 if. 0=#path do. confirm sw '>>> (x) ...cancelled' return. end.
-TPTT=: pathof path
 confirm tabengine inst,SP,path
 showTtable''
 setSelection 1
@@ -1731,8 +1723,6 @@ end.
 
 savea=: 3 : 0
 
-
-TPTT=: 'TPTT' default~ tabengine 'TPTT'
 title=. 'Save ttable as…'
 nom=. wd sw 'mb save "(title)" *',TPTT
 if. 0=#nom do.
@@ -2334,8 +2324,8 @@ start=: 3 : 0
 trace 0
 wd 'timer 0'
 
-try.	load (pathof CREATOR) sl 'tpathdev.ijs'
-catch.	load (pathof CREATOR) sl 'tpath.ijs'
+if. fexist p=. (pathof CREATOR) sl 'tpathdev.ijs' do. load p
+else.     load (pathof CREATOR) sl 'tpathjal.ijs'
 end.
 load TPMT sl 'manifest.ijs'
 

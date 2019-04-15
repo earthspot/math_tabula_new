@@ -9,8 +9,8 @@ start=: 3 : 0
 trace 0
 wd 'timer 0'
   NB. Create the TP*_z_ nouns
-try.	load (pathof CREATOR) sl 'tpathdev.ijs'
-catch.	load (pathof CREATOR) sl 'tpath.ijs'
+if. fexist p=. (pathof CREATOR) sl 'tpathdev.ijs' do. load p
+else.     load (pathof CREATOR) sl 'tpathjal.ijs'
 end.
 load TPMT sl 'manifest.ijs'  NB. to get VERSION
   NB. erase unwanted globals loaded by manifest

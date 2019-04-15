@@ -2,7 +2,7 @@ NB. math/tabula manifest
 
 CAPTION=: 'TABULA - scientific calculator'
 
-VERSION=: '2.1.00'
+VERSION=: '2.1.02'
 
 DEPENDS=: 0 : 0
 math/cal
@@ -13,6 +13,7 @@ manifest.ijs
 patch.ijs
 tabula.ijs
 tabula-toolbar.png
+tpathjal.ijs
 usertools.ijs
 )
 
