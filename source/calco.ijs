@@ -25,13 +25,13 @@ VEX=: y
 make_daisychain=: 3 : 0
   NB. makes the daisychain for: interpretCalco
   NB. NOTE: daisychained verbs are all MONADIC
-d=: 'calco_' nl 3
+daisies=: 'calco_' nl 3
 promote 'calco_singlet'
 promote 'calco_yesno'
 promote 'calco_title'
 promote 'calco_sample'
 demote 'calco_eval'
-]z=. (; d,each <' ::'),'calcoErr'
+]z=. (; daisies,each <' ::'),'calcoErr'
 daisychain=: 13 : ('(',z,')y')
 NB. smoutput crr'daisychain'
 i.0 0
@@ -43,27 +43,35 @@ if. 0=#y do. y=. dltb calco else. y=. dltb y end.
 blink 0	NB. turn blink-1 OFF to start with
 VEX=: '<UNSET>'
 theUnit=: >tabengine 'UNIT' ; theItem=: line 0
-msg '+++ interpretCalco: theItem=(theItem) theUnit=(theUnit) y=[(y)]'
+msg LF,'+++ interpretCalco: theItem=(theItem) theUnit=(theUnit) y=[(y)]'
 z=. daisychain y
-msg '--- interpretCalco: EXITS, VEX=(VEX)'
+msg '--- interpretCalco: EXITS, VEX=(VEX) z=[(swready z)]',LF
 z return.
+)
+
+swready=: 3 : 0
+  NB. reduce y to rank 1 bytes for display under: sw
+  NB. test it: tempuu 91
+NB. ,": y
+crex y
 )
 
 noSelection=: 3 : 'theItem<0'
 
 promote=: 3 : 0
-  NB. assume y is an element of global: d
-d=: ~. d ,~ boxopen y
+  NB. assume y is an element of global: daisies
+daisies=: ~. daisies ,~ boxopen y
 )
 
 demote=: 3 : 0
-  NB. assume y is an element of global: d
-d=: ~. d , boxopen y
+  NB. assume y is an element of global: daisies
+daisies=: ~. daisies , boxopen y
 )
 
 calcoErr=: 3 : 0
 register'calcoErr'
-msg '>>> calcoErr: none chime: y=[(y)]'
+msg z=. '>>> calcoErr: none chime: y=[(y)]'
+confirm sw z
 sw'(y) [???]'
 )
 
@@ -126,9 +134,10 @@ calco_eval=: 3 : 0
 register'calco_eval'
   NB. handle a valid J-phrase to compute a new value
 blink'white'
-y=. y rplc '4π' ; ' PI4 ' ; '2π' ; ' PI2 ' ; 'π' ; ' PI '
 assert. -. noSelection''
-assert. isNum z=. rat {. ". y  NB. the most general
+y=. y rplc '4π' ; ' PI4 ' ; '2π' ; ' PI2 ' ; 'π' ; ' PI '
+assert. 0<# ".y  NB. must evaluate to a non-trivial (list of) number(s)
+assert. isNum z=. rat {. ". y  NB. rationalize (first) number in ".y
 tabenginex 'valu' ; theItem ; z
 )
 
@@ -260,7 +269,7 @@ case.  CO do. 'cal' doinloc }.y
 case.  CM do. 'uu' doinloc }.y
 case.  '$'do. tabenginex }.y
 case.  '\'do. putsb ": tabengine }.y
-case. do. assert 0
+case. do. assert. 0
 end.
 )
 

@@ -531,3 +531,12 @@ anima=: 3 : 0
   NB. animate ⇧ start animation
 tabenginex pickshift ;:'trav tra0'
 )
+
+tab_calco_char=: 3 : 0
+  NB. traps special keystrokes to decorate Term
+select. sysdata
+case. '§' do. smoutput ' '
+case. '±' do. smoutput '--------------------------------'
+case. '¢' do. smclear''
+end.
+)
