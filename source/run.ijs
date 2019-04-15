@@ -1,17 +1,21 @@
-NB. tabby - run
+NB. math_tabula_new - run
 0 :0
-Sunday 30 December 2018  04:52:51
+Monday 15 April 2019  05:14:20
 -
 open BUILTFILE
 open TESTFILE
 )
 
+NB.==================================
+GIT=. '~Gittab'  NB. for DEV bluesky
+NB.==================================
+
 IDE_z_=: 1  NB. can be assumed if this script is run
 
 cocurrent 'base'
 
-BUILTFILE_z_=: 1!:1 <jpath'~Gittab/builtfile'	NB. effectively: '~Gittab/tabula.ijs'
-TESTFILE_z_=: '~Gittab/test/test.ijs'
+]BUILTFILE_z_=: 1!:1 <jpath GIT,'/builtfile'
+]TESTFILE_z_=: GIT,'/test/test.ijs'
 
 NB. ---------------------------------------------------------
 
@@ -22,8 +26,6 @@ smoutput '--- run.ijs: BUILTFILE loaded: ',BUILTFILE
 load TESTFILE
 smoutput '--- run.ijs: TESTFILE completed without discrepancies: ',TESTFILE
 smoutput 4$LF
-
-NB. NOPLOT_z_=: if807''  NB. disable plot package for j807 builds
 
 onload_z_=: do
 
