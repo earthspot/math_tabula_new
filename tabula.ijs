@@ -8,7 +8,7 @@ TABULA: scientific units calculator
 coclass 'tabby'
 coinsert 'jgl2'
 
-CREATOR=: ;(4!:4<'zx'){4!:3''[zx=.''
+PARENTDIR=: (zx i:'/'){.zx=.jpathsep>(4!:4<'zx'){4!:3''[zx=.''
 onload_z_=: empty
 startonload_z_=: start_tabby_
 
@@ -199,6 +199,7 @@ foo a3 ; first2nums list1
 '==================== [tabby] handy4tab ===================='
 cocurrent 'z'
 
+
 and=: *.
 any=: +./
 brace=: 1 |. '}{' , ":
@@ -207,6 +208,14 @@ cr=: [: 5!:5 boxopen
 crr=: > , '=: ' , cr
 cuT=: <;._2
 ddefine=: 1 : 'm&$: : (4 : 0)'
+
+ide=: 3 : 0
+select. y
+  case. 0 do. wd 'ide hide' [IDE_z_=: y
+  case. 1 do. wd 'ide show' [IDE_z_=: y
+  case.   do. ide -.IDE_z_	NB. toggle status
+end.
+)
 
 default=: 0&$: :(4 : 0)
 
@@ -279,7 +288,6 @@ min=: $:/ :<.
 o2f=: 3 : 'LF(I. y=SP)}y'
 or=: +.
 paren=: 1 |. ')(' , ":
-pathof=: ] {.~ [: >: '/' i:~ ]
 pc=: '%' ,~ [: ": [: <. 0.5 + 100 * 88350 %~ ]
 
 sl=: 4 : 0
@@ -1684,8 +1692,6 @@ launder=: 3 : 0
 '\/'charsub y -. CRLF
 )
 
-pathof=: ] {.~ [: >: SL i:~ ]
-
 setFormTitle=: 3 : 0
 
 flag=. (tabengine'DIRT')#brack'UNSAVED'
@@ -2326,17 +2332,17 @@ start=: 3 : 0
 trace 0
 wd 'timer 0'
 
-if. fexist p=. (pathof CREATOR) sl 'tpathdev.ijs' do. load p
-else.     load (pathof CREATOR) sl 'tpathjal.ijs'
+if. fexist p=. PARENTDIR sl 'tpathdev.ijs' do. loadFixed p
+else.     loadFixed PARENTDIR sl 'tpathjal.ijs'
 end.
-load TPMT sl 'manifest.ijs'
+loadFixed TPMT sl 'manifest.ijs'
 
 erase'CAPTION FILES DESCRIPTION RELEASE FOLDER LABCATEGORY PLATFORMS'
 
-load TPCA sl 'cal.ijs'
+loadFixed TPCA sl 'cal.ijs'
 
-load :: 0: TPAT sl 'patch.ijs'
-load :: 0: USERTOOLS=: TPUT sl 'usertools.ijs'
+loadFixed :: 0: TPAT sl 'patch.ijs'
+loadFixed :: 0: USERTOOLS=: TPUT sl 'usertools.ijs'
 tabengine=: tabengine_cal_
 tx_z_=: tabenginex_tabby_
 
@@ -2348,6 +2354,17 @@ setunico 1
 setSelection 1
 updatevaluebar''
 restoreFocusToInputField''
+)
+
+loadFixed=: 3 : 0
+try. load y
+catch.
+  try. load z=. dquote y
+  catch.
+    smoutput '>>> start_uu_ cannot load script at path: ',z
+    assert 0 ['abort start_uu_'
+  end.
+end.
 )
 
 startonload''

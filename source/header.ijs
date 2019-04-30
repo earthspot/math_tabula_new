@@ -8,6 +8,6 @@ TABULA: scientific units calculator
 coclass 'tabby'
 coinsert 'jgl2'	NB. uses gl2 verbs to display the toolbar
 
-CREATOR=: ;(4!:4<'zx'){4!:3''[zx=.''
+PARENTDIR=: (zx i:'/'){.zx=.jpathsep>(4!:4<'zx'){4!:3''[zx=.''
 onload_z_=: empty
 startonload_z_=: start_tabby_	NB. or: empty

@@ -67,8 +67,6 @@ launder=: 3 : 0
 '\/'charsub y -. CRLF
 )
 
-pathof=: ] {.~ [: >: SL i:~ ]
-
 setFormTitle=: 3 : 0
   NB. set the title of the window to identify the t-table
 flag=. (tabengine'DIRT')#brack'UNSAVED'
@@ -92,7 +90,6 @@ title=. sw 'Choose a ttable to (x)…'
   NB. not used by Mac version of jqt??
 path=. launder wd sw 'mb open "(title)" *',TPTT
 if. 0=#path do. confirm sw '>>> (x) ...cancelled' return. end.
-NB. TPTT=: pathof path  NB. change ONLY the local copy
 confirm tabengine inst,SP,path
 showTtable''
 setSelection 1
