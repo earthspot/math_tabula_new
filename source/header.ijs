@@ -1,9 +1,12 @@
 0 :0
-Monday 15 April 2019  23:20:07
+Wednesday 1 May 2019  05:24:35
 -
 TABULA: scientific units calculator
 -simplified architecture
 )
+
+require 'format/zulu'
+require 'math/uu/handy4uu'
 
 coclass 'tabby'
 coinsert 'jgl2'	NB. uses gl2 verbs to display the toolbar
